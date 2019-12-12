@@ -31,7 +31,7 @@
 答：smart_rtmpd 无任何依赖，支持跨平台，解压既运行，或者根据需要简单修改一下 config.xml 文件，即可运行windows 平台下
 1. 第一步下载软件包，解压 rtmpd.rar， 解压后得到 smart_rtmpd_win.rar，进一步解压 smart_rtmpd.rar ，即可得到 windows 的 smart_rtmpd 服务器
 2. 运行 smart_rtmpd.exe 如下图，既表示成功
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
 3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://ffmpeg.zeranoe.com/builds/ )
 
 
