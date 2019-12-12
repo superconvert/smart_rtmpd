@@ -62,8 +62,8 @@
 问：smart_rtmpd 压力测试如何？
 
 答：具体见下图
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_test.png?raw=true)
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_test1.png?raw=true)
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/test.png?raw=true)
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/test1.png?raw=true)
 
 
 
