@@ -33,36 +33,37 @@
 2. 运行 smart_rtmpd.exe 如下图，既表示成功
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
 3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://ffmpeg.zeranoe.com/builds/ )
-
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_push.png?raw=true)
 4. 播流验证
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
 
 
 问：smart_rtmpd 支持那些输入，那些输出
 
 答：smart_rtmp 支持推 rtmp 流，路径注入等方式输入；支持 rtmp, http-flv, http-hls, mpeg-dash, mp4/ts 方式的输出
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_stream.png?raw=true)
 
 问：smart_rtmpd 支持级联吗？
 
 答：支持云内集群以及云间级联，异常方便，还支持针对 URL 级别的级联方式（独创）
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_cluster.png?raw=true)
 
 问：smart_rtmpd 的 rewrite 是怎么一回事？
 
 答：比如中央电视台的体育节目购买版权后，地方点视台需要从央视体育购买转播权，可以通过 rewrite 方式，很轻松的把流授权和分发给地方电视台。无需更改任何软件。即可轻松实现。当然付费业务层，需要另外处理。
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_rewrite.png?raw=true)
 
 问：smart_rtmpd 都是适应过那些端？
 
 答：都是很多常用的终端，具体见下图
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_term.png?raw=true)
 
 问：smart_rtmpd 压力测试如何？
 
 答：具体见下图
-
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_test.png?raw=true)
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_test1.png?raw=true)
 
 
 
