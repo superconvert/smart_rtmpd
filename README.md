@@ -41,7 +41,7 @@
 
 问：smart_rtmpd 支持那些输入，那些输出
 
-答：smart_rtmp 支持推 rtmp 流，路径注入等方式输入；支持 rtmp, http-flv, http-hls, mpeg-dash, mp4/ts 方式的输出
+答：smart_rtmp 支持推 rtmp 流，路径注入等方式输入；支持 rtmp, http-flv, http-hls, mpeg-dash, mp4/ts 方式的输出，同时也支持录像功能
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_stream.png?raw=true)
 
 问：smart_rtmpd 支持级联吗？
@@ -66,6 +66,12 @@
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/test1.png?raw=true)
 
 
+我们的联系方式:
+
+QQ : 99766553
+QQ 群 : 190583317
+WebChat(微信) : 99766553
+E-mail(邮箱) : cwf12345@sina.com
 
 
 
