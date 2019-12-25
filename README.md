@@ -46,6 +46,7 @@
 问：smart_rtmpd 支持那些输入，那些输出
 
 答：smart_rtmp 支持推 rtmp 流，路径注入等方式输入；支持 rtmp, http-flv, http-hls, mpeg-dash, mp4/ts 方式的输出，同时也支持录像功能
+也支持推送 h265 ，有关 codecId 可以通过 config.xml 进行配置，这样就可以对接任何客户端了，下一步需要支持 rtsp 输出。
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_stream.png?raw=true)
 
 问：smart_rtmpd 支持级联吗？
