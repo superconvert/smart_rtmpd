@@ -1,6 +1,6 @@
 Q: What kind of software is QIYI stream server, and what are its functions and advantages?
 
-A: The smart wing server (smart_rtmpd) ​​is a server with excellent recording and broadcasting performance. If you do n’t understand, it can be understood as a function similar to nginx-rtmp, srs, but with a performance that is much higher than nginx-rtmp, and even higher than srs. It is a cross-platform, no dependency, Excellent performance, easy deployment and maintenance, decompression can run. Basically, the mainstream operating systems can make new versions. If necessary, you can contact me privately.
+A: The QIYI stream server (smart_rtmpd) ​​is a server with excellent recording and broadcasting performance. If you do n’t understand, it can be understood as a function similar to nginx-rtmp, srs, but with a performance that is much higher than nginx-rtmp, and even higher than srs. It is a cross-platform, no dependency, Excellent performance, easy deployment and maintenance, decompression can run. Basically, the mainstream operating systems can make new versions. If necessary, you can contact me privately.
 
 Q: What OS does smart_rtmpd support?
 
