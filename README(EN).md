@@ -45,7 +45,7 @@ Streaming verification image image
 
 Q: Smart_rtmpd supports those inputs and those outputs
 
-A: smart_rtmp supports pushing rtmp stream, path injection, etc. input; supports rtmp, http-flv, http-hls, mpeg-dash, mp4 / ts output, and also supports video recording and push h265. The relevant codecId can be obtained through config.xml configuration, so that you can connect to any client, the next step needs to support rtsp output. image
+A: smart_rtmp supports pushing rtmp stream, path injection, etc. input; supports rtmp, http-flv, http-hls, mpeg-dash, mp4 / ts output, rtsp and also supports video recording and push h265. The relevant codecId can be obtained through config.xml configuration, so that you can connect to any client. image
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_stream.png?raw=true)
 
 Q: Does smart_rtmpd support cascading?
