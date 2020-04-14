@@ -25,10 +25,11 @@
     
       right format:
       rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream
-      only support live & vod tag !!!!!
+      only support live or vod tag .
       
       wrong format:
       rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
+      not support abc, sky or other tag !!!!!!!
     
 //----------------------------------------------------------------------------------------------------
 
