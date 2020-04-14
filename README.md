@@ -30,6 +30,50 @@
       wrong format:
       rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
       not support abc, sky or other tag !!!!!!!
+      
+      
+   build cluster or cdn distribution :
+   
+     if you have two server
+     server A (intranet ip: 192.168.1.1, domain: www.qiyicc.com) 
+     server B (intranet ip: 192.168.1.2, domain: www.qiyicc.com)
+     
+     you can modify config.xml file in server A:
+     ... ...
+     <vhosts>
+		<vhost name="www.qiyicc.com">			
+			<hasflv>true</hasflv>			
+			<hashls>true</hashls>			
+			<hasdash>true</hasdash>			
+			<hasrtsp>true</hasrtsp>			
+			<forward>192.168.1.2</forward>			
+		</vhost>
+	</vhosts>
+    
+    if you push stream rtmp://www.qiyicc.com/live/stream to server A， the server A will forward this stream to server B, 
+    user can pull url rtmp://www.qiyicc.com/live/stream from server B， for many server repeat this proccess.
+    
+  forward thirtparty :
+  
+     if you have rmtp url rtmp://www.qiyicc.com/live/sport, you cank distribution this stream to other service.
+     for example : rtmp://www.espn.com/live/sport, thirtypart server address : 54.230.173.30
+     
+     you can modify config.xml file
+     ... ...
+    ... ...
+     <vhosts>			
+		<url name="rtmp://www.qiyicc.com/live/sport">			
+			<rewrite>rtmp://www.espn.com/live/sport</rewrite>			
+			<hasflv>true</hasflv>			
+			<hashls>true</hashls>			
+			<hasdash>true</hasdash>			
+			<hasrtsp>true</hasrtsp>			
+			<forward>54.230.173.30:1935</forward>			
+			<forward></forward>
+		</url>
+	</vhosts>
+    
+
     
 //----------------------------------------------------------------------------------------------------
 
