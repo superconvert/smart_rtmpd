@@ -4,22 +4,22 @@
     
     build ffmpeg support rtmps, see this link:
       https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+      you can play rtmps with vlc.
     
     smart rtmpd :
     
     support protocol:
     
-      rtmp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
-      rtsp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+      push stream              pull stream      
+      rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+      rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
       
     
     media codec:
     
-      video codec:      
-      h264, h265  
-      
-      audio codec:
-      aac
+      video codec:              audio codec:
+      h264, h265                aac
+        
     
     rtmp url :    
     
