@@ -3,7 +3,24 @@
     You can translate documents from Chinese to English through Google Translate！！！
     
     build ffmpeg support rtmps, see this link:
-    https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+      https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+    
+    smart rtmpd :
+    
+    support protocol:
+      rtmp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+      rtsp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+    
+    video codec:            audio codec:
+    h264, h265              aac
+    
+    rtmp url :
+    
+      right format:
+      rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream, 
+    
+      wrong format:
+      rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
     
 //----------------------------------------------------------------------------------------------------
 
