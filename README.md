@@ -51,7 +51,9 @@
 	</vhosts>
     
     if you push stream rtmp://www.qiyicc.com/live/stream to server A， the server A will forward this stream to server B, 
-    user can pull url rtmp://www.qiyicc.com/live/stream from server B， for many server repeat this proccess.
+    if you push stream rtmp://www.qiyicc.com/live/sport to server A, it is also forard this stream to server B.
+    user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server B， 
+    for many server repeat this proccess or each other forward.
     
   forward thirtparty :
   
@@ -73,6 +75,9 @@
 		</url>
 	</vhosts>
     
+    thirtpart user can play this stream.
+    
+    good luck.
 
     
 //----------------------------------------------------------------------------------------------------
