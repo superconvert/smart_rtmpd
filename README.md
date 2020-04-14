@@ -8,6 +8,10 @@
     
     smart rtmpd :
     
+    download url:
+      http://www.qiyicc.com/download/rtmpd.rar
+
+    
     support protocol:
     
       push stream              pull stream      
