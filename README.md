@@ -2,6 +2,9 @@
 
     You can translate documents from Chinese to English through Google Translate！！！
     
+    build ffmpeg support rtmps, see this link:
+    https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+    
 //----------------------------------------------------------------------------------------------------
 
 问：期翼流服务器是哪方面的软件，有什么功能与优点
