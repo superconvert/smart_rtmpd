@@ -11,13 +11,19 @@
       rtmp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
       rtsp[s] ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
     
-    video codec:            audio codec:
-    h264, h265              aac
+    media codec:
+      video codec:            
+      h264, h265
+      
+      audio codec:
+      aac
     
     rtmp url :
     
       right format:
-      rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream, 
+      rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream
+      only support live & vod tag !!!!!
+            
     
       wrong format:
       rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
