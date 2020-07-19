@@ -36,6 +36,7 @@
       not support abc, sky or other tag !!!!!!!
       
    push stream :
+   
       ffmpeg push rtmp stream      
       1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
       2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
