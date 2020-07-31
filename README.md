@@ -9,7 +9,7 @@
     smart rtmpd :
     
     download url:
-      http://www.qiyicc.com/download/rtmpd.rar
+      http://www.qiyicc.com/download/rtmpd.zip
 
     
     support protocol:
