@@ -1,3 +1,5 @@
+We are ready to support webrtc stream output, please focus us!
+
 //----------------------------------------------------------------------------------------------------
 
     You can translate documents from Chinese to English through Google Translate！！！
@@ -15,8 +17,8 @@
     support protocol:
     
       push stream              pull stream      
-      rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
-      rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+      rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc ( will be )
+      rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc ( will be )
       
     
     media codec:
