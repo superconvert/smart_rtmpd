@@ -4,6 +4,10 @@ We are ready to support webrtc stream output, please focus us!
 
     You can translate documents from Chinese to English through Google Translate！！！
     
+    Our new software smart_webrtc download url : 
+    url : https://pan.baidu.com/s/18YQF1TvB9IULDoe9vaXYTw , password : twbw    
+    you can download it and try use it!!!!!!
+    
     build ffmpeg support rtmps, see this link:
       https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
       you can play rtmps with vlc.
