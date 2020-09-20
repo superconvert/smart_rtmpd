@@ -55,6 +55,27 @@ We are ready to support webrtc stream output, please focus us!
       3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
       4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2      
       
+   vod ( recorder ) :
+   you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return 
+   
+   2020-09-19
+   2020-09-20
+   2020-09-21
+   
+   this dir include this day vod files .
+   
+   you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return
+   
+   21-41-06.mpd      or     21-41-06.m3u8
+   21-40-05.mpd             21-40-05.m3u8
+   21-39-05.mpd             21-39-05.m3u8
+   
+   you can use player replay this video
+   
+   ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
+   or 
+   ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
+      
    build cluster or cdn distribution :
    
      if you have two server
