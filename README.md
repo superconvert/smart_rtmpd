@@ -78,7 +78,9 @@ We are ready to support webrtc stream output, please focus us!
    you can use player replay this video
    
      ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
+     
    or 
+   
      ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
      
       
