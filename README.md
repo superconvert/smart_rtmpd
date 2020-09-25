@@ -144,7 +144,7 @@ smart_webrtc description
 
 4. push rtmp stream to smart_webrtc.exe
 
-ffmpeg.exe -re -i oceans.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.1/live/stream
+   ffmpeg.exe -re -i oceans.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.1/live/stream
 
 5. open chrome browse, input url :  https://192.168.1.1
 
