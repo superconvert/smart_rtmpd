@@ -1,4 +1,4 @@
-We are ready to support webrtc stream output, please focus us!
+smart_rtmpd description
 
 //----------------------------------------------------------------------------------------------------
 
@@ -129,9 +129,27 @@ We are ready to support webrtc stream output, please focus us!
     
     thirtpart user can play this stream.
     
-    good luck.
-
+    good luck. 
     
+    
+//----------------------------------------------------------------------------------------------------
+
+smart_webrtc description
+
+1. download smart_webrtc.zip from github.
+
+2. unzip it, unzip smart_webrtc_win.zip
+
+3. run smart_webrtc.exe, if your ip is 192.168.1.1
+
+4. push rtmp stream to smart_webrtc.exe
+
+   ffmpeg.exe -re -i oceans.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.1/live/stream
+
+5. open chrome browse, input url :  https://192.168.1.1
+
+6. in web player edit input 192.168.1.1, click play button.
+
 //----------------------------------------------------------------------------------------------------
 
 问：期翼流服务器是哪方面的软件，有什么功能与优点
@@ -210,6 +228,11 @@ windows, ubuntn, centos, 当然 docker 也是可以运行的。arm 吗，可以�
 答：具体见下图
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/test.png?raw=true)
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/test1.png?raw=true)
+
+smart_webrtc 使用说明：
+
+参考博客
+https://blog.csdn.net/freeabc/article/details/108561272
 
 
 我们的联系方式:
