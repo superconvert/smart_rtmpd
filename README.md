@@ -4,7 +4,8 @@ smart_rtmpd description
 
     You can translate documents from Chinese to English through Google Translate！！！
     
-    ____ Our new software smart_webrtc download url :   ____  
+    Our new software smart_webrtc download url :    
+    ============================================
     url : https://pan.baidu.com/s/13RxwyJQtpD2iBssOdICfSQv  , password : gq6m    
     you can download it and try use it!!!!!!
         
