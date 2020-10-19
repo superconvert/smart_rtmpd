@@ -4,109 +4,130 @@ smart_rtmpd description
 
     You can translate documents from Chinese to English through Google Translate！！！
     
-    **Our new software smart_webrtc download url :    **
-    
-    url : https://pan.baidu.com/s/13RxwyJQtpD2iBssOdICfSQv  , password : gq6m    
-    you can download it and try use it!!!!!!
+    smart_webrtc download url : 
+        url : https://pan.baidu.com/s/13RxwyJQtpD2iBssOdICfSQv  , password : gq6m    
+        you can download it and try use it!!!!!!
         
     build ffmpeg support rtmps, see this link:
-      https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
-      you can play rtmps with vlc.
+        https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+        you can play rtmps with vlc.
     
-    smart rtmpd :
-    
-    download url:
-      http://www.qiyicc.com/download/rtmpd.zip
+    smart rtmpd download url:
+        http://www.qiyicc.com/download/rtmpd.zip
 
-    
     support protocol:
     
-      push stream              pull stream      
-      rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc ( will be )
-      rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc ( will be )
+        push stream              pull stream      
+        rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc 
+        rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc 
       
     
     media codec:
     
-      video codec:              audio codec:
-      h264, h265                aac
+        video codec:              audio codec:
+        h264, h265                aac
         
     
     rtmp url :    
     
-      right format:
-      rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream
-      only support live or vod tag .
+        right format:
+        rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream
+        only support live or vod tag .
       
-      wrong format:
-      rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
-      not support abc, sky or other tag !!!!!!!
+        wrong format:
+        rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
+        not support abc, sky or other tag !!!!!!!
       
    push stream :
    
-      ffmpeg push rtmp stream      
-      1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
-      2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
-      3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream1
-      4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream2
+        ffmpeg push rtmp stream      
+        1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
+        2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
+        3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream1
+        4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream2
       
-      ffmpeg push rtsp stream
-      1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
-      2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
-      3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
-      4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2      
+        ffmpeg push rtsp stream
+        1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
+        2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
+        3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
+        4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2      
       
-   VOD ( recorder ) :
-   
-   you can recorder, app tag from live change to vod, live ---> vod
-   
-     ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
+   VOD ( recorder ) :   
+       you can recorder, app tag from live change to vod, live ---> vod 
+       ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
    
    you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return 
    
-      2020-09-19
-      2020-09-20
-      2020-09-21
+       2020-09-19
+       2020-09-20
+       2020-09-21
    
-   this dir include this day vod files .
+       this dir include this day vod files .
    
    you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return
    
-     21-41-06.mpd      or     21-41-06.m3u8
-     21-40-05.mpd             21-40-05.m3u8
-     21-39-05.mpd             21-39-05.m3u8
+      21-41-06.mpd      or     21-41-06.m3u8
+      21-40-05.mpd             21-40-05.m3u8
+      21-39-05.mpd             21-39-05.m3u8
    
    you can use player replay this video
    
-     ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
+      ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
      
    or 
    
-     ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
+      ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
+      
+      
+   thirdparty auth url :
+      see this link : https://blog.csdn.net/freeabc/article/details/105781985
+      you can modify config.xml file 
+      
+      <authurl>192.168.1.32:8181</authurl>
+      
+      192.168.1.32:8181 is your auth server ， if you have push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
+      smart_rtmpd will send http put request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth server
+      url param type : rtmp, http, rtsp, etc. 
+      url param role : publisher (push stream) or player ( pull stream )
+      
+      if you have below http play request :
+      http://192.168.1.1/live/stream.flv?user=admin&token=xqtv312 ( http-flv )
+      http://192.168.1.1/live/stream.m3u8?user=admin&token=xqtv312 ( http-m3u8 )
+      http://192.168.1.1/live/stream.mpd?user=admin&token=xqtv312 ( http-mpd )
+      
+      smart_rtmpd will send http url auth to auto server :
+      http://192.168.1.32:8181/live/stream.flv?user=admin&token=xqtv312&type=rtmp&role=player
+      http://192.168.1.32:8181/live/stream.m3u8?user=admin&token=xqtv312&type=rtmp&role=player
+      http://192.168.1.32:8181/live/stream.mpd?user=admin&token=xqtv312&type=rtmp&role=player
+      
+      verify success return HTTP 200 OK, other be failed.
+      
+      for safe auth verify :
+      smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request.
      
       
    build cluster or cdn distribution :
    
-     if you have two server
-     server A (intranet ip: 192.168.1.1, domain: www.qiyicc.com) 
-     server B (intranet ip: 192.168.1.2, domain: www.qiyicc.com)
+      if you have two server
+      server A (intranet ip: 192.168.1.1, domain: www.qiyicc.com) 
+      server B (intranet ip: 192.168.1.2, domain: www.qiyicc.com)
      
-     you can modify config.xml file in server A:
-     ... ...
-     <vhosts>
-		<vhost name="www.qiyicc.com">			
-			<hasflv>true</hasflv>			
-			<hashls>true</hashls>			
-			<hasdash>true</hasdash>			
-			<hasrtsp>true</hasrtsp>			
-			<forward>192.168.1.2</forward>			
-		</vhost>
-	</vhosts>
+      you can modify config.xml file in server A:
+      ... ...
+      <vhosts>
+          <vhost name="www.qiyicc.com">			
+	      <hasflv>true</hasflv>			
+	      <hashls>true</hashls>			
+	      <hasdash>true</hasdash>			
+	      <hasrtsp>true</hasrtsp>			
+	      <forward>192.168.1.2</forward>			
+	  </vhost>
+      </vhosts>
     
-    if you push stream rtmp://www.qiyicc.com/live/stream to server A， the server A will forward this stream to server B, 
-    if you push stream rtmp://www.qiyicc.com/live/sport to server A, it is also forard this stream to server B.
-    user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server B， 
-    for many server repeat this proccess or each other forward.
+     if you push stream rtmp://www.qiyicc.com/live/stream to server A， the server A will forward this stream to server B, 
+     if you push stream rtmp://www.qiyicc.com/live/sport to server A, it is also forard this stream to server B.
+     user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server B， 
+     for many server repeat this proccess or each other forward.
     
   forward thirtparty :
   
@@ -115,18 +136,18 @@ smart_rtmpd description
      
      you can modify config.xml file
      ... ...
-    ... ...
+     ... ...
      <vhosts>			
-		<url name="rtmp://www.qiyicc.com/live/sport">			
-			<rewrite>rtmp://www.espn.com/live/sport</rewrite>			
-			<hasflv>true</hasflv>			
-			<hashls>true</hashls>			
-			<hasdash>true</hasdash>			
-			<hasrtsp>true</hasrtsp>			
-			<forward>54.230.173.30:1935</forward>			
-			<forward></forward>
-		</url>
-	</vhosts>
+         <url name="rtmp://www.qiyicc.com/live/sport">			
+	    <rewrite>rtmp://www.espn.com/live/sport</rewrite>			
+	    <hasflv>true</hasflv>			
+	    <hashls>true</hashls>			
+	    <hasdash>true</hasdash>			
+	    <hasrtsp>true</hasrtsp>			
+	    <forward>54.230.173.30:1935</forward>			
+	    <forward></forward>
+	 </url>
+     </vhosts>
     
     thirtpart user can play this stream.
     
