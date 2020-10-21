@@ -29,8 +29,7 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
     
         video codec:              audio codec:
         h264, h265                aac
-	vp8 ( webrtc )		  opus ( webrtc )
-        
+	vp8 ( webrtc )		  opus ( webrtc )        
     
    rtmp url :    
    -------
