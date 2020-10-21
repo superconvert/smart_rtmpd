@@ -29,18 +29,20 @@ You can translate documents from Chinese to English through Google Translate！�
     
         video codec:              audio codec:
         h264, h265                aac
+	vp8 ( webrtc )		  opus ( webrtc )
         
     
    rtmp url :    
    -------
     
         right format:
-        rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/vod/stream
-        only support live or vod tag .
+        rtmp://xxx.xxx.xxx.xxx:port/live/stream, 
+	rtmp://xxx.xxx.xxx.xxx:port/vod/stream
+        only support live or vod app tag .
       
         wrong format:
         rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
-        not support abc, sky or other tag !!!!!!!
+        not support abc, sky or other format app tag !!!!!!!
       
    push stream :
    -------
@@ -59,18 +61,18 @@ You can translate documents from Chinese to English through Google Translate！�
       
    VOD ( recorder ) :   
    -------
-       	you can recorder, app tag from live change to vod, live ---> vod 
+       	you can use recorder function. change app tag from live to vod, live ---> vod, see below :
        	ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
    
-   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return 
+   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return recorder list :
    
        		2020-09-19
        		2020-09-20
        		2020-09-21
    
-       	this dir include this day vod files .
+       	the recorder list include the day vod files .
    
-   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return
+   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return media index file :
    
       		21-41-06.mpd      or     21-41-06.m3u8
       		21-40-05.mpd             21-40-05.m3u8
@@ -80,7 +82,7 @@ You can translate documents from Chinese to English through Google Translate！�
    
       		ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
      
-   	or 
+   	        or 
    
       		ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
       
@@ -93,10 +95,10 @@ You can translate documents from Chinese to English through Google Translate！�
 	
 	<authurl>192.168.1.32:8181</authurl>
 	
-	192.168.1.32:8181 is your auth server ， if you have push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
-	smart_rtmpd will send http put request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth server
-	url param type : rtmp, http, rtsp, etc. 
-	url param role : publisher (push stream) or player ( pull stream )
+	192.168.1.32:8181 is your auth http server url， if you want push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
+	smart_rtmpd will send http put request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth http server.
+	http url param type : rtmp, http, rtsp, etc.  ( protocol )       
+	http url param role : publisher (push stream) or player ( pull stream )
 	
 	if you have below http play request :
 		http://192.168.1.1/live/stream.flv?user=admin&token=xqtv312 ( http-flv )
@@ -110,8 +112,9 @@ You can translate documents from Chinese to English through Google Translate！�
 		
 	verify success return HTTP 200 OK, other be failed.
 	
-	for safe auth verify :
-	smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request.
+	for more safe auth verify :
+	smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request, and then forward request to your 
+	auth http server.
      
       
    build cluster or cdn distribution :
