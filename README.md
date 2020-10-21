@@ -60,30 +60,25 @@ You can translate documents from Chinese to English through Google Translate！�
       
    VOD ( recorder ) :   
    -------
-       	you can use recorder function. change app tag from live to vod, live ---> vod, see below :
-       	ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
    
-   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return recorder list :
+        you can use recorder function. change app tag from live to vod, live ---> vod, see below :
+        ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
+   
+        you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return recorder list :
    
        		2020-09-19
        		2020-09-20
        		2020-09-21
    
-       	the recorder list include the day vod files .
-   
-   	you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return media index file :
-   
+       	the recorder list include the day vod files .   
+        you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return media index file :   
       		21-41-06.mpd      or     21-41-06.m3u8
       		21-40-05.mpd             21-40-05.m3u8
       		21-39-05.mpd             21-39-05.m3u8
    
-   	you can use player replay this video
-   
-      		ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06  
-     
-   	        or 
-   
-      		ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
+   	you can use player replay this video   
+        ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06       
+        ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
       
       
    thirdparty auth url :
