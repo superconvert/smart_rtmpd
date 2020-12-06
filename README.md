@@ -5,9 +5,9 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
     
    smart_webrtc download url : 
    -------    
+        see github directory smart_webrtc or download from below url
         url : https://pan.baidu.com/s/13RxwyJQtpD2iBssOdICfSQv  , password : gq6m    
-        you can download it and try use it!!!!!!
-        
+                
    build ffmpeg support rtmps, see this link:
    -------
         https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
