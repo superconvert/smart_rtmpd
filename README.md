@@ -36,8 +36,8 @@ You can translate documents from Chinese to English through Google Translate！�
     
         right format:
         rtmp://xxx.xxx.xxx.xxx:port/live/stream, 
-        rtmp://xxx.xxx.xxx.xxx:port/vod/stream
-        only support live or vod app tag .
+        rtmp://xxx.xxx.xxx.xxx:port/rec/stream
+        only support live or rec app tag .
       
         wrong format:
         rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
@@ -58,27 +58,27 @@ You can translate documents from Chinese to English through Google Translate！�
         3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
         4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2      
       
-   VOD ( recorder ) :   
+   REC ( recorder ) :   
    -------
    
-        you can use recorder function. change app tag from live to vod, live ---> vod, see below :
-        ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/vod/stream
+        you can use recorder function. change app tag from live to rec, live ---> rec, see below :
+        ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/rec/stream
    
-        you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query，  smart_rtmpd will return recorder list :
+        you can browse url : http://192.168.1.102:8080/rec/stream?cmd=query，  smart_rtmpd will return recorder list :
    
        		2020-09-19
        		2020-09-20
        		2020-09-21
    
-        the recorder list include the day vod files .   
-        you can browse url : http://192.168.1.102:8080/vod/stream?cmd=query&day=2020-09-20, smart_rtmpd will return media index file :   
+        the recorder list include the day rec files .   
+        you can browse url : http://192.168.1.102:8080/rec/stream?cmd=query&day=2020-09-20, smart_rtmpd will return media index file :   
       		21-41-06.mpd      or     21-41-06.m3u8
       		21-40-05.mpd             21-40-05.m3u8
       		21-39-05.mpd             21-39-05.m3u8
    
         you can use player replay this video   
-        ffplay http://192.168.1.102:8080/vod/stream.mpd?day=2020-09-20&time=21-41-06       
-        ffplay http://192.168.1.102:8080/vod/stream.m3u8?day=2020-09-20&time=21-41-06  
+        ffplay http://192.168.1.102:8080/rec/stream.mpd?day=2020-09-20&time=21-41-06       
+        ffplay http://192.168.1.102:8080/rec/stream.m3u8?day=2020-09-20&time=21-41-06  
       
       
    thirdparty auth url :
