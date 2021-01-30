@@ -79,7 +79,11 @@ You can translate documents from Chinese to English through Google Translateï¼ï
         you can use player replay this video   
         ffplay http://192.168.1.102:8080/rec/stream.mpd?day=2020-09-20&time=21-41-06       
         ffplay http://192.168.1.102:8080/rec/stream.m3u8?day=2020-09-20&time=21-41-06  
-      
+	
+   nat map mode :
+   -------   
+         ![image](https://github.com/superconvert/smart_rtmpd/blob/master/nat_map.png?raw=true)
+	 outer user can push stream rtmp://61.180.166.16/live/stream, inner user can play with rtmp://192.168.1.1/live/stream
       
    thirdparty auth url :
    -------
