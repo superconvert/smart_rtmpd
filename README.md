@@ -58,11 +58,11 @@ You can translate documents from Chinese to English through Google Translate！�
         3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
         4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2     
 	
-	ffmpeg push srt stream
-	1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=publisher
+        ffmpeg push srt stream
+        1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=publisher
 
         ffmpeg play srt stream
-	1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
+        1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
       
    REC ( recorder ) :   
    -------
