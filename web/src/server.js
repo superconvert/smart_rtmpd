@@ -16,8 +16,8 @@ var path = require('path');
 var rout = express.Router();
 var child_process = require('child_process');
 
-server.listen(5000, () => {
-    logger.info("server start success!");
+server.listen(port, () => {
+    logger.info("server start success(%s)!", port);
 });
 
 // 这个放到前面，否则静态路径 html 会提前拦截这个消息
