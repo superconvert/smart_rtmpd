@@ -38,3 +38,9 @@ exports.restart_server = function (req, res) {
     res.send(JSON.stringify('{}'));
 }
 
+exports.system_info = function(req, res) {
+    logger.info("system info");
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify('{}'));
+}
+
