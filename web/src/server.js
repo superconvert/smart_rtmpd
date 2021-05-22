@@ -37,6 +37,7 @@ app.post('/login', command.login);
 app.get('/start', command.start_server);
 app.get('/stop', command.stop_server);
 app.get('/restart', command.restart_server);
+app.get('/sysinfo', command.system_info);
 //app.delete('/internal/cluster/inactive', utils.checkClientIp, docsCoServer.shutdown);
 //app.post('/coauthoring/CommandService.ashx', utils.checkClientIp, rawFileParser, docsCoServer.commandFromServer);
 
