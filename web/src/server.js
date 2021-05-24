@@ -5,19 +5,19 @@ const cors = require('cors');
 const uuid = require('uuid')
 const express = require('express');
 const session = require('express-session')
+const config = require('./config')
 const log4js = require('./log_utils');        // 引入库
 const command = require('./cmd_utils');
 const logger = log4js.getLogger('webserver'); // 获取指定的输出源
 const app = express();
 const server = http.createServer(app);
-const port = 5000;
 
 var path = require('path');
 var rout = express.Router();
 var child_process = require('child_process');
 
-server.listen(port, () => {
-    logger.info("server start success(%s)!", port);
+server.listen(config.port, () => {
+    logger.info("server start success(%s)!", config.port);
 });
 
 // 这个放到前面，否则静态路径 html 会提前拦截这个消息
