@@ -44,3 +44,9 @@ exports.system_info = function(req, res) {
     res.send(JSON.stringify('{}'));
 }
 
+exports.set_config = function(req, res) {
+}
+
+exports.get_config = function(req, res) {
+}
+
