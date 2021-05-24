@@ -45,8 +45,26 @@ exports.system_info = function(req, res) {
 }
 
 exports.set_config = function(req, res) {
+    request('http://www.qiyicc.com/api/config', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body); // Show the HTML for the baidu homepage.
+            res.send(body);
+        }
+    });
 }
 
 exports.get_config = function(req, res) {
+    request({
+            url: url,
+            method: "POST",
+            json: true,
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify(requestData)
+        }, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+        }
+    });
 }
 
