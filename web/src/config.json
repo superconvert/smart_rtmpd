@@ -1,0 +1,8 @@
+{
+    "port": 5000,
+    "jwt" : {
+    	"secret" : "20120507",
+	"algorithm": "HS256",
+	"expires": "5m"
+    }
+}
