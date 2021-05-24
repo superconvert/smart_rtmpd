@@ -44,6 +44,12 @@ exports.system_info = function(req, res) {
     res.send(JSON.stringify('{}'));
 }
 
+exports.set_user = function(req, res) {
+}
+
+exports.get_user = function(req, res) {
+}
+
 exports.set_config = function(req, res) {
     request('http://www.qiyicc.com/api/config', function (error, response, body) {
         if (!error && response.statusCode == 200) {
