@@ -1,5 +1,21 @@
 'use strict';
 
+const jwt = require('jsonwebtoken');
+const config = require('./config');
+const sqlite = require('./sql_utils');
+
+const token = jwt.sign({
+        username: "freeabc"
+    }, config.jwt.secret, {
+        algorithm: config.jwt.algorithm, 
+        expiresIn: config.jwt.expires
+    }
+);
+
+jwt.verify(token, config.jwt.secret, function(err, decoded) {
+    console.log(decoded);
+});
+
 exports.login = function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify('{}'));
@@ -38,6 +54,18 @@ exports.restart_server = function (req, res) {
     res.send(JSON.stringify('{}'));
 }
 
+exports.get_service = function (req, res) {
+    logger.info("get service!");
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify('{}'));
+}
+
+exports.set_lang = function (req, res) {
+}
+
+exports.get_logfile = function (req, res) {
+}
+
 exports.system_info = function(req, res) {
     logger.info("system info");
     res.setHeader('Content-Type', 'application/json');
@@ -48,10 +76,14 @@ exports.set_user = function(req, res) {
 }
 
 exports.get_user = function(req, res) {
+    sqlite.get_users(req, res);
 }
 
-exports.set_config = function(req, res) {
-    request('http://www.qiyicc.com/api/config', function (error, response, body) {
+exports.get_stream = function(req, res) {
+}
+
+exports.get_config = function(req, res) {
+    request(config.media.config, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log(body); // Show the HTML for the baidu homepage.
             res.send(body);
@@ -59,9 +91,9 @@ exports.set_config = function(req, res) {
     });
 }
 
-exports.get_config = function(req, res) {
+exports.set_config = function(req, res) {
     request({
-            url: url,
+            url: config.media.config,
             method: "POST",
             json: true,
             headers: {
@@ -70,6 +102,8 @@ exports.get_config = function(req, res) {
             body: JSON.stringify(requestData)
         }, function(error, response, body) {
             if (!error && response.statusCode == 200) {
+                console.log(body);
+                res.send(body);
         }
     });
 }

@@ -4,5 +4,9 @@
     	"secret" : "20120507",
 	"algorithm": "HS256",
 	"expires": "5m"
+    },
+    "media" : {
+        "config" : "http://127.0.0.1:8080/api/user",
+	"stream" : "http://127.0.0.1:8080/api/stream"
     }
 }
