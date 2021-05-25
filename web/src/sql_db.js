@@ -3,7 +3,7 @@ var sqlite3 = require('sqlite3').verbose();
  
 var db = db || {};
  
-/// ´ò¿ª±í
+/// 
 db.sqlitedb = function(file) {
 	db.db = new sqlite3.Database(file); 
     db.exist = fs.existsSync(file);
