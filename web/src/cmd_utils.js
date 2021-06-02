@@ -1,25 +1,29 @@
 'use strict';
 
+const url = require('url');
 const jwt = require('jsonwebtoken');
+const request = require('request');
 const config = require('./config');
 const sqlite = require('./sql_utils');
 
-const token = jwt.sign({
-        username: "freeabc"
-    }, config.jwt.secret, {
-        algorithm: config.jwt.algorithm, 
-        expiresIn: config.jwt.expires
-    }
-);
 
+/*
 jwt.verify(token, config.jwt.secret, function(err, decoded) {
     console.log(decoded);
 });
+*/
 
 exports.login = function(req, res) {
+    const token = jwt.sign({
+            username: "freeabc"
+        }, config.jwt.secret, {
+            algorithm: config.jwt.algorithm, 
+            expiresIn: config.jwt.expires
+        }
+    );
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify('{}'));
-    //res.sendStatus(404);
+    res.send(JSON.stringify({token}));
+    console.log(token);
 }
 
 exports.start_server = function (req, res) {
@@ -54,12 +58,6 @@ exports.restart_server = function (req, res) {
     res.send(JSON.stringify('{}'));
 }
 
-exports.get_service = function (req, res) {
-    logger.info("get service!");
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify('{}'));
-}
-
 exports.set_lang = function (req, res) {
 }
 
@@ -80,18 +78,44 @@ exports.get_user = function(req, res) {
 }
 
 exports.get_stream = function(req, res) {
+	var url = config.media.stream;
+	if (req.query["name"]) {
+		url += "?name=" + req.query["name"];
+		if (req.query["type"]) {
+			url += "&type=" + req.query["type"];
+		}
+	}
+    request(url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+			var data = {}
+			data["code"] = 0;
+			data["msg"] = "ok";
+			data["data"] = JSON.parse(body);
+            res.send(data);
+        } else {
+			
+        }
+    });
 }
 
 exports.get_config = function(req, res) {
-    request(config.media.config, function (error, response, body) {
+	var url = config.media.config;
+    request(url, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body); // Show the HTML for the baidu homepage.
-            res.send(body);
+			var data = {}
+			data["code"] = 0;
+			data["msg"] = "ok";
+			data["data"] = JSON.parse(body);
+            res.send(data);
+        } else {
+			
         }
     });
 }
 
 exports.set_config = function(req, res) {
+    console.log(req.body);
+    /*
     request({
             url: config.media.config,
             method: "POST",
@@ -99,11 +123,28 @@ exports.set_config = function(req, res) {
             headers: {
                 "content-type": "application/json",
             },
-            body: JSON.stringify(requestData)
+            body: JSON.stringify(req.body)
         }, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log(body);
                 res.send(body);
+        }
+    });
+    */
+}
+
+exports.get_service = function (req, res) {
+    var url = config.media.status;
+    request(url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var data = {};
+			data["code"] = 0;
+			data["msg"] = "ok";
+			data["data"] = JSON.parse(body);
+		    res.setHeader('Content-Type', 'application/json');
+            res.send(data);
+        } else {
+			
         }
     });
 }
