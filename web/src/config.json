@@ -6,7 +6,11 @@
 	"expires": "5m"
     },
     "media" : {
-        "config" : "http://127.0.0.1:8080/api/user",
-	"stream" : "http://127.0.0.1:8080/api/stream"
-    }
+	"root" : "192.168.1.102:8080",
+        "config" : "/api/config",
+	"stream" : "/api/stream",
+        "status" : "/api/status",
+	"policy" : "/api/policy"
+    },
+    "binpath": "../smart_rtmpd/"
 }
