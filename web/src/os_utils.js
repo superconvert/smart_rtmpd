@@ -1,5 +1,4 @@
 ﻿const os = require('os');
-const co = require('co');
 const diskinfo = require('diskinfo');
 
 //cpu架构
@@ -25,8 +24,6 @@ const cpus = os.cpus();
 // 网卡列表
 const networksObj = os.networkInterfaces();
 
-let os_info = {}
-
 var dealTime = (seconds)=>{
     var seconds = seconds|0;
     var day = (seconds/(3600*24))|0;
@@ -50,8 +47,12 @@ var dealMem = (mem)=>{
     return G>0?G+'G':M>0?M+'M':KB>0?KB+'KB':mem+'B';
 };
 
-async function get_os_info() {	
+var diskInfo = [];
+
+exports.get_os_info = async function() {	
+	let os_info = {}
 	
+	/*
 	console.log("cpu架构："+arch);
 	console.log("操作系统内核："+kernel);
 	console.log("平台："+pf);
@@ -63,26 +64,31 @@ async function get_os_info() {
 	//console.log("系统负载: 1分钟, 5分钟，15分钟 - " + loadaverage.join(':'));
 	console.log(loadaverage);
 	console.log('*****cpu信息*******');
+	*/
 	
 	cpus.forEach((cpu,idx,arr)=>{
+		/*
 		var times = cpu.times;
 		console.log(`cpu${idx}：`);
 		console.log(`型号：${cpu.model}`);
 		console.log(`频率：${cpu.speed}MHz`);
 		console.log(`使用率：${((1-times.idle/(times.idle+times.user+times.nice+times.sys+times.irq))*100).toFixed(2)}%`);
+		*/
 	});
 	//网卡
-	console.log('*****网卡信息*******');
+	//console.log('*****网卡信息*******');
 	let network = [];
 	for(let nw in networksObj){
 	    let objArr = networksObj[nw];
-		console.log(`\r\n${nw}：`);
+		// console.log(`\r\n${nw}：`);
 	    objArr.forEach((obj,idx,arr)=>{
-			leg netcard = {}
+			/*
 		    console.log(`地址：${obj.address}`);
 			console.log(`掩码：${obj.netmask}`);
 	        console.log(`物理地址：${obj.mac}`);
 		    console.log(`协议族：${obj.family}`);
+			*/
+			let netcard = {}
 			netcard["ip"] = obj.address;
 			netcard["mask"] = obj.netmask;
 			netcard["mac"] = obj.mac;
@@ -103,35 +109,41 @@ async function get_os_info() {
 
 	function get_disk_info() {
 		return new Promise((resolve, reject) => {
-			diskinfo.getDrives((err, aDrives)=>{
-				let di = [];
-				for (var i = 0; i < aDrives.length; i++) {
-					 let dk = {};
-					 //盘符号
-					 var mounted = aDrives[i].mounted;
-					 //总量
-					 var total = (aDrives[i].blocks /1024 /1024 /1024).toFixed(0) + " GB";
-					 //已使用
-					 var used = (aDrives[i].used /1024 /1024 /1024).toFixed(0) + " GB";
-					 //可用
-					 var available = (aDrives[i].available /1024 /1024 /1024).toFixed(0) + " GB";
-					 //使用率
-					 var capacity = aDrives[i].capacity;
-					 dk["mounted"] = mounted;
-					 dk["total"] = total;
- 					 dk["used"] = used;
- 					 dk["available"] = available;
-					 dk["capacity"] = capacity;
-					 di[i] = dk;
-				  }
-				  resolve(di);
-			});
-			
-		})};
+			if ( diskInfo.length ) {
+				  resolve(diskInfo);
+			} else {
+				diskinfo.getDrives((err, aDrives)=>{					
+					for (var i = 0; i < aDrives.length; i++) {
+						 let dk = {};
+						 //盘符号
+						 var mounted = aDrives[i].mounted;
+						 //总量
+						 var total = (aDrives[i].blocks /1024 /1024 /1024).toFixed(0) + " GB";
+						 //已使用
+						 var used = (aDrives[i].used /1024 /1024 /1024).toFixed(0) + " GB";
+						 //可用
+						 var available = (aDrives[i].available /1024 /1024 /1024).toFixed(0) + " GB";
+						 //使用率
+						 var capacity = aDrives[i].capacity;
+						 dk["mounted"] = mounted;
+						 dk["total"] = total;
+ 						 dk["used"] = used;
+ 						 dk["available"] = available;
+						 dk["capacity"] = capacity;
+						 diskInfo[i] = dk;
+					}
+					resolve(diskInfo);
+				});
+			}});
 
-	  os_info["disk_info"] = await get_disk_info();	
-  	  console.log(JSON.stringify(os_info, null, 4));	
-	
+			
+	}
+
+	os_info["disk_info"] = await get_disk_info();	
+	//console.log(JSON.stringify(os_info, null, 4));
+	return os_info;	
 }
 
-get_os_info();
+exports.get_os_platform = function () {
+	return pf.toLowerCase() ;
+}
