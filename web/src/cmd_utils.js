@@ -9,6 +9,7 @@ const date = require('silly-datetime');
 const iconv = require('iconv-lite');
 const request = require('request');
 const thunkify = require('thunkify');
+const child_process = require('child_process');
 const config = require('./config');
 const os_utils = require('./os_utils');
 
@@ -42,33 +43,21 @@ exports.login = function(req, res) {
 // --------------------------------------------
 exports.start_server = function (req, res) {
 
-	var cmdstr = './cmd.sh start';
+	var cmdstr = 'cmd.sh start';
 	if ( os_utils.get_os_platform() == 'win32' ) {
-		cmdstr = './start.bat';
+		cmdstr = 'cmd.bat start';
 	}
 
-	child_process.exec(cmdstr,
-	  function (error, stdout, stderr) {
-        if ( error !== null ) {
-	      console.log('exec error: ' + error);
-		  res.setHeader('Content-Type', 'application/json');
-		  res.send(JSON.stringify('{}'));
-		  return;
-		} else {
-				
-		}
-		res.setHeader('Content-Type', 'application/json');
-		res.send(JSON.stringify('{}'));
-    });
-
-	/*
-	child_process.execFile('D:/testweb/aaa.bat',null,{cwd:'D:/'},
-	  function (error,stdout,stderr) {
-		if (error !== null) {
-		  console.log('exec error: ' + error);
-		}
-	});
-	*/
+	child_process.exec(cmdstr, {timeout: 1000}, 
+		function (error, stdout, stderr) {
+			if ( error !== null ) {
+				console.log('exec error: ' + error);
+			} else {
+				console.log(stdout);				
+			}
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify('{}'));
+		});
 }
 
 // --------------------------------------------
@@ -76,20 +65,19 @@ exports.start_server = function (req, res) {
 // --------------------------------------------
 exports.stop_server = function (req, res) {
 
-	var cmdstr = './cmd.sh stop';
+	var cmdstr = 'cmd.sh stop';
 	if ( os_utils.get_os_platform() == 'win32' ) {
-		cmdstr = './stop.bat';
+		cmdstr = 'cmd.bat stop';
 	}
-    child_process.exec(cmdstr,
-	  function (error, stdout, stderr) {
-	    if (error !== null) {
-	      console.log('exec error: ' + error);
-	    } else {
-				
-	    }
-	    res.setHeader('Content-Type', 'application/json');
-	    res.send(JSON.stringify('{}'));
-	});
+    child_process.exec(cmdstr, {timeout: 1000},
+		function (error, stdout, stderr) {
+		    if (error !== null) {
+				console.log('exec error: ' + error);
+		    } else {
+			}
+			res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify('{}'));
+		});
 }
 
 // --------------------------------------------
@@ -98,24 +86,23 @@ exports.stop_server = function (req, res) {
 exports.restart_server = async function (req, res) {
 	// 备份老的配置文件
     await backup_config();
-	var cmdstr = './cmd.sh restart';
+	var cmdstr = 'cmd.sh restart';
 	if ( os_utils.get_os_platform() == 'win32')	{
-		cmdstr = './restart.bat';
+		cmdstr = 'cmd.bat restart';
 	}
-	child_process.exec(cmdstr,
-	  function (error, stdout, stderr) {
-	    if (error !== null) {
-	      console.log('exec error: ' + error);
-		  await restore_config();
-	    } else {
-			// 探测是否正常工作	
-			
-	    }
-	    res.setHeader('Content-Type', 'application/json');
-	    res.send(JSON.stringify('{}'));
-	});
-	// 重启服务
-	// 探测是否正常工作	
+	child_process.exec(cmdstr, {timeout: 1000},
+		async function (error, stdout, stderr) {
+			if (error !== null) {
+		      console.log('exec error: ' + error);
+			  await restore_config();
+			} else {
+				// 探测是否正常工作
+		    }
+		    res.setHeader('Content-Type', 'application/json');
+			res.send(JSON.stringify('{}'));
+		});
+		// 重启服务
+		// 探测是否正常工作	
 }
 
 // --------------------------------------------
