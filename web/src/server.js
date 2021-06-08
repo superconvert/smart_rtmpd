@@ -5,7 +5,7 @@ const http = require('http');
 const cors = require('cors');
 const uuid = require('uuid')
 const express = require('express');
-const session = require('express-session')
+const session = require('express-session');
 const config = require('./config')
 const log4js = require('./log_utils');        // 引入库
 const command = require('./cmd_utils');
@@ -16,7 +16,6 @@ const server = http.createServer(app);
 
 var path = require('path');
 var rout = express.Router();
-var child_process = require('child_process');
 
 const url_post = {
     '/api/user' : sqlitedb.set_user,
