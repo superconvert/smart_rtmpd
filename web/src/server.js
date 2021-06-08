@@ -96,15 +96,16 @@ app.use((req, res, next) => {
 
 // 这个放到前面，否则静态路径 html 会提前拦截这个消息
 app.get('/', function(req, res, next){
-    var session = req.session;
-    var isLogined = !!session;
-    if (isLogined) {
-      logger.info("has logined.");
-      next;
-    } else {
-      logger.info("no logined.");
-      res.sendFile(path.join(__dirname, '/html/page/login-1.html'));
-    }
+    //var session = req.session;
+    //var isLogined = !!session;
+    //if (isLogined) {
+    //  logger.info("has logined.");
+    //  next;
+    //} else {
+    //  logger.info("no logined.");
+    //  res.sendFile(path.join(__dirname, '/html/page/login-1.html'));
+    //}
+	next();
 });
 
 app.use(cors());

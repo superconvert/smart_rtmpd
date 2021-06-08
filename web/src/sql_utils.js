@@ -162,8 +162,7 @@ function auth_query (req, res) {
 			info['begin'] = objects[i]['begin'];
 			info['end'] = objects[i]['end'];
 			info['token'] = objects[i]['salt'];
-			auth[i] = info ;
-			console.log(objects);
+			auth[i] = info ;		
 		}
 		var data = {
 			"code": 0,

@@ -41,32 +41,81 @@ exports.login = function(req, res) {
 // 启动服务
 // --------------------------------------------
 exports.start_server = function (req, res) {
-    child_process.exec('./cmd.sh start',
-      function (error, stdout, stderr) {
-        if (error !== null) {
-          console.log('exec error: ' + error);
-        }
+
+	var cmdstr = './cmd.sh start';
+	if ( os_utils.get_os_platform() == 'win32' ) {
+		cmdstr = './start.bat';
+	}
+
+	child_process.exec(cmdstr,
+	  function (error, stdout, stderr) {
+        if ( error !== null ) {
+	      console.log('exec error: ' + error);
+		  res.setHeader('Content-Type', 'application/json');
+		  res.send(JSON.stringify('{}'));
+		  return;
+		} else {
+				
+		}
+		res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify('{}'));
     });
-    /*
-    child_process.execFile('D:/testweb/aaa.bat',null,{cwd:'D:/'},
-      function (error,stdout,stderr) {
-        if (error !== null) {
-          console.log('exec error: ' + error);
-        }
-    });
-    */
-    logger.info("start server!");
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify('{}'));
+
+	/*
+	child_process.execFile('D:/testweb/aaa.bat',null,{cwd:'D:/'},
+	  function (error,stdout,stderr) {
+		if (error !== null) {
+		  console.log('exec error: ' + error);
+		}
+	});
+	*/
 }
 
 // --------------------------------------------
 // 停止服务
 // --------------------------------------------
 exports.stop_server = function (req, res) {
-    logger.info("stop server!");
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify('{}'));
+
+	var cmdstr = './cmd.sh stop';
+	if ( os_utils.get_os_platform() == 'win32' ) {
+		cmdstr = './stop.bat';
+	}
+    child_process.exec(cmdstr,
+	  function (error, stdout, stderr) {
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+	    } else {
+				
+	    }
+	    res.setHeader('Content-Type', 'application/json');
+	    res.send(JSON.stringify('{}'));
+	});
+}
+
+// --------------------------------------------
+// 重启服务
+// --------------------------------------------
+exports.restart_server = async function (req, res) {
+	// 备份老的配置文件
+    await backup_config();
+	var cmdstr = './cmd.sh restart';
+	if ( os_utils.get_os_platform() == 'win32')	{
+		cmdstr = './restart.bat';
+	}
+	child_process.exec(cmdstr,
+	  function (error, stdout, stderr) {
+	    if (error !== null) {
+	      console.log('exec error: ' + error);
+		  await restore_config();
+	    } else {
+			// 探测是否正常工作	
+			
+	    }
+	    res.setHeader('Content-Type', 'application/json');
+	    res.send(JSON.stringify('{}'));
+	});
+	// 重启服务
+	// 探测是否正常工作	
 }
 
 // --------------------------------------------
@@ -97,20 +146,6 @@ var restore_config = function () {
 			resolve();
 		});
 	});
-}
-
-// --------------------------------------------
-// 重启服务
-// --------------------------------------------
-exports.restart_server = async function (req, res) {
-	// 备份老的配置文件
-    await backup_config();
-	await restore_config();
-	// 重启服务
-	// 探测是否正常工作
-	
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify('{}'));
 }
 
 // --------------------------------------------
