@@ -3,7 +3,8 @@
 const url = require('url');
 const http = require('http');
 const cors = require('cors');
-const uuid = require('uuid')
+const uuid = require('uuid');
+const multer = require('multer');
 const express = require('express');
 const session = require('express-session');
 const config = require('./config')
@@ -15,21 +16,22 @@ const app = express();
 const server = http.createServer(app);
 
 var path = require('path');
-var rout = express.Router();
 
 const url_post = {
     '/api/user' : sqlitedb.set_user,
     '/api/login' : command.login,
+    '/api/lang' : command.set_lang,
     '/api/config' : command.set_config,
 	'/api/policy' : command.set_policy,
-    '/api/lang' : command.set_lang,
     '/api/start' : command.start_server,
     '/api/stop' : command.stop_server,
     '/api/restart' : command.restart_server,
+	'/api/upload': command.upload_file,
 };
 
 const url_get = {
     '/api/user' : sqlitedb.get_user,
+    '/api/lang' : command.get_lang,
     '/api/service' : command.get_service,
     '/api/sysinfo' : command.system_info,
     '/api/config' : command.get_config,
@@ -45,7 +47,8 @@ server.listen(config.port, () => {
 
 // 可以解析 req.body 参数
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
+app.use(multer({ dest: './upload/' }).any());
 
 function jwt_verify(req) {
     const Uri = url.parse(req.url);
@@ -91,20 +94,6 @@ app.use((req, res, next) => {
     } else {
         next () ;
     }
-});
-
-// 这个放到前面，否则静态路径 html 会提前拦截这个消息
-app.get('/', function(req, res, next){
-    //var session = req.session;
-    //var isLogined = !!session;
-    //if (isLogined) {
-    //  logger.info("has logined.");
-    //  next;
-    //} else {
-    //  logger.info("no logined.");
-    //  res.sendFile(path.join(__dirname, '/html/page/login-1.html'));
-    //}
-	next();
 });
 
 app.use(cors());

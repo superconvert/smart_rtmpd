@@ -16,10 +16,36 @@ const os_utils = require('./os_utils');
 var readdir=thunkify(fs.readdir);
 
 // --------------------------------------------
+// 响应正确值到前端
+// --------------------------------------------
+function succ_response(res, val) {
+	var data = {
+		"code": 0,
+		"msg": "ok",
+		"data": val
+	};
+	res.setHeader('Content-Type', 'application/json');
+	res.send(data);
+}
+
+// --------------------------------------------
+// 响应错误的值到前端
+// --------------------------------------------
+function fail_response(res, msg, val) {
+	var data = {
+		"code": 1,
+		"msg": msg,
+		"data": val
+	};
+	res.setHeader('Content-Type', 'application/json');
+	res.send(data);
+}
+
+// --------------------------------------------
 // 获取与 smart_rtmpd 的 url api 接口
 // --------------------------------------------
 function get_url(path) {
-	return "http://" + config.media.root + path;
+	return "http://" + config.media.host + ":" + config.media.port + path;
 }
 
 // --------------------------------------------
@@ -47,16 +73,14 @@ exports.start_server = function (req, res) {
 	if ( os_utils.get_os_platform() == 'win32' ) {
 		cmdstr = 'cmd.bat start';
 	}
-
 	child_process.exec(cmdstr, {timeout: 1000}, 
 		function (error, stdout, stderr) {
 			if ( error !== null ) {
-				console.log('exec error: ' + error);
+				fail_response(res, error, null);
+				console.log('start service error: ' + error);
 			} else {
-				console.log(stdout);				
+				succ_response(res, {});
 			}
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify('{}'));
 		});
 }
 
@@ -72,11 +96,51 @@ exports.stop_server = function (req, res) {
     child_process.exec(cmdstr, {timeout: 1000},
 		function (error, stdout, stderr) {
 		    if (error !== null) {
-				console.log('exec error: ' + error);
+				fail_response(res, error, null);
+				console.log('stop service error: ' + error);
 		    } else {
+				succ_response(res, {});
 			}
-			res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify('{}'));
+		});
+}
+
+// --------------------------------------------
+// 重启服务
+// --------------------------------------------
+var restart_service = function () {
+	return new Promise((resolve, reject) => {
+		var cmdstr = 'cmd.sh restart';
+		if ( os_utils.get_os_platform() == 'win32')	{
+			cmdstr = 'cmd.bat restart';
+		}
+		child_process.exec(cmdstr, {timeout: 1000},
+			async function (error, stdout, stderr) {
+				if (error !== null) {
+					reject(error);
+				} else {				
+					resolve(stdout);
+				}
+			});
+		});
+}
+
+// --------------------------------------------
+//  恢复服务
+// --------------------------------------------
+var restore_service = function () {
+	return new Promise((resolve, reject) => {
+		var cmdstr = 'cmd.sh restore';
+		if ( os_utils.get_os_platform() == 'win32')	{
+			cmdstr = 'cmd.bat restore';
+		}
+		child_process.exec(cmdstr, {timeout: 1000},
+			async function (error, stdout, stderr) {
+				if (error !== null) {
+					reject(error);
+				} else {				
+					resolve(stdout);
+				}
+			});
 		});
 }
 
@@ -84,54 +148,12 @@ exports.stop_server = function (req, res) {
 // 重启服务
 // --------------------------------------------
 exports.restart_server = async function (req, res) {
-	// 备份老的配置文件
-    await backup_config();
-	var cmdstr = 'cmd.sh restart';
-	if ( os_utils.get_os_platform() == 'win32')	{
-		cmdstr = 'cmd.bat restart';
-	}
-	child_process.exec(cmdstr, {timeout: 1000},
-		async function (error, stdout, stderr) {
-			if (error !== null) {
-		      console.log('exec error: ' + error);
-			  await restore_config();
-			} else {
-				// 探测是否正常工作
-		    }
-		    res.setHeader('Content-Type', 'application/json');
-			res.send(JSON.stringify('{}'));
-		});
-		// 重启服务
-		// 探测是否正常工作	
-}
-
-// --------------------------------------------
-// 备份配置文件
-// --------------------------------------------
-var backup_config = function () {
-	return new Promise((resolve, reject) => {
-		var cfgfile = config.binpath + "config.xml";
-	    var readable = fs.createReadStream( cfgfile );
-	    var writable = fs.createWriteStream( "config.xml.bak" ); 
-	    readable.pipe( writable );
-		readable.on('end', function() {
-			resolve();
-		});
-	});
-}
-
-// --------------------------------------------
-// 还原配置文件
-// --------------------------------------------
-var restore_config = function () {
-	return new Promise((resolve, reject) => {
-		var cfgfile = config.binpath + "config.xml";
-	    var readable = fs.createReadStream( "config.xml.bak" );
-		var writable = fs.createWriteStream( cfgfile ); 
-	    readable.pipe( writable );
-		readable.on('end', function() {
-			resolve();
-		});
+	co(function* () {
+		const result = yield restart_service();
+		// 返回的结果是备份文件名字
+		succ_response( res, {} );
+	}).catch(async err=>{
+		fail_response( res, err.code, err.stack );
 	});
 }
 
@@ -139,16 +161,73 @@ var restore_config = function () {
 // 设置语言
 // --------------------------------------------
 exports.set_lang = function (req, res) {
+	// 上传语言包
 	if ( req.query['cmd'] == 'add' )  {
-		// 修改语言索引文件
+		var lang = req.body;
+		var result = '{"lang":[]}';
+	    var langpath = "lang/lang.json";
+		var langfile = "lang/" + lang['file'];
+		if(fs.existsSync(langpath)) {
+			result = fs.readFileSync(langpath, "utf-8");
+		}
+		var value = {
+			'name': lang['name'],
+			'file': lang['file']
+		};
+		var find = false;
+		var index = JSON.parse(result);
+		for (var i = 0; i < index['lang'].length; i++ ) {
+			if ( index['lang'][i]['name'] == lang['name'] ) {
+				if ( index['lang'][i]['file'] != lang['file'] ) {
+					fs.unlinkSync('lang/' + index['lang'][i]['file']);
+				}
+				index['lang'][i]['file'] = lang['file'];
+				find = true;
+				break;
+			}
+		}
+		if ( false == find ) {
+			index['lang'].push(value);
+		}
+		fs.writeFileSync(langpath, JSON.stringify(index, "utf-8"));
+		fs.writeFileSync(langfile, lang['data']);
+		succ_response ( res, {} ) ;
+	// 删除语言包
 	} else if ( req.query['cmd'] == 'del' ) {
-		// 从索引文件内删除
+		var name = req.body;
+		var langpath = "lang/lang.json";
+		var result = '{"lang":[]}';
+		if(fs.existsSync(langpath)) {
+			result = fs.readFileSync(langpath, "utf-8");
+		}
+		var index = JSON.parse(result);
+		for (var i = 0; i < index['lang'].length; i++) {
+			if ( index['lang'][i]['name'] == name['name'] ) {
+				fs.unlinkSync('lang/' + index['lang'][i]['file']);
+				index['lang'].splice(i,1);
+				break;
+			}
+		}
+		fs.writeFileSync(langpath, JSON.stringify(index, "utf-8"));		
+		succ_response ( res, {} ) ;
+	// 从索引文件内删除
 	} else {
-		var data = {};
-		data["code"] = 1;
-		data["msg"] = "no inclued cmd";
-		res.setHeader('Content-Type', 'application/json');
-		res.send(data);
+		fail_response( res, "no include cmd", null );
+	}
+}
+
+// --------------------------------------------
+// 获取语言包
+// --------------------------------------------
+exports.get_lang = function (req, res) {
+	if ( req.query['file'] ) {
+		var langfile = "lang/" + req.query['file'];
+		var langdata = fs.readFileSync(langpath);
+		succ_respons ( res, langdata ) ;
+	} else {
+	    var langpath = "lang/lang.json";
+		var result = fs.readFileSync(langpath);
+		succ_response ( res, result ) ;
 	}
 }
 
@@ -156,8 +235,8 @@ exports.set_lang = function (req, res) {
 // 遍历目录
 // --------------------------------------------
 function* read_dir(logpath) {
-	var files = yield readdir(logpath);
 	var fileList=[];
+	var files = yield readdir(logpath);
 	if ( files && files.length ) {
 		files.forEach(function(filename){
 			fileList.push(filename);
@@ -172,12 +251,7 @@ function* read_dir(logpath) {
 exports.get_logfile = async function (req, res) {
 	var logpath = config.binpath + "log";
 	co(function*(){
-		var data = {}
-		data["code"] = 0;
-		data["msg"] = "ok";
-		data["data"] = yield read_dir(logpath);
-		res.setHeader('Content-Type', 'application/json');
-	    res.send(data);
+		succ_response( res, yield read_dir(logpath) );
 	});	
 }
 
@@ -200,27 +274,48 @@ exports.get_logmsg = function (req, res) {
 		arr.splice(0,arr.length-line);
 	}
 
-	var data = {
-		"code": 0,
-		"msg": "ok",
-		"data": arr
-	};
-	res.setHeader('Content-Type', 'application/json');
-    res.send(data);
+	succ_response( res, arr );
 }
 
 // --------------------------------------------
 // 获取系统信息
 // --------------------------------------------
 exports.system_info = async function(req, res) {
-	var data = {
-		"code": 0,
-		"msg": "ok",
-		"data": await os_utils.get_os_info()
-	};
-	res.setHeader('Content-Type', 'application/json');
-    res.send(data);
+	succ_response( res, await os_utils.get_os_info() );
 }
+
+// --------------------------------------------
+// 与 smart_rtmpd 进行通讯
+// --------------------------------------------
+function* req_smart_rtmpd(req_cmd, req_url, body=null) {
+	var option = { 
+		url: req_url,
+		method: req_cmd,
+		timeout: config.media.timeout
+	};
+	if (req_cmd == "POST") {
+		option['json'] = true;
+		option['headers'] = {
+			"content-type": "application/json",
+		};
+		option['body'] = body;
+	}
+	return new Promise((resolve, reject) => {
+		request(option, (err, res, body) => {
+			var data = {
+				"code": (err) ? 1 : 0,
+				"msg": (err) ? err : body,
+			};
+			if (res && res.statusCode != 200) {
+				console.log(req_url);
+				console.log(res.statusCode + "-" + res.statusMessage);
+				data["code"] = 1 ;
+				data["msg"] = res.statusCode + "-" + res.statusMessage;
+			}
+			resolve(data);
+		});
+	});
+};
 
 // --------------------------------------------
 // 获取直播流信息
@@ -233,18 +328,15 @@ exports.get_stream = function(req, res) {
 			url += "&type=" + req.query["type"];
 		}
 	}
-    request(url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-			var data = {
-				"code": 0,
-				"msg": "ok",
-				"data": JSON.parse(body)
-			};
-            res.send(data);
-        } else {
-			
-        }
-    });
+
+	co(function* () {
+		const result = yield req_smart_rtmpd("GET", url);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			succ_response( res, JSON.parse(result["msg"]) );
+		}
+	});
 }
 
 // --------------------------------------------
@@ -252,39 +344,73 @@ exports.get_stream = function(req, res) {
 // --------------------------------------------
 exports.get_config = function(req, res) {
 	var url = get_url(config.media.config);
-    request(url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-			var data = {
-				"code": 0,
-				"msg": "ok",
-				"data": JSON.parse(body)
-			};
-            res.send(data);
-        } else {
-			
-        }
-    });
+	co(function* () {
+		const result = yield req_smart_rtmpd("GET", url);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			succ_response( res, JSON.parse(result["msg"]) );
+		}
+	});
+}
+
+// ---------------------------------------------
+// 保存配置
+// ---------------------------------------------
+function save_config() {
+	return new Promise((resolve, reject) => {
+		fs.writeFile('./config.json', JSON.stringify(config), function (error) {
+			if (error) {
+				resolve(error);
+			} else {
+				resolve(null);
+			}
+		});	
+	});
+}
+
+// ---------------------------------------------
+// 延迟
+// ---------------------------------------------
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 // --------------------------------------------
 // 设置配置
 // --------------------------------------------
 exports.set_config = function(req, res) {
-    console.log(req.body);
-    request({
-            url: get_url(config.media.config),
-            method: "POST",
-            json: true,
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify(req.body)
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body);
-                res.send(body);
-        }
-    });    
+    var url = get_url(config.media.config);
+	co(function* () {
+		const result = yield req_smart_rtmpd("POST", url, req.body);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			console.log(result);
+			var old_port = config.media.port;
+			var new_port = result["msg"]["http_port"];
+			var bak_config = result["msg"]["bak_config"];
+			// 重启服务
+			yield restart_service();
+			// 获取服务状态
+			config.media.port = new_port;
+			yield sleep(config.restart);
+			url = get_url(config.media.status);
+			console.log(url);
+			const status = yield req_smart_rtmpd("GET", url);
+			if (status["code"] == 1) {
+				config.media.port = old_port ;
+				// 启动失败，则恢复旧配置启动
+				yield restore_service();
+				fail_response( res, status["msg"] );
+			} else {
+				// 保存新配置
+				yield save_config();
+				// 启动成功，则返回成功
+				succ_response( res, {} );
+			}			
+		}
+	});
 }
 
 // --------------------------------------------
@@ -292,19 +418,14 @@ exports.set_config = function(req, res) {
 // --------------------------------------------
 exports.get_service = function (req, res) {
     var url = get_url(config.media.status);
-    request(url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-			var data = {
-				"code": 0,
-				"msg": "ok",
-				"data": JSON.parse(body)
-			};
-		    res.setHeader('Content-Type', 'application/json');
-            res.send(data);
-        } else {
-			
-        }
-    });
+	co(function* () {
+		const result = yield req_smart_rtmpd("GET", url);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			succ_response( res, JSON.parse(result["msg"]) );
+		}
+	});
 }
 
 // --------------------------------------------
@@ -312,37 +433,50 @@ exports.get_service = function (req, res) {
 // --------------------------------------------
 exports.get_policy = function (req, res) {
     var url = get_url(config.media.policy);
-    request(url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-			var data = {
-				"code": 0,
-				"msg": "ok",
-				"data": JSON.parse(body)
-			};
-		    res.setHeader('Content-Type', 'application/json');
-            res.send(data);
-        } else {
-			
-        }
-    });
+	co(function* () {
+		const result = yield req_smart_rtmpd("GET", url);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			succ_response( res, JSON.parse(result["msg"]) );
+		}
+	});
 }
 
 // --------------------------------------------
 // 设置转发策略
 // --------------------------------------------
 exports.set_policy = function (req, res) {
-	request({
-            url: get_url(config.media.policy),
-            method: "POST",
-            json: true,
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify(req.body)
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body);
-                res.send(body);
-        }
-    });  
+    var url = get_url(config.media.policy);
+	co(function* () {
+		const result = yield req_smart_rtmpd("POST", url);
+		if (result["code"] == 1) {
+			fail_response( res, result["msg"] );
+		} else {
+			succ_response( res, JSON.parse(result["msg"]) );
+		}
+	});
+}
+
+// -------------------------------------------
+// 文件上传
+// -------------------------------------------
+exports.upload_file = function (req, res) {
+	var des_file = 'upload/' + req.files[0].originalname;
+	fs.readFile( req.files[0].path, function (err, data) {
+		fs.writeFile(des_file, data, function (err) {
+			res.header("Access-Control-Allow-Origin", "*");
+			if ( err ) {
+				console.log( err );
+				fail_response( res, err );
+			} else {
+				var response = {
+					message:'File uploaded successfully', 
+					filename:req.files[0].originalname
+				};
+				succ_response( res, response );
+			}
+			fs.unlinkSync(req.files[0].path);			
+		});
+	});
 }

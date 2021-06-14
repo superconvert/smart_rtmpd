@@ -1,17 +1,17 @@
 @echo off
 
+cd ../smart_rtmpd/
+
 set one=%1
 set pname=smart_rtmpd.exe
 set ppath=../smart_rtmpd/%pname%
 set stopfail='stop service %pname% failed.'
 set startfail='start service %pname% failed.'
 set restartfail='restart service %pname% failed.'
-
-if "%one%" == "" (
-    echo 'please input parameter'
+set restorefail='restore service %pname% failed.'
 
 rem ---------------------------------------------------------
-) else if "%one%" == "start" (
+if "%one%" == "start" (
     call:start_service
     tasklist | findstr /i "%pname%" > nul
     if %errorlevel%==1 (
@@ -46,8 +46,20 @@ rem ---------------------------------------------------------
         exit /B 0
     )
 
+rem ---------------------------------------------------------
+) else if "%one%" == "restore" (
+    call:restore_service
+    tasklist | findstr /i "%pname%" > nul
+    if %errorlevel%==1 (
+        echo "%restorefail%"
+        exit /B 1
+    ) else (
+        echo %pname%
+        exit /B 0
+    )
+
 ) else (
-    echo 'parameter muste be start, stop or restart'
+    echo 'parameter muste be start, stop, restart or restore'
 
 )
 goto:eof
@@ -60,7 +72,7 @@ rem ------------------------------------------------
     if %errorlevel%==0 (
         exit /B 0
     )
-    start %ppath% start
+    start %ppath% %1
 goto:eof
 
 rem ------------------------------------------------
@@ -79,5 +91,13 @@ rem restart service
 rem ------------------------------------------------
 :restart_service
     call:stop_service
-    call:start_service
+    call:start_service start
+goto:eof
+
+rem ------------------------------------------------
+rem restore service
+rem ------------------------------------------------
+:restore_service
+    call:stop_service
+    call:start_service restore
 goto:eof
