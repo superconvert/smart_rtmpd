@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-let config
+var config
 try {
     const data = fs.readFileSync('./config.json', 'utf8');
     // parse JSON string to JSON object
@@ -8,4 +8,7 @@ try {
 } catch (err) {
     console.log('Error reading file from disk: ${err}');
 }
+
 module.exports = config;
+
+
