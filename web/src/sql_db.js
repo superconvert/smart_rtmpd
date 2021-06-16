@@ -14,7 +14,7 @@ db.sqlitedb = function(file) {
  
 /// print error
 db.print_error = function(err) {
-	console.log("error msg:" + err.message + " error no:" + errno);
+	console.log("error msg: " + err.message + ", error no: " + err.errno);
 };
  
 /// create table

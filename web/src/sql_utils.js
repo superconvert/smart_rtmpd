@@ -86,6 +86,7 @@ function mdf_user (req, res) {
 	
 	var user = req.body;
 	var updateSql = '';
+	console.log(user);
 	// 更改信息
 	if ( user['mobile'] || user['email'] ) {
 		updateSql = 'update user set mobile=\'' + user['mobile'] + '\', ' + 
@@ -127,6 +128,7 @@ function mdf_user (req, res) {
 // ----------------------------------------------------------
 function auth_user (req, res) {
 	var user = req.body;
+	console.log(user);
 	var token = user['id'] + '-' + user['type'] + '-' + user['begin'] + '-' + user['end'];
 	token = crypt_passwd ( crypt_passwd ( token ) ) ;
 
@@ -142,6 +144,7 @@ function auth_user (req, res) {
 	};
 	res.setHeader('Content-Type', 'application/json');
 	res.send(data);	
+	console.log(data);
 }
 
 // ----------------------------------------------------------
@@ -175,19 +178,65 @@ function auth_query (req, res) {
 }
 
 // ----------------------------------------------------------
+// 查找用户
+// ----------------------------------------------------------
+function find_user (req, res) {
+	var kw = req.query['keyword'];
+	var querySql = "select * from user where id like '" + kw + "%' or email like '%" + 
+		kw + "%'" + " or mobile like '" + kw + "%' or nickname like '%s" + kw + "%'";
+	sqliteDB.query(querySql, query_data); 
+	function query_data(objects){
+		var data = {
+			"code": 0,
+			"msg": "ok",
+			"data": objects
+		};
+	    res.setHeader('Content-Type', 'application/json');
+		res.send(JSON.stringify(data));
+	}
+}
+
+// ----------------------------------------------------------
+// 取消授权
+// ----------------------------------------------------------
+function auth_del (req, res) {
+
+	var user = req.query['id'];
+	var querySql = 'delete from service where id=' + user;
+	sqliteDB.query(querySql, query_data);
+    
+	function query_data(objects) {
+		var data = {
+			"code": 0,
+			"msg": "ok"
+		};
+		res.setHeader('Content-Type', 'application/json');
+	    res.send(JSON.stringify(data));
+	}	
+}
+
+// ----------------------------------------------------------
 // 获取用户
 // ----------------------------------------------------------
 exports.get_user = function (req, res) {
 
 	if ( req.query["cmd"] ) {
+		// 添加用户
 		if ( req.query["cmd"] == "add" ) {
 			add_user ( req, res ) ;
+		// 删除用户
 		} else if ( req.query["cmd"] == "del" ) {
 			del_user ( req, res ) ;
+		// 授权用户
 		} else if ( req.query["cmd"] == "auth" ) {
 			auth_query ( req, res ) ;
+		// 查找用户
+		} else if ( req.query["cmd"] == "find" ) {
+			find_user ( req, res ) ;		
+		// 修改用户信息
 		} else if ( req.query["cmd"] == "modify" ) {
 			mdf_user ( req, res ) ;
+		// 错误处理
 		} else {
 	        var data = {
 				"code": 1,
@@ -197,13 +246,12 @@ exports.get_user = function (req, res) {
 	        res.setHeader('Content-Type', 'application/json');
 		    res.send(JSON.stringify(data));			
 		}
-
+	// 分页用户列表
 	} else {
-		
-		/// query data.
-	    var querySql = 'select * from user';
-	    sqliteDB.query(querySql, query_data);
-    
+		var page = req.query['page'];
+		var limit = req.query['limit'];
+		var querySql = 'select * from user limit ' + page * limit + ',' + limit ;
+	    sqliteDB.query(querySql, query_data);    
 	    function query_data(objects){
 	        var data = {
 				"code": 0,
@@ -222,14 +270,24 @@ exports.get_user = function (req, res) {
 exports.set_user = function (req, res) {
 
 	if ( req.query["cmd"] ) {
+		// 添加用户
 		if ( req.query["cmd"] == "add" ) {
 			add_user ( req, res ) ;
+		// 删除用
 		} else if ( req.query["cmd"] == "del" ) {
 			del_user ( req, res ) ;
 		} else if ( req.query["cmd"] == "auth" ) {
-			auth_user ( req, res ) ;
+			// 取消授权
+			if ( req.query["id"] ) {
+				auth_del ( req, res ) ;
+			// 产生授权
+			} else {
+ 			    auth_user ( req, res ) ;
+			}
+		// 修改用户
 		} else if ( req.query["cmd"] == "modify" ) {
 			mdf_user ( req, res ) ;
+		// 错误返回
 		} else {
 	        var data = {
 				"code": 1,

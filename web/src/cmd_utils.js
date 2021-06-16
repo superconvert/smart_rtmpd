@@ -4,6 +4,7 @@ const co = require('co');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const date = require('silly-datetime');
 const iconv = require('iconv-lite');
@@ -14,6 +15,14 @@ const config = require('./config');
 const os_utils = require('./os_utils');
 
 var readdir=thunkify(fs.readdir);
+
+// ----------------------------------------------------------
+// 加密密码
+// ----------------------------------------------------------
+function crypt_passwd (password) {
+    var md5 = crypto.createHash('md5');
+	return md5.update(password).digest('hex');
+}
 
 // --------------------------------------------
 // 响应正确值到前端
@@ -52,16 +61,24 @@ function get_url(path) {
 // 登录处理
 // --------------------------------------------
 exports.login = function(req, res) {
-    const token = jwt.sign({
-            username: "freeabc"
-        }, config.jwt.secret, {
-            algorithm: config.jwt.algorithm, 
-            expiresIn: config.jwt.expires
-        }
-    );
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({token}));
-    console.log(token);
+	var pwd = crypt_passwd("123456");
+	pwd = crypt_passwd(pwd);
+	if ( pwd == req.body['pwd']) {
+		const token = jwt.sign({
+			    username: "admin"
+			}, config.jwt.secret, {
+				algorithm: config.jwt.algorithm, 
+	            expiresIn: config.jwt.expires
+		    }
+		);
+	
+		succ_response ( res, { "token": token } ) ;
+
+	} else {
+		console.log("xxxxxxxxxxxxxxxxxxxx");
+		fail_response ( res, "password not match" ) ;
+		
+	}
 }
 
 // --------------------------------------------
@@ -249,9 +266,12 @@ function* read_dir(logpath) {
 // 获取日志文件列表
 // --------------------------------------------
 exports.get_logfile = async function (req, res) {
-	var logpath = config.binpath + "log";
+	var logpath = config.binpath + "log";	
 	co(function*(){
+		console.log(logpath);
 		succ_response( res, yield read_dir(logpath) );
+		console.log(yield read_dir(logpath));
+		console.log(logpath);
 	});	
 }
 
@@ -281,6 +301,7 @@ exports.get_logmsg = function (req, res) {
 // 获取系统信息
 // --------------------------------------------
 exports.system_info = async function(req, res) {
+	console.log(await os_utils.get_os_info());
 	succ_response( res, await os_utils.get_os_info() );
 }
 
@@ -329,6 +350,7 @@ exports.get_stream = function(req, res) {
 		}
 	}
 
+	console.log(url);
 	co(function* () {
 		const result = yield req_smart_rtmpd("GET", url);
 		if (result["code"] == 1) {
@@ -381,6 +403,7 @@ function sleep(ms){
 // --------------------------------------------
 exports.set_config = function(req, res) {
     var url = get_url(config.media.config);
+	console.log(req.body);
 	co(function* () {
 		const result = yield req_smart_rtmpd("POST", url, req.body);
 		if (result["code"] == 1) {
@@ -419,6 +442,7 @@ exports.set_config = function(req, res) {
 exports.get_service = function (req, res) {
     var url = get_url(config.media.status);
 	co(function* () {
+		console.log(url);
 		const result = yield req_smart_rtmpd("GET", url);
 		if (result["code"] == 1) {
 			fail_response( res, result["msg"] );
