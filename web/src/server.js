@@ -10,7 +10,7 @@ const session = require('express-session');
 const config = require('./config')
 const log4js = require('./log_utils');        // 引入库
 const command = require('./cmd_utils');
-const sqlitedb = require('./sql_utils');
+const sqlutils = require('./sql_utils');
 const logger = log4js.getLogger('webserver'); // 获取指定的输出源
 const app = express();
 const server = http.createServer(app);
@@ -18,7 +18,7 @@ const server = http.createServer(app);
 var path = require('path');
 
 const url_post = {
-    '/api/user' : sqlitedb.set_user,
+    '/api/user' : sqlutils.set_user,
     '/api/login' : command.login,
     '/api/lang' : command.set_lang,
     '/api/config' : command.set_config,
@@ -30,7 +30,7 @@ const url_post = {
 };
 
 const url_get = {
-    '/api/user' : sqlitedb.get_user,
+    '/api/user' : sqlutils.get_user,
     '/api/lang' : command.get_lang,
     '/api/service' : command.get_service,
     '/api/sysinfo' : command.system_info,
@@ -95,6 +95,9 @@ app.use((req, res, next) => {
         next () ;
     }
 });
+
+const sqlitedb = require('./sql_db.js').sqlitedb;
+var sqliteDB = new sqlitedb("smart_web.db");
 
 app.use(cors());
 app.use(express.static(path.join(__dirname,'html')));
