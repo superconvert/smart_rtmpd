@@ -1,10 +1,11 @@
 @echo off
 
-cd ../smart_rtmpd/
+set cwd=%cd%
+echo %cd%
 
 set one=%1
 set pname=smart_rtmpd.exe
-set ppath=../smart_rtmpd/%pname%
+set ppath=%cwd%/../smart_rtmpd/%pname%
 set stopfail='stop service %pname% failed.'
 set startfail='start service %pname% failed.'
 set restartfail='restart service %pname% failed.'
@@ -12,7 +13,7 @@ set restorefail='restore service %pname% failed.'
 
 rem ---------------------------------------------------------
 if "%one%" == "start" (
-    call:start_service
+    call:start_service start
     tasklist | findstr /i "%pname%" > nul
     if %errorlevel%==1 (
         echo "%startfail%"
@@ -72,6 +73,9 @@ rem ------------------------------------------------
     if %errorlevel%==0 (
         exit /B 0
     )
+    echo %ppath%
+    echo %one%
+    echo 'caiwenfeng'
     start %ppath% %1
 goto:eof
 

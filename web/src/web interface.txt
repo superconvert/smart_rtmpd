@@ -293,8 +293,8 @@
         "msg": "ok",
         "data": {
             "stream": [
-                "url": "rtmp://192.168.1.1/live/music",
-                "url": "rtmp://192.168.1.1/live/sport"	    
+                "rtmp://192.168.1.1/live/music",
+                "rtmp://192.168.1.1/live/sport"	    
             ]
         }
     }
@@ -357,24 +357,31 @@
     --------------------------------------- 与 后台交互 JSON 定义 ------------------------------------------
     5.1 获取日志列表
     HTTP GET 获取日志列表
-        http://192.168.1.1/api/logfile
+        http://192.168.1.1/api/logfile?month=1
 
     HTTP RESPONSE
     {
         "code": 0,
         "msg": "ok",
-        "data": {
-            "file": [
+        "data": [
                 "20210521.log",
                 "20210522.log",
                 "20210523.log"
-            ]
-        }
+        ]        
     }
 
     5.2 下载日志文件
     HTTP GET 获取日志文件
-        http://192.168.1.1/api/log_file?name=20210521.log
+        http://192.168.1.1/api/logfile?name=20210521.log
+
+    HTTP RESPONSE
+    {
+        "code": 0,
+        "msg": "ok",
+        "data": { 
+            "日志内容"
+        }
+    }
 
     5.3 下载日志内容
     HTTP GET 获取日志内容
@@ -391,8 +398,6 @@
 
    line 参数如果不带，表示就是获取 60 行日志，用户可以指定行数，默认 60， 有个可调整的定时器，
    默认 3 秒刷新获取一次, 实时显示到管理界面上，以方便排查问题
-
-    这是一个标准的文件下载
 
 // ------------------------------------------
 // 6. 用户管理
@@ -578,17 +583,17 @@
            "run_time": "20:10:16:56",             // 开机运行时间 20 天, 10 小时, 16 分钟，56 秒
            "cpu_info" : [
                {
-                   "type": "CPU 型号",            // CPU 型号
-                   "speed" : "2.9G",              // CPU 频率
+                   "type": "CPU 型号",              // CPU 型号
+                   "speed" : "2.9G",                  // CPU 频率
                    "used" : "CPU 使用率"          // CPU 使用率
                },
                {
-                   "type": "CPU 型号",            // CPU 型号
-                   "speed" : "2.9G",              // CPU 频率
+                   "type": "CPU 型号",              // CPU 型号
+                   "speed" : "2.9G",                  // CPU 频率
                    "used" : "CPU 使用率"          // CPU 使用率
                }
            ],
-           "cpu_average": "1 5 15",               // CPU 负载 1 分钟负载， 5 分钟负载，15 分钟负载
+           "cpu_average": [1,5,15],               // CPU 负载 1 分钟负载， 5 分钟负载，15 分钟负载
            "os_type": "操作系统类型 WINNT",
            "os_platform": "操作系统平台, 32, 64",
            "mem_size": "内存大小",
