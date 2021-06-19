@@ -10,11 +10,19 @@ const date = require('silly-datetime');
 const iconv = require('iconv-lite');
 const request = require('request');
 const thunkify = require('thunkify');
+const readline = require('readline');
 const child_process = require('child_process');
 const config = require('./config');
 const os_utils = require('./os_utils');
 
 var readdir=thunkify(fs.readdir);
+
+// ---------------------------------------------
+// 延迟
+// ---------------------------------------------
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 // ----------------------------------------------------------
 // 加密密码
@@ -110,12 +118,14 @@ exports.stop_server = function (req, res) {
 	if ( os_utils.get_os_platform() == 'win32' ) {
 		cmdstr = 'cmd.bat stop';
 	}
+	console.log(cmdstr);
     child_process.exec(cmdstr, {timeout: 1000},
 		function (error, stdout, stderr) {
 		    if (error !== null) {
 				fail_response(res, error, null);
 				console.log('stop service error: ' + error);
 		    } else {
+				console.log(cmdstr);
 				succ_response(res, {});
 			}
 		});
@@ -183,8 +193,8 @@ exports.set_lang = function (req, res) {
 		var lang = req.body;
 		var result = '{"lang":[]}';
 	    var langpath = "lang/lang.json";
-		var langfile = "lang/" + lang['file'];
-		if(fs.existsSync(langpath)) {
+		var langfile = "html/lang/" + lang['file'];
+		if (fs.existsSync(langpath)) {
 			result = fs.readFileSync(langpath, "utf-8");
 		}
 		var value = {
@@ -212,7 +222,7 @@ exports.set_lang = function (req, res) {
 	// 删除语言包
 	} else if ( req.query['cmd'] == 'del' ) {
 		var name = req.body;
-		var langpath = "lang/lang.json";
+		var langpath = "html/lang/lang.json";
 		var result = '{"lang":[]}';
 		if(fs.existsSync(langpath)) {
 			result = fs.readFileSync(langpath, "utf-8");
@@ -238,24 +248,26 @@ exports.set_lang = function (req, res) {
 // --------------------------------------------
 exports.get_lang = function (req, res) {
 	if ( req.query['file'] ) {
-		var langfile = "lang/" + req.query['file'];
+		var langfile = "html/lang/" + req.query['file'];
 		var langdata = fs.readFileSync(langpath);
 		succ_respons ( res, langdata ) ;
 	} else {
-	    var langpath = "lang/lang.json";
-		var result = fs.readFileSync(langpath);
-		succ_response ( res, result ) ;
+	    var langpath = "html/lang/lang.json";
+		var result = fs.readFileSync(langpath, "utf8");
+		var data = JSON.parse(result);
+		succ_response ( res, data['lang'] ) ;
 	}
 }
 
 // --------------------------------------------
 // 遍历目录
 // --------------------------------------------
-function* read_dir(logpath) {
+function* read_dir(logpath, month) {
 	var fileList=[];
 	var files = yield readdir(logpath);
 	if ( files && files.length ) {
 		files.forEach(function(filename){
+
 			fileList.push(filename);
 		});
 	}
@@ -269,10 +281,44 @@ exports.get_logfile = async function (req, res) {
 	var logpath = config.binpath + "log";	
 	co(function*(){
 		console.log(logpath);
-		succ_response( res, yield read_dir(logpath) );
-		console.log(yield read_dir(logpath));
+		if ( req.query["name"] ) {
+			var logfile = logpath + '/' + req.query["name"];
+			if (fs.existsSync(logfile)) {
+				var result = fs.readFileSync(logfile);
+				if ( os_utils.get_os_platform() == 'win32')	{
+					result = iconv.decode(result, 'utf-16');
+				}	
+				succ_response( res, result );		
+			}
+		} else {
+			var month = req.query["month"];
+			succ_response( res, yield read_dir(logpath, month) );
+		}
 		console.log(logpath);
 	});	
+}
+
+// ---------------------------------------------
+//
+// ---------------------------------------------
+function read_line_file(path, line, callback) {
+    var fRead = fs.createReadStream(path);
+    var objReadline = readline.createInterface({
+        input:fRead
+    });
+    var arr = new Array();
+    objReadline.on('line',function (data) {
+		if (arr.length > 60) {
+			arr.shift();
+		}
+		if ( os_utils.get_os_platform() == 'win32')	{
+			data = iconv.decode(data, 'utf-16');
+		}
+        arr.push(data);
+    });
+    objReadline.on('close',function () {
+        callback(arr);
+    });
 }
 
 // --------------------------------------------
@@ -281,10 +327,20 @@ exports.get_logfile = async function (req, res) {
 exports.get_logmsg = function (req, res) {
 	var dtstr = date.format(new Date(), 'YYYYMMDD');
 	var logpath = config.binpath + "log/" + dtstr + ".log";
-	var result = fs.readFileSync(logpath);
-	if ( os_utils.get_os_platform() == 'win32')	{
-		result = iconv.decode(result, 'utf-16');
-	}	
+	var result = '';
+
+	read_line_file(logpath, 60, function (arr) {
+		succ_response( res, arr );
+	});
+
+	/*
+	if (fs.existsSync(logpath)) {
+		result = fs.readFileSync(logpath);
+		if ( os_utils.get_os_platform() == 'win32')	{
+			result = iconv.decode(result, 'utf-16');
+		}	
+		console.log(result);
+	}
 	var line = 60 ;
 	if ( req.query["line"] ) {
 		line = parseInt(req.query["line"]);
@@ -293,15 +349,15 @@ exports.get_logmsg = function (req, res) {
 	if ( arr.length > line ) {
 		arr.splice(0,arr.length-line);
 	}
-
+	console.log(arr);	
 	succ_response( res, arr );
+	*/
 }
 
 // --------------------------------------------
 // 获取系统信息
 // --------------------------------------------
 exports.system_info = async function(req, res) {
-	console.log(await os_utils.get_os_info());
 	succ_response( res, await os_utils.get_os_info() );
 }
 
@@ -391,13 +447,6 @@ function save_config() {
 	});
 }
 
-// ---------------------------------------------
-// 延迟
-// ---------------------------------------------
-function sleep(ms){
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 // --------------------------------------------
 // 设置配置
 // --------------------------------------------
@@ -443,11 +492,31 @@ exports.get_service = function (req, res) {
     var url = get_url(config.media.status);
 	co(function* () {
 		console.log(url);
-		const result = yield req_smart_rtmpd("GET", url);
+		var result = yield req_smart_rtmpd("GET", url);
 		if (result["code"] == 1) {
 			fail_response( res, result["msg"] );
 		} else {
-			succ_response( res, JSON.parse(result["msg"]) );
+			var status = JSON.parse(result["msg"]);
+			// 服务器还在启动过程中，需要等待
+			if ( status['http'].run && status['start_time'] == '') {
+				sleep(1000);
+				while ( true ) {
+					result = yield req_smart_rtmpd("GET", url);
+					if (result["code"] == 1) {
+						fail_response( res, result["msg"] );
+						return;
+					} else {
+						status = JSON.parse(result["msg"]);
+						if ( status['http'].run && status['rtmp'].run == false) {
+							sleep(1000);
+							continue ;
+						}
+						succ_response( res, status );
+						return ;						
+					}
+				}
+			}
+			succ_response( res, status );
 		}
 	});
 }
@@ -473,11 +542,12 @@ exports.get_policy = function (req, res) {
 exports.set_policy = function (req, res) {
     var url = get_url(config.media.policy);
 	co(function* () {
-		const result = yield req_smart_rtmpd("POST", url);
+		console.log(req.body);
+		const result = yield req_smart_rtmpd("POST", url, req.body);
 		if (result["code"] == 1) {
 			fail_response( res, result["msg"] );
 		} else {
-			succ_response( res, JSON.parse(result["msg"]) );
+			succ_response( res, {} );
 		}
 	});
 }

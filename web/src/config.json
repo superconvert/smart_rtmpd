@@ -1,1 +1,1 @@
-{"port":5000,"restart":3000,"binpath":"../smart_rtmpd/","jwt":{"secret":"20120507","algorithm":"HS256","expires":"5m"},"media":{"host":"192.168.1.104","port":8282,"timeout":1000,"config":"/api/config","stream":"/api/stream","status":"/api/status","policy":"/api/policy"}}
+{"port":5000,"restart":3000,"binpath":"../smart_rtmpd/","jwt":{"secret":"20120507","algorithm":"HS256","expires":"5m"},"media":{"host":"192.168.1.104","port":8080,"timeout":1000,"config":"/api/config","stream":"/api/stream","status":"/api/status","policy":"/api/policy"}}

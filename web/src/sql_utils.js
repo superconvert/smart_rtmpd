@@ -137,10 +137,11 @@ function auth_user (req, res) {
 	];
 	var insertTileSql = "insert into service(id, type, begin, end, salt) values(?, ?, ?, ?, ?)";
 	sqliteDB.insert(insertTileSql, tileData);
+	var auth = { "token": token } ;
 	var data = {
 		"code": 0,
 		"msg": "ok",
-		"data": JSON.parse("{}")
+		"data": auth
 	};
 	res.setHeader('Content-Type', 'application/json');
 	res.send(data);	
@@ -183,7 +184,7 @@ function auth_query (req, res) {
 function find_user (req, res) {
 	var kw = req.query['keyword'];
 	var querySql = "select * from user where id like '" + kw + "%' or email like '%" + 
-		kw + "%'" + " or mobile like '" + kw + "%' or nickname like '%s" + kw + "%'";
+		kw + "%'" + " or mobile like '" + kw + "%' or nickname like '%s" + kw + "%' limit 0,120";
 	sqliteDB.query(querySql, query_data); 
 	function query_data(objects){
 		var data = {
@@ -248,9 +249,10 @@ exports.get_user = function (req, res) {
 		}
 	// 分页用户列表
 	} else {
-		var page = req.query['page'];
+		var page = req.query['page'] - 1;
 		var limit = req.query['limit'];
 		var querySql = 'select * from user limit ' + page * limit + ',' + limit ;
+		console.log(querySql);
 	    sqliteDB.query(querySql, query_data);    
 	    function query_data(objects){
 	        var data = {

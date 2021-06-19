@@ -66,14 +66,20 @@ exports.get_os_info = async function() {
 	console.log('*****cpu信息*******');
 	*/
 	
+	let cpuinfo = [];
 	cpus.forEach((cpu,idx,arr)=>{
-		/*
 		var times = cpu.times;
+		/*
 		console.log(`cpu${idx}：`);
 		console.log(`型号：${cpu.model}`);
 		console.log(`频率：${cpu.speed}MHz`);
-		console.log(`使用率：${((1-times.idle/(times.idle+times.user+times.nice+times.sys+times.irq))*100).toFixed(2)}%`);
+		console.log(`使用率：${((1-times.idle/(times.idle+times.user+times.nice+times.sys+times.irq))*100).toFixed(2)}%`);		
 		*/
+		var cpudata = {};
+		cpudata['type'] = cpu.model;
+		cpudata['speed'] = cpu.speed + ' MHz';
+		cpudata['used'] = ((1-times.idle/(times.idle+times.user+times.nice+times.sys+times.irq))*100).toFixed(2);
+		cpuinfo.push(cpudata);
 	});
 	//网卡
 	//console.log('*****网卡信息*******');
@@ -92,20 +98,20 @@ exports.get_os_info = async function() {
 			netcard["ip"] = obj.address;
 			netcard["mask"] = obj.netmask;
 			netcard["mac"] = obj.mac;
-			netcard["family"] = obj.family;
+			netcard["type"] = obj.family;
 			network[idx] = netcard;
 		});
 	}
 
 	os_info["cpu_arch"] = arch;
 	os_info["os_type"] = kernel;
-	os_info["os_arch"] = pf;
+	os_info["os_platform"] = pf;
 	os_info["run_time"] = dealTime(uptime); 
 	os_info["mem_size"] = dealMem(totalMem);
 	os_info["mem_free"] = dealMem(freeMem);
-	os_info["os_average"] = loadaverage;
-	os_info["cpu_cores"] = cpus;
-	os_info["net_interfaces"] = network;
+	os_info["cpu_average"] = loadaverage;
+	os_info["cpu_info"] = cpuinfo;
+	os_info["net_interface"] = network;
 
 	function get_disk_info() {
 		return new Promise((resolve, reject) => {
