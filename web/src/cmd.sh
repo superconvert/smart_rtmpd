@@ -1,19 +1,19 @@
 #!/bin/bash
 
-app="~/Application/Application.py"
-
-function kill_proc() {
-    app_name=$1
-    app_pid=$(ps -e | grep $app_name | awk '{print $1}') 
-    kill -9 $app_pid
-}
-
 function start() {
-    echo 'start'
+    nohup ./exec.sh > /dev/null 2>&1 &
 }
 
 function stop() {
-    kill_proc "mypython"
+    server=`ps aux | grep exec.sh | grep -v grep | awk -F ' ' '{print $2}'`
+    if [ "$server" ]; then
+        kill -9 $server
+    fi
+
+    server=`ps aux | grep smart_rtmpd | grep -v grep | awk -F ' ' '{print $2}'`
+    if [ "$server" ]; then
+        kill -9 $server
+    fi
 }
 
 function restart() {
