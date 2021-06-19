@@ -4,7 +4,6 @@ const url = require('url');
 const http = require('http');
 const cors = require('cors');
 const uuid = require('uuid');
-const multer = require('multer');
 const express = require('express');
 const session = require('express-session');
 const config = require('./config')
@@ -27,6 +26,7 @@ const url_post = {
     '/api/stop' : command.stop_server,
     '/api/restart' : command.restart_server,
 	'/api/upload': command.upload_file,
+	'/api/password': command.change_password,
 };
 
 const url_get = {
@@ -48,7 +48,6 @@ server.listen(config.port, () => {
 // 可以解析 req.body 参数
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(multer({ dest: './upload/' }).any());
 
 function jwt_verify(req) {
     const Uri = url.parse(req.url);
