@@ -60,16 +60,6 @@ function jwt_verify(req) {
 
 //token验证中间件
 app.use((req, res, next) => {
-	/*
-    req.on('data', buff => {
-        console.log(buff.toString());
-    });
-
-    req.on('end', () => {
-        //chunks = Buffer.concat(arr);
-        //done(chunks);
-    });
-	*/
     const Uri = url.parse(req.url);
     const baseurl = Uri.pathname;
     if (req.method == 'GET') {
@@ -77,9 +67,10 @@ app.use((req, res, next) => {
         if ( cb ) {
             cb ( req, res ) ;
         } else {
-			let token = req.authentication;
+			let token = req.Authorization;
 			if (baseurl.endsWith(".html")) {
 				console.log(baseurl);
+				console.log(token);
 			}
             next();
         }
