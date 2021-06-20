@@ -301,10 +301,10 @@
 
     4.2 获取某个输入流的子流
     HTTP GET 方法
-        http://192.168.1.1/api/stream?vhost=192.168.1.1:1935&type=live&name=sport
+        http://192.168.1.1/api/stream?vhost=192.168.1.1:1935&app=live&name=sport
 
         参数 vhost 为上述的 vhost 路径
-        参数 type 为上述 的 live，一般有两种类型 live 和 rec
+        参数 app 为上述 的 live，一般有两种类型 live 和 rec
         参数 name 为上述 的 music, sport 这个名字是客户动态更改的
 
     HTTP RESPONSE
@@ -376,13 +376,7 @@
         http://192.168.1.1/api/logfile?name=20210521.log
 
     HTTP RESPONSE
-    {
-        "code": 0,
-        "msg": "ok",
-        "data": { 
-            "日志内容"
-        }
-    }
+    标准的文件下载方式
 
     5.3 下载日志内容
     HTTP GET 获取日志内容
