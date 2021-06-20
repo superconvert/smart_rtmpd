@@ -347,7 +347,7 @@ function read_line_file(path, line, callback) {
         if ( os_utils.get_os_platform() == 'win32') {
             data = iconv.decode(data, 'utf-16');
         }
-        arr.push(data);
+        arr.unshift(data);
     });
     objReadline.on('close',function () {
         callback(arr);
@@ -418,8 +418,8 @@ exports.get_stream = function(req, res) {
     var url = get_url(config.media.stream);
     if (req.query["name"]) {
         url += "?name=" + req.query["name"];
-        if (req.query["type"]) {
-            url += "&type=" + req.query["type"];
+        if (req.query["app"]) {
+            url += "&app=" + req.query["app"];
         }
 		if (req.query["vhost"])	{
 			url += "&vhost=" + req.query["vhost"];

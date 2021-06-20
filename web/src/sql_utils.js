@@ -252,7 +252,6 @@ exports.get_user = function (req, res) {
 		var page = req.query['page'] - 1;
 		var limit = req.query['limit'];
 		var querySql = 'select * from user limit ' + page * limit + ',' + limit ;
-		console.log(querySql);
 	    sqliteDB.query(querySql, query_data);    
 	    function query_data(objects){
 	        var data = {
