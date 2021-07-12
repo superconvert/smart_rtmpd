@@ -93,7 +93,7 @@ You can translate documents from Chinese to English through Google Translateï¼ï
 
    nat map mode :
    -------   
-   ![image](https://github.com/superconvert/smart_rtmpd/blob/master/nat_map.png)
+   ![image](https://github.com/superconvert/smart_rtmpd/blob/master/nat.png)
    	 
    	 outer user can push stream rtmp://61.180.166.16/live/stream, inner user can play with rtmp://192.168.1.1/live/stream
       
