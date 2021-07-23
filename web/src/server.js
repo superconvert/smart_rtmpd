@@ -26,6 +26,7 @@ const url_post = {
     '/api/stop' : command.stop_server,
     '/api/restart' : command.restart_server,
 	'/api/upload': command.upload_file,
+	'/api/license': command.set_license,
 	'/api/password': command.change_password,
 };
 
@@ -38,6 +39,7 @@ const url_get = {
 	'/api/policy' : command.get_policy,
     '/api/stream' : command.get_stream,
     '/api/logfile' : command.get_logfile,
+	'/api/license' : command.get_license,
 	'/api/logmsg' : command.get_logmsg
 };
 
@@ -49,12 +51,14 @@ server.listen(config.port, () => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-function jwt_verify(req) {
-    const Uri = url.parse(req.url);
-    const baseurl = Uri.pathname;
-	if ( baseurl == "/" || baseurl == "/api/login" ) {
-		return true ;
+function jwt_verify(req, res, cb) {
+	let token = req.headers.authorization;
+	if ( token == null ) {
+		res.sendFile('html/page/login.html');
+		return false ;
 	}
+	token = token.replace('Bearer ', '');
+	cb ( req, res ) ;
 	return true ;	
 }
 
@@ -65,19 +69,14 @@ app.use((req, res, next) => {
     if (req.method == 'GET') {
         let cb = url_get[baseurl];
         if ( cb ) {
-            cb ( req, res ) ;
+			jwt_verify(req, res, cb);	            
         } else {
-			let token = req.Authorization;
-			if (baseurl.endsWith(".html")) {
-				console.log(baseurl);
-				console.log(token);
-			}
             next();
         }
     } else if (req.method == 'POST') {
         let cb = url_post[baseurl];
         if ( cb ) {
-            cb ( req, res ) ;
+			jwt_verify(req, res, cb) ;	        
         } else {
             next();
         }
@@ -97,3 +96,7 @@ process.on('uncaughtException', (err) => {
     logger.error(err.stack);
     process.exit(1);
 });
+25
+15
+125
+25

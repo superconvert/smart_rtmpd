@@ -43,6 +43,7 @@ function succ_response(res, val) {
         "data": val
     };
     res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(data);
 }
 
@@ -56,6 +57,7 @@ function fail_response(res, msg, val) {
         "data": val
     };
     res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Access-Control-Allow-Origin', '*');
     res.send(data);
 }
 
@@ -594,4 +596,18 @@ exports.upload_file = function (req, res) {
             fs.unlinkSync(req.files[0].path);           
         });
     });
+}
+
+// --------------------------------------------
+// 设置 license
+// --------------------------------------------
+exports.set_license = function (req, res) {
+	succ_response( res, {} );	
+}
+
+// --------------------------------------------
+// 设置 license
+// --------------------------------------------
+exports.get_license = function (req, res) {
+	succ_response( res, {} );
 }
