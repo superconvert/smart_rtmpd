@@ -104,7 +104,9 @@ You can translate documents from Chinese to English through Google Translate！�
 	<authurl>192.168.1.32:8181</authurl>
 	
 	192.168.1.32:8181 is your auth http server url， if you want push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
-	smart_rtmpd will send http put request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth http server.
+	smart_rtmpd will send http get request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth http server.
+	if you set <authurl router="/api/auth">192.168.1.32:8181</authurl>，smart_rtmpd will send http get request
+	http://192.168.1.32:8181/api/auth/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher
 	http url param type : rtmp, http, rtsp, etc.  ( protocol )       
 	http url param role : publisher (push stream) or player ( pull stream )
 	
