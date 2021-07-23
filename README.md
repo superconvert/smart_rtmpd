@@ -84,7 +84,7 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
         ffplay http://192.168.1.102:8080/rec/stream.mpd?day=2020-09-20&time=21-41-06       
         ffplay http://192.168.1.102:8080/rec/stream.m3u8?day=2020-09-20&time=21-41-06  
 
-   download file :
+   download file or vod mode :
    -------
         1. you put file into vod directory, for example: test.mp4
         2. in browser you can download it from url http://ip:port/vod/test.mp4
