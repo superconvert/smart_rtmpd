@@ -182,7 +182,6 @@ web portal
   web interface :
   https://github.com/superconvert/smart_rtmpd/blob/master/web/src/web%20interface.txt
     
-    
 //----------------------------------------------------------------------------------------------------
 
 smart_webrtc description
