@@ -176,6 +176,7 @@ You can translate documents from Chinese to English through Google Translateï¼ï
 
 web portal
 -------
+  web browser <-------> nodejs server ( source code ) <----> smart_rtmpd
   see https://github.com/superconvert/smart_rtmpd/tree/master/web/src
   
   web interface :
