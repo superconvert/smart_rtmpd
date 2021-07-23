@@ -147,7 +147,8 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
      user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server BÔºå 
      for many server repeat this proccess or each other forward.
      this is call app forward!
-     ![image](https://github.com/superconvert/smart_rtmpd/blob/master/app%20forward.png)
+     
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/app%20forward.png)
     
   forward thirtparty :
   -------
@@ -167,10 +168,9 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
      </vhosts>
     
     thirtpart user can play this stream.
-    this is call url forward!
-    ![image](https://github.com/superconvert/smart_rtmpd/blob/master/url%20forward.png)
-    
+    this is call url forward!   
     good luck. 
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/url%20forward.png)
     
 //----------------------------------------------------------------------------------------------------
 
