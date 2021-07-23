@@ -134,15 +134,11 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
       server A (intranet ip: 192.168.1.1, domain: www.qiyicc.com) 
       server B (intranet ip: 192.168.1.2, domain: www.qiyicc.com)
      
-      you can modify config.xml file in server A:
+      you can modify policy.xml file in server A:
       ... ...
       <vhosts>
-          <vhost name="www.qiyicc.com">			
-	      <hasflv>true</hasflv>			
-	      <hashls>true</hashls>			
-	      <hasdash>true</hasdash>			
-	      <hasrtsp>true</hasrtsp>			
-	      <forward>192.168.1.2</forward>			
+          <vhost name="rtmp://www.qiyicc.com/live">
+	      <forward rewrite="">192.168.1.2</forward>			
 	  </vhost>
       </vhosts>
     
@@ -150,6 +146,8 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
      if you push stream rtmp://www.qiyicc.com/live/sport to server A, it is also forard this stream to server B.
      user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server BÔºå 
      for many server repeat this proccess or each other forward.
+     this is call app forward!
+     ![image](https://github.com/superconvert/smart_rtmpd/blob/master/app forward.png?raw=true)
     
   forward thirtparty :
   -------
@@ -161,18 +159,16 @@ You can translate documents from Chinese to English through Google TranslateÔºÅÔ
      ... ...
      ... ...
      <vhosts>			
-         <url name="rtmp://www.qiyicc.com/live/sport">			
-	    <rewrite>rtmp://www.espn.com/live/sport</rewrite>			
-	    <hasflv>true</hasflv>			
-	    <hashls>true</hashls>			
-	    <hasdash>true</hasdash>			
-	    <hasrtsp>true</hasrtsp>			
-	    <forward>54.230.173.30:1935</forward>			
+         <url name="rtmp://www.qiyicc.com/live/sport">	    
+	    <forward rewrite="rtmp://www.espn.com/live/sport">54.230.173.30:1935</forward>			
+	    <forward rewrite="rtmps://www.espn.com/live/sport">54.230.173.32:1935</forward>
 	    <forward></forward>
 	 </url>
      </vhosts>
     
     thirtpart user can play this stream.
+    this is call url forward!
+    ![image](https://github.com/superconvert/smart_rtmpd/blob/master/url forward.png?raw=true)
     
     good luck. 
     
