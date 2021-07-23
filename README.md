@@ -2,12 +2,7 @@ smart_rtmpd description
 -------
 
 You can translate documents from Chinese to English through Google Translate！！！
-    
-   smart_webrtc download url : 
-   -------    
-        see github directory smart_webrtc or download from below url
-        url : https://pan.baidu.com/s/13RxwyJQtpD2iBssOdICfSQv  , password : gq6m    
-                
+                   
    build ffmpeg support rtmps, see this link:
    -------
         https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
@@ -19,10 +14,11 @@ You can translate documents from Chinese to English through Google Translate！�
 
    support protocol:
    -------    
-        push stream              pull stream      
-        rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc 
-        rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc 
-      
+        push stream                   pull stream      
+	srt     ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt
+        rtmp[s] ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt
+        rtsp[s] ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt 
+	
     
    media codec:
    -------
@@ -34,9 +30,9 @@ You can translate documents from Chinese to English through Google Translate！�
    rtmp url :    
    -------
     
-        right format:
-        rtmp://xxx.xxx.xxx.xxx:port/live/stream, 
-        rtmp://xxx.xxx.xxx.xxx:port/rec/stream
+        right format:	
+        rtmp://xxx.xxx.xxx.xxx:port/live/stream,                          ( live stream )	
+        rtmp://xxx.xxx.xxx.xxx:port/rec/stream                            ( live and record stream )
         only support live or rec app tag .
       
         wrong format:
@@ -63,6 +59,8 @@ You can translate documents from Chinese to English through Google Translate！�
 
         ffmpeg play srt stream
         1. ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
+	
+	see script https://github.com/superconvert/smart_rtmpd/tree/master/test
       
    REC ( recorder ) :   
    -------
@@ -211,7 +209,7 @@ smart_webrtc description
 问：smart_rtmpd 支持那些 OS? 
 -------
 
-windows, ubuntn, centos, 当然 docker 也是可以运行的。arm 吗，可以私下联系我。
+windows, ubuntn, centos, freebsd, arm 当然 docker 也是可以运行的。
 
 答：smart_rtmpd
 
@@ -300,7 +298,7 @@ https://blog.csdn.net/freeabc/article/details/108561272
 -------
 QQ : 99766553
 
-QQ 群 : 190583317
+QQ 群 : 190583317, 300474021, 271191746
 
 WebChat(微信) : 99766553
 
