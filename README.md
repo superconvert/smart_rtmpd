@@ -15,7 +15,7 @@ You can translate documents from Chinese to English through Google Translateï¼ï
    support protocol:
    -------    
         push stream                   pull stream
-	srt     ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt
+        srt     ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt
         rtmp[s] ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt
         rtsp[s] ---> smart_rtmpd ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt 
 	
