@@ -7,6 +7,34 @@ const config = require('./config');
 const sqlitedb = require('./sql_db.js').sqlitedb;
 var sqliteDB = new sqlitedb("smart_web.db");
 
+// --------------------------------------------
+// 响应正确值到前端
+// --------------------------------------------
+function succ_response(res, val) {
+    var data = {
+        "code": 0,
+        "msg": "ok",
+        "data": val
+    };
+    res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(data);
+}
+
+// --------------------------------------------
+// 响应错误的值到前端
+// --------------------------------------------
+function fail_response(res, msg, val) {
+    var data = {
+        "code": 1,
+        "msg": msg,
+        "data": val
+    };
+    res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send(data);
+}
+
 // ----------------------------------------------------------
 // 创建表
 // ----------------------------------------------------------
@@ -50,13 +78,7 @@ function add_user (req, res) {
 		];
 		var insertTileSql = "insert into user(id, email, mobile, nickname, regtime, passwd) values(?, ?, ?, ?, ?, ?)";
 		sqliteDB.insert(insertTileSql, tileData);        
-		var data = {
-			"code": 0,
-			"msg": "ok",
-			"data": JSON.parse("{}")
-		};
-	    res.setHeader('Content-Type', 'application/json');
-		res.send(data);
+		succ_response ( res, {} ) ;
 	}
 }
 
@@ -68,15 +90,8 @@ function del_user (req, res) {
 	for (var i = 0; i < userid.length; i++) {
 		var delSql = "delete from user where id=" + userid[i];
 		sqliteDB.execute(delSql);
-	}
-	
-	var data = {
-		"code": 0,
-		"msg": "ok",
-		"data": JSON.parse("{}")
-	};
-    res.setHeader('Content-Type', 'application/json');
-	res.send(data);
+	}	
+	succ_response ( res, {} ) ;
 }
 
 // ----------------------------------------------------------
@@ -94,31 +109,19 @@ function mdf_user (req, res) {
 		updateSql = updateSql + 'where id=' + user['id'];
 		console.log(updateSql);
 		sqliteDB.execute(updateSql);
-		var data = {
-			"code": 0,
-			"msg": "ok",
-			"data": JSON.parse("{}")
-		};
-	    res.setHeader('Content-Type', 'application/json');
-		res.send(data);
+		succ_response ( res, {} ) ;
 	// 更改密码
 	} else {
 		var querySql = 'select passwd from user where id=' + user['id'];
 		sqliteDB.query(querySql, query_data);	
 		function query_data( objects ) {
-			var data = {};
 			if ( objects[0]['passwd'] == null || objects[0]['passwd'] != user['oldpwd'] ) {
-				data["code"] = 1;
-				data["msg"] = "bad old password";
+				fail_response ( res, "bad old password" ) ;
 			} else {
 				var updateSql = "update user set passwd='" + user['newpwd'] + "'";
 				sqliteDB.execute(updateSql);        
-				data["code"] = 0,
-				data["msg"] = "ok",
-				data["data"] = JSON.parse("{}");
+				succ_response ( res, {} ) ;
 			}
-		    res.setHeader('Content-Type', 'application/json');
-			res.send(data);
 		}
 	}
 }
@@ -138,13 +141,7 @@ function auth_user (req, res) {
 	var insertTileSql = "insert into service(id, type, begin, end, salt) values(?, ?, ?, ?, ?)";
 	sqliteDB.insert(insertTileSql, tileData);
 	var auth = { "token": token } ;
-	var data = {
-		"code": 0,
-		"msg": "ok",
-		"data": auth
-	};
-	res.setHeader('Content-Type', 'application/json');
-	res.send(data);	
+	succ_response ( res, auth ) ;
 	console.log(data);
 }
 
@@ -168,13 +165,7 @@ function auth_query (req, res) {
 			info['token'] = objects[i]['salt'];
 			auth[i] = info ;		
 		}
-		var data = {
-			"code": 0,
-			"msg": "ok",
-			"data": auth
-		};
-		res.setHeader('Content-Type', 'application/json');
-	    res.send(JSON.stringify(data));
+		succ_response ( res, auth ) ;
 	}
 }
 
@@ -187,13 +178,7 @@ function find_user (req, res) {
 		kw + "%'" + " or mobile like '" + kw + "%' or nickname like '%s" + kw + "%' limit 0,120";
 	sqliteDB.query(querySql, query_data); 
 	function query_data(objects){
-		var data = {
-			"code": 0,
-			"msg": "ok",
-			"data": objects
-		};
-	    res.setHeader('Content-Type', 'application/json');
-		res.send(JSON.stringify(data));
+		succ_response ( res, objects ) ;
 	}
 }
 
@@ -207,12 +192,7 @@ function auth_del (req, res) {
 	sqliteDB.query(querySql, query_data);
     
 	function query_data(objects) {
-		var data = {
-			"code": 0,
-			"msg": "ok"
-		};
-		res.setHeader('Content-Type', 'application/json');
-	    res.send(JSON.stringify(data));
+		succ_response ( res, {} ) ;
 	}	
 }
 
@@ -254,13 +234,7 @@ exports.get_user = function (req, res) {
 		var querySql = 'select * from user limit ' + page * limit + ',' + limit ;
 	    sqliteDB.query(querySql, query_data);    
 	    function query_data(objects){
-	        var data = {
-				"code": 0,
-				"msg": "ok",
-				"data": objects
-			};
-	        res.setHeader('Content-Type', 'application/json');
-		    res.send(JSON.stringify(data));
+			succ_response ( res, objects ) ;
 		}
 	}
 }
@@ -290,13 +264,7 @@ exports.set_user = function (req, res) {
 			mdf_user ( req, res ) ;
 		// 错误返回
 		} else {
-	        var data = {
-				"code": 1,
-				"msg": "not found query param",
-				"data": JSON.parse('{}')
-			};
-	        res.setHeader('Content-Type', 'application/json');
-		    res.send(JSON.stringify(data));			
+			succ_response ( res, {} ) ;
 		}
 
 	} else {
