@@ -179,6 +179,14 @@ web portal
   
   web interface :
   https://github.com/superconvert/smart_rtmpd/blob/master/web/src/web%20interface.txt
+  
+//----------------------------------------------------------------------------------------------------
+
+web player
+-------
+  you can put all file ( see below url ) to smart_rtmpd html dir
+  https://github.com/superconvert/smart_rtmpd/tree/master/h5%20player/demo
+  input url http://192.168.1.1:8080 ，good luck!
     
 //----------------------------------------------------------------------------------------------------
 
