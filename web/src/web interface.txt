@@ -618,7 +618,11 @@
                     "used" : "5T",                 // 磁盘使用
                     "capacity" : "62.5"            // 使用率 62.5%
                 }
-            ]
+            ],
+           "license": {
+               "expire": 0,
+               "machcode": ""
+           }
         }
     }
 
@@ -626,6 +630,40 @@
 
      可以手动随时刷新，也可以定时刷新默认 10 秒一次，可以配置
 
+    8.2 获取授权信息
+    HTTP GET 方法
+        http://192.168.1.1/api/license
+
+    HTTP RESPONSE
+    {
+        "code": 0,
+        "msg": "ok",
+        "data": {
+           "license": {
+               "expire": 0,
+               "machcode": ""
+           }
+    }
+
+     如果机器码为空， 则不显示授权信息， 如果授权信息里 expire 为 0 ，则显示机器码，否则如果小于  10 天，高红显示尽快注册，如果小于 30 显示高黄，否则显示绿色已授权，
+     正常
+
+    8.3 设置授权信息
+    HTTP POST 请求
+        http://192.168.1.1/api/license
+
+    HTTP REQUEST
+    {
+        "data": "字符串数据"
+    }
+
+    HTTP RESPONSE
+    {
+        "code": 0,
+        "msg": "ok"        
+    }
+
+    更新注册码
 
 // ------------------------------------------
 // 9.  支持中英文切换
@@ -756,67 +794,52 @@
       "data": {
           "vhosts" : [
               {
-                  "vhost" : "192.168.1.1:1935",
+                  // 只要是下面开头的流，将都会被转发
+                 // as long as it is the beginning of the following stream, it will be forwarded
+                  "vhost" : "rtmp://192.168.1.1:1935/live",
                   "forward": [
                       {
-                          "ssl": false,
-                          "rewrite" : false,
+                           // rewrite 为空表示此字段与 vhost 的值相同
+                          // rewrite "" means that the value is equal to vhost  "rtmp://192.168.1.1:1935/live"
+                          "rewrite" : "",
                           "host" : "192.168.1.7:1936"
                       },
                       {
-                          "ssl": false,
-                          "rewrite" : false,
+                          // rtmps - ssl on ( 开启 ssl 推流 )
+                          "rewrite" : "rtmps://192.168.1.17:1936/sport",
+                          "host" : "192.168.1.7:1936"
+                      },
+                      {
+                          // 正常的转发
+                          "rewrite" : "rtmp://192.168.1.8:1936/sport",
                           "host" : "192.168.1.8:1936"
                       },
                   ]
               },
-              {
-                  "vhost" : "192.168.1.3:1935",
-                  "forward": [
-                      {
-                          "ssl": false,
-                          "rewrite" : false,
-                          "host" : "192.168.1.4:1936"
-                      },
-                      {
-                          "ssl": false,
-                          "rewrite" : false,
-                          "host" : "192.168.1.5:1936"
-                      },
-                  ]
-              }
           ],
           "urls" : [
               {
+                  // 指定的 url 将会被转发 ( the specified url will be forwarded )
                   "url" : "rtmp://192.168.1.1/live/stream"
                   "forward": [
                       {
-                          "ssl": false,
+                          // rewrite 为空表示此字段与 url 的值相同 "rtmp://192.168.1.1/live/stream"
+                          // rewrite "" means that the value is equal to url "rtmp://192.168.1.1/live/stream"
+                          "rewrite" : "",
+                          "host": "192.168.1.101:1935"
+                      },
+                      { 
+                          // 正常的转发
                           "rewrite" : "rtmp://www.qiyicc.com/live/sport",
                           "host": "192.168.1.101:1935"
                       },
-                      {
-                          "ssl": false,
-                          "rewrite" : "rtmp://www.qiyicc.com/live/sport",
-                          "host": "192.168.1.101:1935"
-                      },
-                  ]
-              },
-              {
-                  "url" : "rtmp://192.168.1.1/live/stream"
-                  "forward": [
-                      {
-                          "ssl": false,
-                          "rewrite" : "rtmp://www.qiyicc.com/live/sport",
-                          "host": "192.168.1.101:1935"
-                      },
-                      {
-                          "ssl": false,
-                          "rewrite" : "rtmp://www.qiyicc.com/live/sport",
+	     {
+                          // rtmps - ssl on ( 开启 ssl 推流 )
+                          "rewrite" : "rtmps://www.qiyicc.com/live/sport",
                           "host": "192.168.1.101:1935"
                       },
                   ]
-              }              
+              },             
           ]
       }
   }
@@ -827,37 +850,43 @@
 
   HTTP REPONSE 格式如上
 
-  此页面分为两个区域 一个是 vhost 转发策略，一个是 url 转发策略
-  vhost 转发策略是针对某一种 vhost 做转发策略
-  <!-- e.g. : url is rtmp://www.qiyicc.com/live/sport, vhost = www.qiyicc.com, app = live, stream = sport -->
-  <!-- 对 vhost 为 www.qiyicc.com 进行转发, 配置如下: <vhost name="www.qiyicc.com">, 那么 url 的 vhost 值为 www.qiyicc.com 的将会被转发 -->
-  <vhost name="">
-      <!-- <forward rewrite="true">www.cctv5.com:1936</forward> 假设 rewrite 为 true, forward 配置为 www.cctv5.com:1936, -->
-      <!-- 那么源 url: rtmp://www.qiyicc.com/live/sport, 则会改写为 url: rtmp://www.cctv5.com:1936/live/sport -->
-      <forward rewrite="false"></forward>
-      <!-- 假设 rewrite 为 false, forward 配置为 192.168.1.1:1936, 那么 rtmp://www.qiyicc.com/live/sport, 则保持不变 rtmp://www.qiyicc.com/live/sport -->
-      <forward rewrite="false"></forward>
-  </vhost>
-  <!-- vhost 可以配置多个 -->
-  <vhost name="">
-  </vhost>
-
-  url 转发策略是针对特定的 url 做转发
-  <!-- 可以针对具体的 url 进行 forward，从而避免 forward 整个 vhost, 比如： rtmp://192.168.1.1/live/stream -->
-  <!-- 配置如下: <url name="rtmp://192.168.1.1/live/stream"> 那么 url 值为 rtmp://192.168.1.1/live/stream 的将会被转发, 这样的转发更精确 -->
-      <url name="">
-          <!-- <forward rewrite="rtmp://www.cctv5.com:1936/live/football">www.cctv5.com:1936</forward> rewrite 是具体的 url -->
-          <!-- 那么源 url: rtmp://www.qiyicc.com/live/sport, 则会改写为 url: rtmp://www.cctv5.com:1936/live/football -->
-	<forward rewrite=""></forward>
-	<!-- <forward rewrite="">www.cctv5.com:1936</forward> rewrite 为空的情况下 -->
-                <!-- 那么源 url: rtmp://www.qiyicc.com/live/sport, 则不会改写, 还是为 url: rtmp://www.qiyicc.com/live/sport -->
-	<forward rewrite=""></forward>
-                <!-- forword 可以有多个, 根据需要自行扩充 -->
-	<forward rewrite=""></forward>
-      </url>
-      <!-- url 可以配置多个 -->
-      <url name="">
-  </url>
+  此页面分为两个区域 一个是批量转发，一个是单路转发
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!-- 转发 policy 列表，vhosts - 批量转发列表, urls - 单路转发列表; rtmp - 普通转发, rtmps - 经过 ssl 加密后转发 -->
+  <!-- url 格式详解如下：rtmp://www.qiyicc.com/live/sport, 其中 vhost = www.qiyicc.com, app = live, stream = sport -->
+  <policy>
+    <!-- 批量转发 ( batch forward ), 这里的 vhost 代表 tcUrl , 例如: rtmp://www.qiyicc.com/live -->
+    <vhosts>
+        <!-- 如果想对 rtmp://www.qiyicc.com/live 开头的 url 进行转发，则配置如下: <vhost name="rtmp://www.qiyicc.com/live"> -->
+        <vhost name="">
+            <!-- 如果源 url 为 rtmp://www.qiyicc.com/live/stream, forward 配置如下 <forward rewrite="">www.cctv5.com:1936</forward> -->
+            <!-- 因为 rewrite="", 所以就会把源 url 的流转发主机 www.cctv5.com:1936 上，那么目的 url 同源 url ，常用于一个域名多个 IP 的情况 -->
+            <!-- 如果 rewrite="rtmps://www.cctv5.com:1936/sport", 那么就会把流转发到主机 www.cctv5.com:1936 上，目的 url 为 rtmps://www.cctv5.com:1936/sport/stream -->
+            <forward rewrite=""></forward>
+            <!-- forword 可以有多个, 根据需要自行扩充 -->
+            <forward rewrite=""></forward>
+        </vhost>
+        <!-- vhost 可以配置多个 -->
+        <vhost name="" />
+    </vhosts>
+    <!-- 单路转发 ( single forward ) -->
+    <urls>
+        <!-- 可以针对固定的 url 进行转发，从而避免转发整个 vhost, 比如想转发 rtmp://192.168.1.1/live/stream 到别的服务器 配置如下  -->
+        <!-- <url name="rtmp://192.168.1.1/live/stream"> 那么只要推流的 url 是上述的值, 将会按下面的规则转发, 可以做到精确转发  -->
+        <url name="">
+            <!-- 1.<forward rewrite="rtmps://www.cctv5.com:1936/sport/football">www.cctv5.com:1936</forward> rewrite 是目的 url, 如果  -->
+            <!-- 是 rtmps 则代表启动 ssl, 比如源 url 为 rtmp://www.qiyicc.com/live/stream, 那么推流则会转发到主机 www.cctv5.com:1936  -->
+            <!-- 转发方式是 ssl 加密, 转发的目的 url 变成 rtmps://www.cctv5.com:1936/sport/football  -->
+            <!-- 2.<forward rewrite="">www.cctv5.com:1936</forward> rewrite 为空的情况下, 那么源 url 为 rtmp://www.qiyicc.com/live/stream -->
+            <!-- 那么目的 url 还是保持原来 rtmp://www.qiyicc.com/live/stream, 推流则会转发到主机 www.cctv5.com:1936 , 常用于一个域名多个 IP 的情况 -->
+            <forward rewrite=""></forward>
+            <!-- forword 可以有多个, 根据需要自行扩充 -->
+            <forward rewrite=""></forward>
+        </url>
+        <!-- url 可以配置多个 -->
+        <url name="" />
+    </urls>
+  </policy>
 
 // ------------------------------------------
 // 12.  升级包上传
@@ -953,3 +982,5 @@
         "code": 0,
         "msg": "ok"        
     }
+
+
