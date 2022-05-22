@@ -5,6 +5,7 @@ You can translate documents from Chinese to English through Google Translate！�
 # build ffmpeg support rtmps, see this link:
 
 https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+
 you can play rtmps with vlc player.
     
 # download url
@@ -30,13 +31,19 @@ push stream                   pull stream
 # rtmp url  
 
 - right format:	
-rtmp://xxx.xxx.xxx.xxx:port/live/stream,                          ( live stream )	
-rtmp://xxx.xxx.xxx.xxx:port/rec/stream                            ( record stream )
+|url|description|
+|---|---|
+|rtmp://xxx.xxx.xxx.xxx:port/live/stream |live stream |
+|rtmp://xxx.xxx.xxx.xxx:port/rec/stream |record stream |
 only support live or rec app tag .
 
 - bad format:
-rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
-not support abc, sky or other format app tag !!!!!!!
+|url|description|
+|---|---|
+|rmtp://xxx.xxx.xxx.xxx:port/abc/stream | bad format|
+|rmtp://xxx.xxx.xxx.xxx:port/sky/camera | bad format|
+|rmtp://xxx.xxx.xxx.xxx:port/xxx/live | bad format|
+not support abc, sky, xxx or other format app tag !!!!!!!
       
 # push stream
    
@@ -65,14 +72,14 @@ https://github.com/superconvert/smart_rtmpd/tree/master/test
 
 - recorder stream
 you can use recorder function. change app tag from live to rec, live ---> rec, see below :
-'''
+```bash
 ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/rec/stream
-'''
+```
 smart rtmpd will generator recorder file in /rec directory
 
 - query recorder list
 you can browse url : 
-'''
+```bash
 http request：
 http://192.168.1.1:8080/api/rec
 
@@ -84,11 +91,11 @@ http response：
         "sport"
     ]
 } 
-'''
+```
 music & sport is recorder name
 
 - query the specified stream name
-'''
+```bash
 http request：
 http://192.168.1.1:8080/rec/sport
 
@@ -100,11 +107,11 @@ http response：
 	"2022-05-22"
     ]
 }
-'''
+```
 day 2022-05-21 & "2022-05-22 has recorder stream
 
 - query the specified video file
-'''
+```bash
 http request：
 http://192.168.1.1:8080/rec/sport?day=2022-05-21
 
@@ -117,7 +124,7 @@ http response：
         "18-34-02.m3u8"
     ]
 }
-'''
+```
 
 - replay recorder video
 you can use player replay this video   
@@ -142,36 +149,35 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
    outer user can push stream rtmp://61.180.166.16/live/stream, inner user can play with rtmp://192.168.1.1/live/stream
       
 # thirdparty auth url :
-
    
-   	see this link : https://blog.csdn.net/freeabc/article/details/105781985
-	you can modify config.xml file 
+see this link : https://blog.csdn.net/freeabc/article/details/105781985
+you can modify config.xml file 
 	
-	<authurl>192.168.1.32:8181</authurl>
+<authurl>192.168.1.32:8181</authurl>
 	
-	192.168.1.32:8181 is your auth http server url， if you want push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
-	smart_rtmpd will send http get request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth http server.
-	if you set <authurl router="/api/auth">192.168.1.32:8181</authurl>，smart_rtmpd will send http get request
-	http://192.168.1.32:8181/api/auth/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher
-	http url param type : rtmp, http, rtsp, etc.  ( protocol )       
-	http url param role : publisher (push stream) or player ( pull stream )
+192.168.1.32:8181 is your auth http server url， if you want push a stream rtmp://192.168.1.1/live/stream?user=admin&token=xqtv312,
+smart_rtmpd will send http get request http://192.168.1.32:8181/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher to your auth http server.
+if you set <authurl router="/api/auth">192.168.1.32:8181</authurl>，smart_rtmpd will send http get request
+http://192.168.1.32:8181/api/auth/live/stream?user=admin&token=xqtv312&type=rtmp&role=publisher
+http url param type : rtmp, http, rtsp, etc.  ( protocol )       
+http url param role : publisher (push stream) or player ( pull stream )
 	
-	if you have below http play request :
-		http://192.168.1.1/live/stream.flv?user=admin&token=xqtv312 ( http-flv )
-		http://192.168.1.1/live/stream.m3u8?user=admin&token=xqtv312 ( http-m3u8 )
-		http://192.168.1.1/live/stream.mpd?user=admin&token=xqtv312 ( http-mpd )
+if you have below http play request :
+    http://192.168.1.1/live/stream.flv?user=admin&token=xqtv312 ( http-flv )
+    http://192.168.1.1/live/stream.m3u8?user=admin&token=xqtv312 ( http-m3u8 )
+    http://192.168.1.1/live/stream.mpd?user=admin&token=xqtv312 ( http-mpd )
 		
-	smart_rtmpd will send http url auth to auto server :
-		http://192.168.1.32:8181/live/stream.flv?user=admin&token=xqtv312&type=rtmp&role=player
-		http://192.168.1.32:8181/live/stream.m3u8?user=admin&token=xqtv312&type=rtmp&role=player
-		http://192.168.1.32:8181/live/stream.mpd?user=admin&token=xqtv312&type=rtmp&role=player
+smart_rtmpd will send http url auth to auto server :
+    http://192.168.1.32:8181/live/stream.flv?user=admin&token=xqtv312&type=rtmp&role=player
+    http://192.168.1.32:8181/live/stream.m3u8?user=admin&token=xqtv312&type=rtmp&role=player
+    http://192.168.1.32:8181/live/stream.mpd?user=admin&token=xqtv312&type=rtmp&role=player
 		
-	verify success return HTTP 200 OK, other be failed.
+verify success return HTTP 200 OK, other be failed.
 	
-	for more safe auth verify :
-	smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request, and then forward request to your 
-	auth http server.
-     
+for more safe auth verify :
+smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request, and then forward request to your 
+auth http server.
+    
       
 # build cluster or cdn distribution :
    
