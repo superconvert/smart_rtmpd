@@ -144,10 +144,12 @@ http response：
 ```
 
 - replay recorder video
-you can use player replay this video   
+you can use player replay this video 
+```bash
 ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-22-11.m3u8
 ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-24-33.m3u8
 ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-32-02.m3u8
+```
 
 # download file or vod mode :
 
