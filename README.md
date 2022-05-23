@@ -33,29 +33,35 @@ https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
 
 you can play rtmps with vlc player.
    
-# rtmp url  
+# smart rtmpd url format
 
-- right format
+- right format url
 
 |url|description|
 |---|---|
 |rtmp://192.168.1.1:1935/live/stream|live stream|
 |rtmp://192.168.1.1:1935/rec/stream|record stream|
+|rtsp://192.168.1.105:9554/live/music|live stream|
+|rtsp://192.168.1.105:9554/rec/music|live stream|
+|srt://192.168.1.105:9000/live/space|record stream|
+|srt://192.168.1.105:9000/rec/space|record stream|
 
 only support live or rec app tag .
 
-- bad format
+- bad format url
 
 |url|description|
 |---|---|
 |rmtp://192.168.1.1:1935/abc/stream|bad format|
 |rmtp://192.168.1.1:1935/sky/camera|bad format|
 |rmtp://192.168.1.1:1935/xxx/live|bad format|
+|rtsp://192.168.1.105:9554/class/music|bad format|
+|srt://192.168.1.105:9000/record/space|bad format|
 
 not support abc, sky, xxx or other format app tag !!!!!!!
-      
-# push stream
-   
+
+# smart rtmpd live stream
+ 
 - ffmpeg push rtmp stream      
 ```bash
 ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
@@ -85,8 +91,8 @@ ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=pla
 ```bash
 https://github.com/superconvert/smart_rtmpd/tree/master/test
 ```
-      
-# recorder stream
+
+# smart rtmpd recorder stream
 
 - recorder stream
 you can use recorder function. change app tag from live to rec, live ---> rec, see below :
@@ -227,7 +233,10 @@ http://192.168.1.32:8181/live/stream.mpd?user=admin&token=xqtv312&type=rtmp&role
 verify success return HTTP 200 OK, other be failed.
 	
 for more safe auth verify :
-smart_rtmpd  --- http ---> proxy  --- https ---> auth server ， you can use sample proxy module first process auth request, and then forward request to your 
+```bash
+smart_rtmpd  --- http ---> proxy  --- https ---> auth server
+```
+you can use sample proxy module first process auth request, and then forward request to your 
 auth http server.
     
       
@@ -273,14 +282,13 @@ auth http server.
     this is call url forward!   
     good luck. 
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/url%20forward.png)
-    
 
 # web portal
 
   web browser <-------> nodejs server ( source code ) <----> smart_rtmpd
   see https://github.com/superconvert/smart_rtmpd/tree/master/web/src
   
-  web interface :
+  web development interface :
   https://my.oschina.net/u/4249347/blog/5529704
   
 # web player
