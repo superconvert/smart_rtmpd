@@ -1,6 +1,11 @@
 # smart_rtmpd description
 
 You can translate documents from Chinese to English through Google Translate！！！
+
+smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance. The supported protocols are rtmp, rtsp, srt, webrtc, http, hls, dash, etc. 
+
+It has two versions multithreading and coroutine
+
                    
 # build ffmpeg support rtmps, see this link:
 
@@ -14,13 +19,12 @@ http://www.qiyicc.com/download/rtmpd.zip
 
 # support protocol
 
-push stream                   pull stream
 | client | server | protocol |
 |---|---|---|
 |srt     |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 |rtmp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 |rtsp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
-	
+
 # media codec
 
 | video codec | audio codec |
@@ -30,43 +34,56 @@ push stream                   pull stream
     
 # rtmp url  
 
-- right format:	
+- right format
+
 |url|description|
 |---|---|
-|rtmp://xxx.xxx.xxx.xxx:port/live/stream |live stream |
-|rtmp://xxx.xxx.xxx.xxx:port/rec/stream |record stream |
+|rtmp://192.168.1.1:1935/live/stream|live stream|
+|rtmp://192.168.1.1:1935/rec/stream|record stream|
+
 only support live or rec app tag .
 
-- bad format:
+- bad format
+
 |url|description|
 |---|---|
-|rmtp://xxx.xxx.xxx.xxx:port/abc/stream | bad format|
-|rmtp://xxx.xxx.xxx.xxx:port/sky/camera | bad format|
-|rmtp://xxx.xxx.xxx.xxx:port/xxx/live | bad format|
+|rmtp://192.168.1.1:1935/abc/stream|bad format|
+|rmtp://192.168.1.1:1935/sky/camera|bad format|
+|rmtp://192.168.1.1:1935/xxx/live|bad format|
+
 not support abc, sky, xxx or other format app tag !!!!!!!
       
 # push stream
    
 - ffmpeg push rtmp stream      
-1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
-2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
-3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/music
-4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/sport
+```bash
+ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
+ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
+ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/music
+ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/sport
+```
       
 - ffmpeg push rtsp stream
-1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
-2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
-3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/music
-4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/sport    
+```bash
+ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
+ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
+ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/music
+ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/sport
+```
 	
 - ffmpeg push srt stream
-1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=publisher
+```bash
+ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=publisher
+```
 
 - ffmpeg play srt stream
-1. ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
-	
+```bash
+ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
+```
 - more scripts 
+```bash
 https://github.com/superconvert/smart_rtmpd/tree/master/test
+```
       
 # recorder stream
 
