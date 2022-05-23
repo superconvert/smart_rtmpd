@@ -6,18 +6,14 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 
 It has two versions multithreading and coroutine
 
-                   
-# build ffmpeg support rtmps, see this link:
+- support media codec
 
-https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+| video codec | audio codec |
+|---|---|
+|h264, h265|aac|
+|vp8 ( webrtc )|opus ( webrtc )|
 
-you can play rtmps with vlc player.
-    
-# download url
-
-http://www.qiyicc.com/download/rtmpd.zip
-
-# support protocol
+- support protocol
 
 | client | server | protocol |
 |---|---|---|
@@ -25,13 +21,18 @@ http://www.qiyicc.com/download/rtmpd.zip
 |rtmp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 |rtsp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 
-# media codec
+- download url
+```bash
+http://www.qiyicc.com/download/rtmpd.zip
+https://github.com/superconvert/smart_rtmpd/releases
+```
 
-| video codec | audio codec |
-|---|---|
-|h264, h265|aac|
-|vp8 ( webrtc )|opus ( webrtc )|
-    
+# build ffmpeg support rtmps, see this link:
+
+https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+
+you can play rtmps with vlc player.
+   
 # rtmp url  
 
 - right format
