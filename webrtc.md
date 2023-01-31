@@ -14,7 +14,7 @@
 1. 制作服务器端证书 （ client )
 * 下载 https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-windows-arm64.exe 到 client，并重命名
     ```shell
-    mkcert-v1.4.4-windows-arm64.exe 为 mkcert.exe
+    mkcert-v1.4.4-windows-arm64.exe -> mkcert.exe
     ```
 * 执行如下命令：
     ```shell
