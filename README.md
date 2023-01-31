@@ -1,31 +1,131 @@
-# smart_rtmpd description
+# smart rtmpd 简介
+smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您不理解，可以理解为和 nginx-rtmp, srs ，并与此功能类似，特点是性能卓越，跨平台，无依赖，部署和维护十分方便，解压既能运行。
 
-You can translate documents from Chinese to English through Google Translate！！！
+### 说明
+* 免费软件 ( 不开源 )
+* 允许商业应用 ( 保留我们的 logo 和 name )
 
-smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance. The supported protocols are rtmp, rtsp, srt, webrtc, http, hls, dash, etc. 
+### 特点
+* 性能是我们追求的目标，个人认为 smart_rtmpd 性能相对不错
+* 部署简单，解压及运行，无需过渡配置
+* 兼容性特强，windows, linux, freebsd, arm64 主流系统，都满足运行条件
+* 软件大小相对比较小，即使是嵌入式设备也能满足布署 
+* 支持 web 开发接口
+* 支持集群，级联
 
-It has two versions multithreading and coroutine
+### 支持那些 OS
+* Windows
+* Linux ( Ubuntu, CentOS )
+* FreeBSD
+* ARM64
+* Embedded system  
+其中 Linux, FreeBSD 版本 支持多线程 ( multithread ) 和协程 ( coroutines )  
+对于 docker 版本，直接拷贝 smart_rtmpd 到 docker 里面，直接运行即可  
+理论上即使是自定制 linux 操作系统都能正常运行 smart_rtmpd
 
-- support media codec
+### 益处
+最大的益处就是极大的节约您的运营成本，维护成本，迁移成本，
+* 软件布署极其简单，解压即可运行，无第三方库依赖，解决了部署繁琐问题，兼容性问题，以及后续升级维护兼容性的问题
+* 高性能是 smart rtmpd 追求的目标，尽量降低硬件要求，挖据硬件性能，极大的节约运营成本
+* 配置通用化，windows 平台的配置可以轻松拷贝到 linux, arm, freebsd 反之亦然，数据格式统一化，满足迁移需求
+* 灵活的布署模式，支持单服务器，集群，级联等多种模式，满足各种业务需求 ( rewrite )，也满足大规模布署的需要
+* 支持热插拔，最大限度的保证系统运营状态下，平滑升级或维护系统
+* 支持鉴权接口与验证，满足灵活的业务需求
+
+# smart rtmpd 下载地址
+|站点 |地址 |
+|---|---|
+|official |http://www.qiyicc.com/download/rtmpd.zip |
+|github |https://github.com/superconvert/smart_rtmpd |
+|gitee |https://gitee.com/mirrors/smart-rtmpd |
+
+# smart rtmpd 支持那些音视频编码
+
+### support media codec
 
 | video codec | audio codec |
 |---|---|
 |h264, h265|aac|
+|h264, h265|pcmu/pcma|
 |vp8 ( webrtc )|opus ( webrtc )|
+|h264 ( webrtc )|pcmu/pcma ( webrtc )|
 
-- support protocol
-
+### support protocol
 | client | server | protocol |
 |---|---|---|
 |srt     |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 |rtmp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 |rtsp[s] |smart_rtmpd |rtmp[s], http[s]-flv, ws(s)-flv, http[s]-hls, https[s]-dash, rtsp[s], webrtc, srt|
 
-- download url
-```bash
-http://www.qiyicc.com/download/rtmpd.zip
-https://github.com/superconvert/smart_rtmpd/releases
-```
+### input & output detail
+
+| input | video |	audio |	output |	rtmp	| rtsp( udp/tcp ) | flv( http/websocket ) |	hls	| dash |	srt | webrtc( video baseline level 3.1 ) |
+|---|---|---|---|---|---|---|---|---|---|---|
+|rtmp |h264 |pcma/pcmu | |yes	|yes |yes |only video |onlyvideo |only video |h264/vp8, pcma/pcmu |
+|rtmp	|h264	|aac			 | |yes	|yes |yes |yes |yes |yes |h264/vp8, aac - opus	|
+|rtmp	|hevc	|pcma/pcmu | |yes |yes |yes |only |video |only video |only video |only audio = pcma/pcmu	|
+|rtmp	|hevc	|aac			 | |yes	|yes |yes |yes |yes	|yes |only audio = aac - opus |
+|rtsp	|h264	|pcma/pcmu | |yes	|yes |yes	|only video	|only video	|only video	| h264/vp8, pcma/pcmu	|
+|rtsp	|h264	|aac       | |yes	|yes |yes |yes |yes |yes |h264/vp8, aac - opus |
+|rtsp	|hevc	|pcma/pcmu | |yes	|yes |yes	|only video	|only video	|only video	|only audio = pcma/pcmu	|
+|rtsp |hevc	|aac       | |yes	|yes |yes |yes |yes |yes |only audio = aac - opus	|
+|srt |h264	|aac       | |yes |yes |yes |yes |yes |yes	|h264/vp8, aac - opus	|
+|srt |hevc	|aac       | |yes	|yes |yes |yes |yes |yes  |only audio = aac - opus |
+
+# 怎么使用 smart rtmpd
+
+### 最快部署
+1. 下载软件包，解压 rtmpd.zip， 解压后得到 windows 的 smart_rtmpd 服务器
+2. 运行 smart_rtmpd.exe 如下图，既表示成功
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
+3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://ffmpeg.zeranoe.com/builds/ )
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_push.png?raw=true)
+4. 播流验证
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
+![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
+
+### 例子
+｜说明 |链接 |
+|---|---|
+|推拉流 |https://github.com/superconvert/smart_rtmpd/tree/master/example|
+|web接口 |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
+|集群 |待续 ... |
+|webrtc |待续 ... |
+|录像 |待续 ... |
+|NAT配置 |待续 ... |
+
+# smart rtmpd 商业支持
+* 担心软件免费突然中断？  
+这个您放心，我们原来是 IM 的， 那个几乎不挣钱，我们到现在还在坚持，
+大家可以从网上搜一下 FreeCommunication ，存在多少年了 ( 18 年了 )。
+毕竟这个我们的每个项目工程非常庞大，我们也投入很多精力和心血做好这
+个事情，我相信我们要做优秀的产品，优秀的体验，是一种爱好，也是一种事业，
+不会突然中断的，况且有这么多热爱的朋友大力支持！
+
+* 遇到问题怎么办？  
+我们一般不想收这个辛苦钱，但你们如果有技术支持的需要，我们还是提供技术支持的，这个
+也请您放心，也支持软件定制 ( OEM )。如果您热心支持我们，我们表示感谢也非常乐意。
+
+* 你们做这个的目的不为钱为什么？  
+谁说我们不为钱，任何软件的初衷都是为了钱，精确的说价值。我们也不例外，肯定想挣钱。
+但国内靠这个赚钱太难太难，我们基本上也是不挣钱。我们既然免费了，也不想靠这个挣钱。
+我们的目的就是让软件名气更大，能拉到融资，有了融资，软件就更强大。也希望热爱的朋友
+参与进来，形成一个生态圈，只要能力被认可，后续看发展而定，肯定有回报。
+
+# 联系方式
+| name |description|
+|---|---|
+|QQ |99766553 |
+|QQ 群| 190583317, 300474021, 271191746 |
+|WebChat(微信)|99766553|
+|E-mail(邮箱)|cwf12345@sina.com|
+
+
+# smart_rtmpd description
+
+You can translate documents from Chinese to English through Google Translate！！！
+
+smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance. The supported protocols are rtmp, rtsp, srt, webrtc, http, hls, dash, etc. 
 
 # build ffmpeg support rtmps, see this link:
 
@@ -395,92 +495,5 @@ Be sure to see clearly that it is https, so that you can see the corresponding w
 
 http://www.smartrtmpd.com:8080/player.html
 You will experience another powerful function of smart_rtmpd, which is h5, live broadcast, video and VOD functions!
-
-
-# 问：期翼流服务器是哪方面的软件，有什么功能与优点
-
-答：期翼流服务器（ smart_rtmpd ），是一款用于直播，录播性能卓越的服务器。如果您不理解，可以理解为和 nginx-rtmp, srs ，功能类似，但是性能比 nginx-rtmp 高很多，甚至比 srs 还要高的直播（录播）服务器，特点是跨平台，无任何依赖，性能卓越，部署和维护十分方便，解压既能运行。基本上主流的操作系统都可以做新版本，有需要的话，可以私下联系我。
-
-# 问：smart_rtmpd 支持那些 OS? 
-
-windows, ubuntn, centos, freebsd, arm 当然 docker 也是可以运行的。
-
-# 问：smart_rtmpd performance 性能如何？
-
-答：smart_rtmpd 的 rtmp, http-flv 能做到 1 秒之内，http-hls 经过参数调试可以做到 4 秒，如果做进一步优化，可以
-做到 3 秒或更少。为什么我的配置不了那么好的性能？这个东西是全方面的支持，首先硬件要跟得上，CPU， 硬盘，内存，网络，其次就是参数调优，有兴趣的改善的可以私下联系我们，下面有我们的联系方式。
-
-# 问：smart_rtmpd 能解决什么问题？
-
-答：smart_rtmpd 服务器短小精悍，追求性能。能解决如下问题：
-第三方库版本差异带来的问题，部署繁琐问题，后续升级维护兼容性繁琐的问题。
-2. smart_rtmpd 性能比较高，针对不同平台，不同系统，推出相匹配以及最佳可配置的方案，保证系统的高性能运行。
-不同的架构模式，适合不同的业务需求。
-3. 解决了平台迁移问题，不同平台之间可以根据需要可以进行平台切换，比如：用户原来用的是 windows 系统，可以
-平滑切换到 linux 系统下，数据格式统一。
-4. smart_rtmpd 提供灵活的业务配置模式，无需升级程序即可根据配置满足不同的业务应用。
-5. 支持集群的无限扩展以及热插拔，最大限度的保证系统运营状态下，平滑升级或维护系统。
-6. 支持鉴权接口与验证。
-
-# 问：smart_rtmpd download url 下载地址是？
-
-答：http://www.qiyicc.com/download/rtmpd.zip
-
-
-# 问：smart_rtmpd 怎么使用？
-
-答：smart_rtmpd 无任何依赖，支持跨平台，解压既运行，或者根据需要简单修改一下 config.xml 文件，即可运行windows 平台下
-1. 第一步下载软件包，解压 rtmpd.zip， 解压后得到 smart_rtmpd_win.zip，进一步解压 smart_rtmpd.zip ，即可得到 windows 的 smart_rtmpd 服务器
-2. 运行 smart_rtmpd.exe 如下图，既表示成功
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
-3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://ffmpeg.zeranoe.com/builds/ )
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_push.png?raw=true)
-4. 播流验证
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
-
-
-# 问：smart_rtmpd 支持那些输入，那些输出
-
-答：smart_rtmp 支持推 rtmp(rtmps), rtsp(rtsps) 流，路径注入等方式输入；支持 rtmp(rtmps), http-flv(https-flv), http-hls(https-hls), mpeg-dash(https), mp4/ts(https), rtsp(rtsps) 方式的输出，同时也支持录像功能
-也支持推送 h265 ，有关 codecId 可以通过 config.xml 进行配置，这样就可以对接任何客户端了，下一步需要支持 rtsp 输出。
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_stream.png?raw=true)
-
-# 问：smart_rtmpd 支持级联吗？
-
-答：支持云内集群以及云间级联，异常方便，还支持针对 URL 级别的级联方式（独创）
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_cluster.png?raw=true)
-
-# 问：smart_rtmpd 的 rewrite 是怎么一回事？
-
-答：比如中央电视台的体育节目购买版权后，地方点视台需要从央视体育购买转播权，可以通过 rewrite 方式，很轻松的把流授权和分发给地方电视台。无需更改任何软件。即可轻松实现。当然付费业务层，需要另外处理。
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_rewrite.png?raw=true)
-
-# 问：smart_rtmpd 都是适应过那些端？
-
-答：都是很多常用的终端，具体见下图
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_term.png?raw=true)
-
-# 问：smart_rtmpd 压力测试如何？
-
-答：具体见下图
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/test.png?raw=true)
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/test1.png?raw=true)
-
-# smart_webrtc example 使用说明：
-	
-参考博客
-https://blog.csdn.net/freeabc/article/details/108561272
-
-
-# 我们的联系方式:
-
-| name |description|
-|---|---|
-|QQ |99766553 |
-|QQ 群| 190583317, 300474021, 271191746 |
-|WebChat(微信)|99766553|
-|E-mail(邮箱)|cwf12345@sina.com|
-
 
 
