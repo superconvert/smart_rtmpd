@@ -85,7 +85,7 @@ smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您�
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
 
 ### 例子
-｜说明 |链接 |
+|说明 |链接 |
 |---|---|
 |推拉流 |https://github.com/superconvert/smart_rtmpd/tree/master/example|
 |web接口 |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
