@@ -113,7 +113,6 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 |webrtc im |https://github.com/superconvert/smart_rtmpd/blob/master/webrtc_im.md |
 |录像 ( recording ) |https://blog.csdn.net/freeabc/article/details/103360588 |
 |nat模式 ( nat mode ) |https://blog.csdn.net/freeabc/article/details/113446129 |
-|rtmps支持 ( rtmps support ) |https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook |
 |重写 ( rewrite ) |待续 ... |
 |vod配置 ( vod config)|待续 ... |
 
