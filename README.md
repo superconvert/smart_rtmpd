@@ -149,39 +149,7 @@ https://github.com/superconvert/smart_rtmpd/blob/master/recording.md
 |QQ 群 |190583317, 300474021, 271191746 |
 |WebChat(微信) |99766553 |
 |E-mail(邮箱) |cwf12345@sina.com |
-   
-# smart rtmpd live stream
  
-- ffmpeg push rtmp stream      
-```bash
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
-ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/music
-ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/sport
-```
-      
-- ffmpeg push rtsp stream
-```bash
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
-ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/music
-ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/sport
-```
-	
-- ffmpeg push srt stream
-```bash
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f mpegts srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=publisher
-```
-
-- ffmpeg play srt stream
-```bash
-ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=player
-```
-- more scripts 
-```bash
-https://github.com/superconvert/smart_rtmpd/tree/master/test
-```
-
 # download file or vod mode :
 
 1. you can put a video file into /vod directory, for example: test.mkv
