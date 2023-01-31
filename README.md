@@ -1,5 +1,6 @@
 # smart rtmpd 简介
 smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您不理解，可以理解为和 nginx-rtmp, srs ，并与此功能类似，特点是性能卓越，跨平台，无依赖，部署和维护十分方便，解压既能运行。
+smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance. The supported protocols are rtmp, rtsp, srt, webrtc, http, hls, dash, etc. 
 
 ### 说明
 * 免费软件 ( 不开源 )
@@ -72,6 +73,23 @@ smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您�
 |srt |h264	|aac       | |yes |yes |yes |yes |yes |yes	|h264/vp8, aac - opus	|
 |srt |hevc	|aac       | |yes	|yes |yes |yes |yes |yes  |only audio = aac - opus |
 
+
+### URL description
+|URL |description |isok |
+|---|---|---|
+|rtmp://192.168.1.1:1935/live/stream   |live stream|yes |
+|rtmp://192.168.1.1:1935/rec/stream    |record stream|yes |
+|rmtp://192.168.1.1:1935/sky/camera    |bad format|no |
+|rtsp://192.168.1.105:9554/live/music  |live stream|yes |
+|rtsp://192.168.1.105:9554/rec/music   |live stream|yes |
+|rtsp://192.168.1.105:9554/class/music |bad format|no |
+|srt://192.168.1.105:9000/live/space   |record stream|yes |
+|srt://192.168.1.105:9000/rec/space    |record stream|yes |
+|srt://192.168.1.105:9000/record/space |bad format|no |
+
+only support "live" or "rec" app tag, but no support "sky", "class" or "record" other app tag !!!
+
+
 # 怎么使用 smart rtmpd
 
 ### 最快部署
@@ -84,15 +102,19 @@ smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您�
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
 
-### 例子
+### 例子 ( example )
 |说明 |链接 |
 |---|---|
-|推拉流 |https://github.com/superconvert/smart_rtmpd/tree/master/example|
-|web接口 |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
+|推拉流 ( pull/pull stream ) |https://github.com/superconvert/smart_rtmpd/tree/master/example|
+|web接口 ( web interface ) |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
 |集群 |待续 ... |
-|webrtc |待续 ... |
-|录像 |待续 ... |
-|NAT配置 |待续 ... |
+|webrtc |https://blog.csdn.net/freeabc/article/details/108561272 |
+|webrtc im |https://blog.csdn.net/freeabc/article/details/119793176 |
+|录像 ( recording ) |https://blog.csdn.net/freeabc/article/details/103360588 |
+|nat模式 ( nat mode ) |https://blog.csdn.net/freeabc/article/details/113446129 |
+|rtmps推流 ( rtmps support ) |https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook |
+|重写 ( rewrite ) |待续 ... |
+|vod配置 ( vod config)|待续 ... |
 
 # smart rtmpd 商业支持
 * 担心软件免费突然中断？  
@@ -116,50 +138,14 @@ smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您�
 | name |description|
 |---|---|
 |QQ |99766553 |
-|QQ 群| 190583317, 300474021, 271191746 |
-|WebChat(微信)|99766553|
-|E-mail(邮箱)|cwf12345@sina.com|
-
-
-# smart_rtmpd description
-
-You can translate documents from Chinese to English through Google Translate！！！
-
-smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance. The supported protocols are rtmp, rtsp, srt, webrtc, http, hls, dash, etc. 
+|QQ 群 |190583317, 300474021, 271191746 |
+|WebChat(微信) |99766553 |
+|E-mail(邮箱) |cwf12345@sina.com |
 
 # build ffmpeg support rtmps, see this link:
-
 https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
-
 you can play rtmps with vlc player.
    
-# smart rtmpd url format
-
-- right format url
-
-|url|description|
-|---|---|
-|rtmp://192.168.1.1:1935/live/stream|live stream|
-|rtmp://192.168.1.1:1935/rec/stream|record stream|
-|rtsp://192.168.1.105:9554/live/music|live stream|
-|rtsp://192.168.1.105:9554/rec/music|live stream|
-|srt://192.168.1.105:9000/live/space|record stream|
-|srt://192.168.1.105:9000/rec/space|record stream|
-
-only support live or rec app tag .
-
-- bad format url
-
-|url|description|
-|---|---|
-|rmtp://192.168.1.1:1935/abc/stream|bad format|
-|rmtp://192.168.1.1:1935/sky/camera|bad format|
-|rmtp://192.168.1.1:1935/xxx/live|bad format|
-|rtsp://192.168.1.105:9554/class/music|bad format|
-|srt://192.168.1.105:9000/record/space|bad format|
-
-not support abc, sky, xxx or other format app tag !!!!!!!
-
 # smart rtmpd live stream
  
 - ffmpeg push rtmp stream      
@@ -487,7 +473,7 @@ Copy the certificate and private key generated above to the directory of smart_r
 
 Configure the certification path, open the ssl of the http server and configure the port, if there is no other requirement, just start the smart_rtmpd server
 
-4.3 Run pure webrtc
+4.3 Run webrtc im
 Enter on the machine where you just configured the hosts file
 
 https://www.smartrtmpd.com:8181/webrtc.html
