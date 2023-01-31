@@ -12,7 +12,10 @@
 ### 制作步骤
 
 1. 制作服务器端证书 （ client )
-* 下载 https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-windows-arm64.exe 到 client，并重命名 mkcert-v1.4.4-windows-arm64.exe 为 mkcert.exe
+* 下载 https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-windows-arm64.exe 到 client，并重命名
+    ```shell
+    mkcert-v1.4.4-windows-arm64.exe 为 mkcert.exe
+    ```
 * 执行如下命令：
     ```shell
     mkcert.exe www.smartwebrtc.com 192.168.1.6
