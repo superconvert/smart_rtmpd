@@ -1,6 +1,6 @@
 # smart rtmpd 简介
 smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您不理解，可以理解为和 nginx-rtmp, srs ，并与此功能类似，特点是性能卓越，跨平台，无依赖，部署和维护十分方便，解压既能运行。  
-smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm. It is small, independent, easy to deploy, and has high performance.
+smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm64. It is small, independent, easy to deploy, and has high performance. 
 
 ### 说明
 * 免费软件 ( 不开源 )
@@ -107,14 +107,22 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 |---|---|
 |推拉流 ( pull/pull stream ) |https://github.com/superconvert/smart_rtmpd/tree/master/example|
 |web接口 ( web interface ) |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
+|auth接口 ( web authentication ) |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
 |集群 |待续 ... |
 |webrtc |https://blog.csdn.net/freeabc/article/details/108561272 |
 |webrtc im |https://blog.csdn.net/freeabc/article/details/119793176 |
 |录像 ( recording ) |https://blog.csdn.net/freeabc/article/details/103360588 |
 |nat模式 ( nat mode ) |https://blog.csdn.net/freeabc/article/details/113446129 |
-|rtmps推流 ( rtmps support ) |https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook |
+|rtmps支持 ( rtmps support ) |https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook |
 |重写 ( rewrite ) |待续 ... |
 |vod配置 ( vod config)|待续 ... |
+
+# build ffmpeg support rtmps, see this link:  
+https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/  
+you can play rtmps with vlc player.  
+
+# smart rtmpd recorder stream
+https://github.com/superconvert/smart_rtmpd/blob/master/recording.md
 
 # smart rtmpd 商业支持
 * 担心软件免费突然中断？  
@@ -141,10 +149,6 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 |QQ 群 |190583317, 300474021, 271191746 |
 |WebChat(微信) |99766553 |
 |E-mail(邮箱) |cwf12345@sina.com |
-
-# build ffmpeg support rtmps, see this link:
-https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
-you can play rtmps with vlc player.
    
 # smart rtmpd live stream
  
@@ -176,72 +180,6 @@ ffplay srt://192.168.1.105:9000?streamid=192.168.1.105:9000/live/stream,role=pla
 - more scripts 
 ```bash
 https://github.com/superconvert/smart_rtmpd/tree/master/test
-```
-
-# smart rtmpd recorder stream
-
-- recorder stream
-you can use recorder function. change app tag from live to rec, live ---> rec, see below :
-```bash
-ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/rec/stream
-```
-smart rtmpd will generator recorder file in /rec directory
-
-- query recorder list
-you can browse url : 
-```bash
-http request：
-http://192.168.1.1:8080/api/rec
-
-http response：
-{
-    "dirs" : 
-    [
-        "music",
-        "sport"
-    ]
-} 
-```
-music & sport is recorder name
-
-- query the specified stream name
-```bash
-http request：
-http://192.168.1.1:8080/rec/sport
-
-http response：
-{
-    "dirs" : 
-    [
-        "2022-05-21",
-	"2022-05-22"
-    ]
-}
-```
-day 2022-05-21 & "2022-05-22 has recorder stream
-
-- query the specified video file
-```bash
-http request：
-http://192.168.1.1:8080/rec/sport?day=2022-05-21
-
-http response：
-{
-    "files" :
-    [
-        "18-22-11.m3u8",
-        "18-24-33.m3u8",
-        "18-34-02.m3u8"
-    ]
-}
-```
-
-- replay recorder video
-you can use player replay this video 
-```bash
-ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-22-11.m3u8
-ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-24-33.m3u8
-ffplay http://192.168.1.1:8080/rec/sport?day=2022-05-21&time=18-32-02.m3u8
 ```
 
 # download file or vod mode :
@@ -400,24 +338,24 @@ auth http server.
 
 6. in web player edit input 192.168.1.1, click play button.
 
-# pure webrtc description
+# webrtc im description
 
-1. Why is it called pure webrtc?
+1. Why is it called im webrtc?
 We know that the extended version of smart_rtmpd is called smart_webrtc, which already supports the webrtc function; however, the function of webrtc here only refers to push streaming through rtmp, rtsp, srt protocols, and smart_webrtc transcodes the video through the media layer video (h264 ---> vp8 ) And audio (aac ---> opus) to achieve this function, currently only supports H5 streaming in webrtc mode.
 
-The pure webrtc function here is the pure webrtc function, which is parallel to the existing smart_rtmpd function. There is no interaction between them, there is no intercommunication and transcoding. That is to say, rtmp, rtsp, srt are mutually converted, and there is no connection between pure webrtc and them, including signaling and media data.
+The webrtc im function here is the webrtc im function, which is parallel to the existing smart_rtmpd function. There is no interaction between them, there is no intercommunication and transcoding. That is to say, rtmp, rtsp, srt are mutually converted, and there is no connection between webrtc im and them, including signaling and media data.
 
-2. What are the advantages of pure webrtc?
-Pure webrtc functions are all realized through web pages. As long as the browser version supports webrtc functions, it can meet your requirements and further realize your requirements on this basis. This greatly adapts to almost all devices, compatibility issues, and environmental problems are almost no longer obstacles! ! !
+2. What are the advantages of webrtc im?
+webrtc im functions are all realized through web pages. As long as the browser version supports webrtc functions, it can meet your requirements and further realize your requirements on this basis. This greatly adapts to almost all devices, compatibility issues, and environmental problems are almost no longer obstacles! ! !
 
-Pure webrtc deployment is more convenient, as long as you configure smart_rtmpd and click Run, you only need to open the browser and enter the URL on the front end, and all your needs can be met. This greatly simplifies your various configuration troubles, compatibility issues, and environmental settings, all of which are thrown aside.
+webrtc im deployment is more convenient, as long as you configure smart_rtmpd and click Run, you only need to open the browser and enter the URL on the front end, and all your needs can be met. This greatly simplifies your various configuration troubles, compatibility issues, and environmental settings, all of which are thrown aside.
 
-3. What functions does pure webrtc have?
+3. What functions does webrtc im have?
 Account login, online list/user search, message chat, peer audio and video (webrtc p2p)
 
 Chat room list, chat room search, chat room entry, chat room user list, chat room user online notification, user show list, user show notification, chat room group chat, chat room audio and video (webrtc sfu)
 
-4. How to use the pure webrtc function of smart_rtmpd
+4. How to use the webrtc im function of smart_rtmpd
 4.1 Making a certificate
 
 Why do I need to make a certificate? Generally, the browser opens the audio and video equipment, and the https link is required to have the authority to execute it. Therefore, we need to make a certificate to access the internal http server of smart_rtmpd via https. In this way, there will be no problem when you open the audio and video equipment through the web page.
