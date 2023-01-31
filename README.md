@@ -109,7 +109,7 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 |web接口 ( web interface ) |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
 |auth接口 ( web authentication ) |https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md |
 |集群 |待续 ... |
-|webrtc |https://blog.csdn.net/freeabc/article/details/108561272 |
+|webrtc |https://github.com/superconvert/smart_rtmpd/blob/master/webrtc.md |
 |webrtc im |https://blog.csdn.net/freeabc/article/details/119793176 |
 |录像 ( recording ) |https://blog.csdn.net/freeabc/article/details/103360588 |
 |nat模式 ( nat mode ) |https://blog.csdn.net/freeabc/article/details/113446129 |
