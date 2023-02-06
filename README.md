@@ -96,7 +96,7 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 1. 下载软件包，解压 rtmpd.zip， 解压后得到 windows 的 smart_rtmpd 服务器
 2. 运行 smart_rtmpd.exe 如下图，既表示成功
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
-3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://ffmpeg.zeranoe.com/builds/ )
+3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://github.com/BtbN/FFmpeg-Builds/releases )
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_push.png?raw=true)
 4. 播流验证
 ![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
