@@ -192,16 +192,16 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
      if you have rmtp url rtmp://www.qiyicc.com/live/sport, you cank distribution this stream to other service.
      for example : rtmp://www.espn.com/live/sport, thirtypart server address : 54.230.173.30
      
-     you can modify config.xml file
+     you can modify policy.xml file
      ... ...
      ... ...
-     <vhosts>			
+     <urls>			
          <url name="rtmp://www.qiyicc.com/live/sport">	    
 	    <forward rewrite="rtmp://www.espn.com/live/sport">54.230.173.30:1935</forward>			
 	    <forward rewrite="rtmps://www.espn.com/live/sport">54.230.173.32:1935</forward>
 	    <forward></forward>
 	 </url>
-     </vhosts>
+     </urls>
     
     thirtpart user can play this stream.
     this is call url forward!   
