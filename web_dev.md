@@ -5,7 +5,7 @@
 |live|直播播放接口，对应服务器上的 live 目录|
 |rec |录像回放接口，对于服务器上的 rec 目录|
 |vod|点播接口，支持子目录，对应服务器上的 vod 目录|
-|api|web 管理预留的接口，当然前端页面可能也有可能用到|
+|api|web 管理编程接口，当然前端页面可能也有可能用到|
 |web|通用的 web 接口，对应服务器上的 html 目录|
 |ws_im|IM 通讯接口，websocket 实现的 IM 会话接口|
 
@@ -229,56 +229,62 @@ http://192.168.1.1:8080/api/live?vhost=192.168.1.1&app=live&name=stream
 
 响应：
 {
-    "audio" : 
-    {
-        "channel" : "2",
-        "codec" : "aac",
-        "samplebit" : "16",
-        "samplerate" : "44100"
-    },
-    "duration" : "PT7M50S",
-    "from" : "rtmp",
-    "rate" : "4.05 kb/s",
-    "rec" : "none",
-    "urls" : 
-    [
-        {
-            "type" : "rtmp",
-            "url" : "rtmp://192.168.1.1:1935/live/stream"
-        },
-        {
-            "type" : "http-flv",
-            "url" : "http://192.168.1.1:8080/live/stream.flv"
-        },
-        {
-             "type" : "ws-flv",
-             "url" : "ws://192.168.1.1:8080/live/stream.flv"
-         },
-         {
-              "type" : "http-hls",
-              "url" : "http://192.168.1.1:8080/live/stream.m3u8"
-          },
-          {
-               "type" : "http-dash",
-               "url" : "http://192.168.1.1:8080/live/stream.mpd"
-            },
-            {
-                "type" : "rtsp",
-                "url" : "rtsp://192.168.1.1:8554/live/stream"
-            },
-            {
-                 "type" : "srt",
-                 "url" : "srt://192.168.1.1:9000/live/stream"
-             }
-        ],
-        "video" : 
-       {
-              "codec" : "h264",
-              "fps" : "24",
-              "gop" : "88",
-              "height" : "562",
-              "width" : "1000"
-        }
+	"app" : 
+	{
+		"duration" : "PT2S",
+		"from" : "rtmp",
+		"rate" : "91.81 b/s",
+		"rec" : false
+	},
+	"media" : 
+	{
+		"audio" : 
+		{
+			"channel" : 2,
+			"codec" : "aac",
+			"samplebit" : 16,
+			"samplerate" : 48000
+		},
+		"video" : 
+		{
+			"codec" : "h264",
+			"fps" : 30,
+			"gop" : 0,
+			"height" : 720,
+			"width" : 1280
+		}
+	},
+	"urls" : 
+	[
+		{
+			"type" : "rtmp",
+			"url" : "rtmp://192.168.1.6/live/stream"
+		},
+		{
+			"type" : "http-flv",
+			"url" : "http://192.168.1.6:8080/live/stream.flv"
+		},
+		{
+			"type" : "ws-flv",
+			"url" : "ws://192.168.1.6:8080/live/stream.flv"
+		},
+		{
+			"type" : "webrtc",
+			"url" : "https://192.168.1.6:8181/live/stream.wms"
+		},
+		{
+			"type" : "http-hls",
+			"url" : "http://192.168.1.6:8080/live/stream.m3u8"
+		},
+		{
+			"type" : "rtsp",
+			"url" : "rtsp://118.145.6.103:554/live/stream"
+		},
+		{
+			"type" : "srt",
+			"url" : "srt://192.168.1.6:9000/live/stream"
+		}
+	]
 }
 ```
 - cmd 参数例子
