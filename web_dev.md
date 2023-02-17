@@ -415,31 +415,34 @@ http://192.168.1.1:8080/api/status
  
 响应：
 {
-    "http" : 
-    {
-        "port" : 8080,
-        "run" : true,
-        "sport" : 8181,
-        "ssl" : false
-    },
-    "rtmp" : 
-    {
-        "port" : 1935,
-        "run" : true,
-        "ssl" : false
-    },
-    "rtsp" : 
-    {
-        "port" : 8554,
-        "run" : true,
-        "ssl" : false
-    },
-    "srt" : 
-    {
-        "port" : 9000,
-        "run" : true
-    },
-    "start_time" : "2022-05-21 22:18:31"
+	"http" : 
+	{
+		"port" : 8080,
+		"run" : true
+	},
+	"https" : 
+	{
+		"port" : 8181,
+		"run" : false
+	},
+	"rtmp" : 
+	{
+		"port" : 1935,
+		"run" : true,
+		"ssl" : false
+	},
+	"rtsp" : 
+	{
+		"port" : 8554,
+		"run" : true,
+		"ssl" : false
+	},
+	"srt" : 
+	{
+		"port" : 9000,
+		"run" : true
+	},
+	"start_time" : "2023-02-18 06:30:33"
 }
 ```
 **业务标识 config**
@@ -456,7 +459,7 @@ http://127.0.0.1:8080/api/config
 http://127.0.0.1:8080/api/config
 ```
 
-**业务标识 policy**
+**集群/流转发标识 policy**
 
 这块同上，相对复杂，这里不做详细解释
 
