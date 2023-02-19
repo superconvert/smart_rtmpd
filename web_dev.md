@@ -348,7 +348,7 @@ http://192.168.1.1:8080/api/rec?vhost=www.qiyicc.com
 1.  利用 http://192.168.1.1:8080/api/rec 查询录像列表，获取所有的录像名称
 2.  利用 http://192.168.1.1:8080/rec/<流名称> 查询那天有录像产生
 3.  利用 http://192.168.1.1:8080/rec/<流名称>?day=xxxx-yy-zz 查询录像文件列表
-4.  利用 http://192.168.1.1:8080/rec/<流名称>?day=xxxx-yy-zz&time=iiiii.m3u8 播放录像
+4.  利用 http://192.168.1.1:8080/rec/<流名称>?day=xxxx-yy-zz&time=hh-mm-ss&ext=m3u8 播放录像
 
 具体使用方法，参见上述的 rec 章节说明
 
