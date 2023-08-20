@@ -116,6 +116,9 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 |重写 ( rewrite ) |待续 ... |
 |vod配置 ( vod config)|待续 ... |
 
+### 推拉流
+https://blog.csdn.net/freeabc/article/details/117403471?spm=1001.2014.3001.5501
+
 # build ffmpeg support rtmps, see this link:  
 https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/  
 you can play rtmps with vlc player.  
