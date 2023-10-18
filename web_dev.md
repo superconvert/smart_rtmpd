@@ -95,7 +95,8 @@ rtmp://www.qiyicc.com/rec/sport
 ```bash
 # 获取录像信息或播放录像文件
 # HTTP GET
-http://<服务器地址或域名>:[服务器端口]/rec/<流的名称>?[day=年月日]&[time=时分秒]&[ext=扩展名(m3u8或dash)]
+http://<服务器地址或域名>:[服务器端口]/rec/<流的名称>/[day=年月日]/[time=时分秒].[ext=扩展名(m3u8或dash)]
+example : http://192.168.1.2:8080/rec/stream/2023-10-18/13-17-49.m3u8
 ```
 
 |参数|说明|
@@ -123,7 +124,7 @@ http://192.168.1.1:8080/rec/stream
 - 参数 day 例子如下
 ```bash
 请求：
-http://192.168.1.1:8080/rec/stream?day=2022-05-21
+http://192.168.1.1:8080/rec/stream/2022-05-21
 
 响应：
 {
@@ -140,7 +141,7 @@ http://192.168.1.1:8080/rec/stream?day=2022-05-21
 - 参数 time 例子如下
 ```bash
 请求：
-http://192.168.1.1:8080/rec/stream?day=2022-05-21&time=18-22-11&ext=m3u8
+http://192.168.1.1:8080/rec/stream/2022-05-21/18-22-11.m3u8
 
 响应：
 录像数据流，播放器拿到数据流就可以播放了
@@ -348,7 +349,7 @@ http://192.168.1.1:8080/api/rec?vhost=www.qiyicc.com
 1.  利用 http://192.168.1.1:8080/api/rec 查询录像列表，获取所有的录像名称         example : http://192.168.1.2:8080/api/rec
 2.  利用 http://192.168.1.1:8080/rec/<流名称> 查询那天有录像产生                 example : http://192.168.1.2:8080/rec/stream
 3.  利用 http://192.168.1.1:8080/rec/<流名称>/day 查询录像文件列表               example : http://192.168.1.2:8080/rec/stream/2023-10-18
-4.  利用 http://192.168.1.1:8080/rec/<流名称>/day/time 播放录像                 example : http://192.168.1.2:8080/rec/stream/2023-10-18/13-17-49.ts
+4.  利用 http://192.168.1.1:8080/rec/<流名称>/day/time 播放录像                 example : http://192.168.1.2:8080/rec/stream/2023-10-18/13-17-49.m3u8
 
 具体使用方法，参见上述的 rec 章节说明
 
