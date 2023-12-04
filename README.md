@@ -15,7 +15,7 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 * 支持 web 开发接口
 * 支持集群，级联
 
-### 支持那些 OS
+### 支持哪些 OS
 * Windows
 * Linux ( Ubuntu, CentOS )
 * FreeBSD
@@ -41,7 +41,7 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 |github |https://github.com/superconvert/smart_rtmpd |
 |gitee |https://gitee.com/mirrors/smart-rtmpd |
 
-# smart rtmpd 支持那些音视频编码
+# smart rtmpd 支持哪些音视频编码
 
 ### support media codec
 
