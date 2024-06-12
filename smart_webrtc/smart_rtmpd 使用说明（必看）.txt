@@ -1,0 +1,208 @@
+//---------------------------------------------------------------------------------------------------------------
+change log ( 活动日志 ) 
+
+
+1. 支持 NAT 模式下，内网推流，外网可以访问，具体参照配置文件 config.xml
+   <!-- 内网地址推流,映射成外网地址, 内外网都能播放 -->
+   <hostmap inner="" outer=""/>
+假设我内网地址 192.168.1.1 ，外网地址 210.36.12.8 ，那么我配置文件 innter="192.168.1.1" outer="210.36.12.8"
+如果内网推流 rtmp://192.168.1.1/live/stream，那么就会映射为对应的外网地址是 rtmp://210.36.12.8/live/stream
+
+2. 解决一些小 bug，ssl 校验，如果 ssl 配置不合理，则不让启动，端口为 19350 ， 流通道显示信息不正确，录像模式下
+最后一个文件不合并的问题
+
+3. 支持 dash 方式录制，hls 录制也进一步修订
+
+查询录像列表  http://192.168.1.105:8080/rec/stream?cmd=query ，这个返回录像的目录列表，可以看到那一天有录像；
+
+查询具体某一天的录像  http://192.168.1.105:8080/rec/stream?cmd=query&day=2020-09-19， 这个返回具体的录像列表
+如果是 mpd，则后缀为 
+21-41-06.mpd
+21-40-05.mpd
+
+播放录像的 URL 为 
+http://192.168.1.105:8080/rec/stream.mpd?day=2020-09-19&time=21-41-06
+http://192.168.1.105:8080/rec/stream.mpd?day=2020-09-19&time=21-40-05
+
+如果是 m3u8，则后缀为
+21-41-06.m3u8
+21-40-05.m3u8
+
+播放录像的 URL 为
+http://192.168.1.105:8080/rec/stream.m3u8?day=2020-09-19&time=21-41-06
+http://192.168.1.105:8080/rec/stream.m3u8?day=2020-09-19&time=21-40-05
+
+4. 支持 vod 注入，最新版本可以把录像文件，比如 1.mp4 放到 vod （运行程序目录），那么就可以
+用播放器播放 http://192.168.1.105:8080/vod/1.mp4 播放了。
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+支持 rtmp ---> webrtc ，必须用 https 进行访问，程序内自带证书，方便演示，首先开启 https 服务，参见配置文件 
+
+由于要用到 UDP ，因此要求服务器防火墙不能关闭对应的 UDP 端口
+
+配置文件 config.xml 里的需要关注的地方是 ：
+<config>
+    ... ...
+    <ssl>		
+        <serverkey>server.key</serverkey>
+        <servercert>server.pem</servercert>		
+    </ssl>
+    <http>
+        <!-- https 端口 -->
+        <sport>8181</sport>
+        <!-- 开启 ssl -->
+        <ssl>true</ssl>
+    </http>
+    ... ...
+</config>
+
+网页及脚本 编辑 js/main.js 文件
+    var addr = "https://" + ip + ":8181" + "/live/stream.wms?type=getoffer";
+    var addr = "https://" + ip + ":8181" + "/live/stream.wms?type=setcandidate&token=" + token;
+
+webrtc url 格式类似如下：
+
+    https://192.168.1.1:8181/live/stream.wms
+
+webrtc 服务器也支持三个版本 win, ubuntu ( 多线程和协程 ), centos ( 多线程和协程 )
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+//---------------------------------------------------------------------------------------------------------------
+
+smart_rtmp 服务器，小巧，高效，布署及其简单。only has an config.xml，其它无没任何依赖！！！！！！
+
+You can translate documents from Chinese to English through Google Translate！！！
+
+build ffmpeg support rtmps, see this link:
+  https://www.iiwnz.com/compile-ffmpeg-with-rtmps-for-facebook/
+  you can play rtmps with vlc.
+
+smart rtmpd :
+
+download url:
+  http://www.qiyicc.com/download/rtmpd.zip
+
+
+support protocol:
+
+  push stream              pull stream      
+  rtmp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+  rtsp[s] ---> server ---> rtmp[s], http[s]-flv, http[s]-hls, https[s]-dash, rtsp[s]
+  
+
+media codec:
+
+  video codec:              audio codec:
+  h264, h265                aac
+    
+
+rtmp url :    
+
+  right format:
+  rtmp://xxx.xxx.xxx.xxx:port/live/stream, rtmp://xxx.xxx.xxx.xxx:port/rec/stream
+  only support live or rec tag .
+  
+  wrong format:
+  rmtp://xxx.xxx.xxx.xxx:port/abc/stream, rmtp://xxx.xxx.xxx.xxx:port/sky/stream, ... ...
+  not support abc, sky or other tag !!!!!!!
+push stream :
+
+  ffmpeg push rtmp stream      
+  1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream1
+  2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f flv rtmp://192.168.1.105:8554/live/stream2
+  3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream1
+  4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f flv rtmp://192.168.1.105:9554/live/stream2
+  
+  ffmpeg push rtsp stream
+  1. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream1
+  2. ffmpeg -re -i my.mp4 -vcodec libx264 -acodec aac -f rtsp rtsp://192.168.1.105:8554/live/stream2
+  3. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream1
+  4. ffmpeg -re -i my265.mkv -vcodec libx265 -acodec aac -f rtsp rtsp://192.168.1.105:9554/live/stream2      
+build cluster or cdn distribution :
+
+ if you have two server
+ server A (intranet ip: 192.168.1.1, domain: www.qiyicc.com) 
+ server B (intranet ip: 192.168.1.2, domain: www.qiyicc.com)
+ 
+ you can modify config.xml file in server A:
+ ... ...
+ <vhosts>
+	<vhost name="www.qiyicc.com">			
+		<hasflv>true</hasflv>			
+		<hashls>true</hashls>			
+		<hasdash>true</hasdash>			
+		<hasrtsp>true</hasrtsp>			
+		<forward>192.168.1.2</forward>			
+	</vhost>
+</vhosts>
+
+if you push stream rtmp://www.qiyicc.com/live/stream to server A， the server A will forward this stream to server B, 
+if you push stream rtmp://www.qiyicc.com/live/sport to server A, it is also forard this stream to server B.
+user can pull url rtmp://www.qiyicc.com/live/stream or rtmp://www.qiyicc.com/live/sport from server B， 
+for many server repeat this proccess or each other forward.
+forward thirtparty :
+
+ if you have rmtp url rtmp://www.qiyicc.com/live/sport, you cank distribution this stream to other service.
+ for example : rtmp://www.espn.com/live/sport, thirtypart server address : 54.230.173.30
+ 
+ you can modify config.xml file
+ ... ...
+... ...
+ <vhosts>			
+	<url name="rtmp://www.qiyicc.com/live/sport">			
+		<rewrite>rtmp://www.espn.com/live/sport</rewrite>			
+		<hasflv>true</hasflv>			
+		<hashls>true</hashls>			
+		<hasdash>true</hasdash>			
+		<hasrtsp>true</hasrtsp>			
+		<forward>54.230.173.30:1935</forward>			
+		<forward></forward>
+	</url>
+</vhosts>
+
+thirtpart user can play this stream.
+
+//---------------------------------------------------------------------------------------------------------------
+目前只提供了，CentOS ( 7.7.1908 core ), ubuntu ( 16.04 LTS，64 位 ) 和 windows 的测试版本。
+
+windows version：smart_rtmpd_win.rar
+ubuntu coroutines version: smart_rtmpd.coroutines.ubuntu16.04LTS.x64.tar.gz
+ubuntu multithread version：smart_rtmpd.multithread.ubuntu16.04LTS.x64.tar.gz
+centos coroutines version：smart_rtmpd.coroutines.centos7.7.1908.x64.tar.gz 
+centos multithread version：smart_rtmpd.multithread.centos7.7.1908.x64.tar.gz
+
+性能应该超过 SRS !!!!!，如果发现问题，可以及时联系我 
+
+QQ:   99766553,   webchat: 99766553， QQ Group(群)：190583317， 300474021
+websit:  http://www.qiyicc.com
+email:  cwf12345@sina.com 
+
+csdn 教程地址：
+https://blog.csdn.net/freeabc/article/details/106545569
+
+download url ( 下载地址 ):
+http://www.qiyicc.com/download/rtmpd.rar
+
+github url ( github 地址 )：
+https://github.com/superconvert/smart_rtmpd
+
+//---------------------------------------------------------------------------------------------------------------
+
+如果 rtmp 协议 url 为 rtmp://192.168.1.1:1935/live/stream
+那么对应的 websock-flv 协议 url 为 ws://192.168.1.1:8080/live/stream.flv
+那么对应的 http-flv 协议 url 为 http://192.168.1.1:8080/live/stream.flv
+那么对应的 http-hls 协议 url 为 http://192.168.1.1:8080/live/stream.m3u8
+那么对应的 http-dash 协议 url 为 http://192.168.1.1:8080/live/stream.mpd
+那么对应的 rtsp-live 协议 url 为 rtsp://192.168.1.1:554/live/stream
+那么对应的 webrtc 协议 url 为 https://192.168.1.1:8181/live/stream.wms
+
+查看所有流信息 ( get all stream info )
+http://192.168.1.1:8080/api/application?token=md5_16(admin + password)
+
+查看具体流信息 ( view a stream info )
+http://192.168.1.1:8080/api/application?md5_16(admin + password)&stream=流的名字
+
+查看统计信息 ( get all statisics )
+http://192.168.1.1:8080/api/statistics?md5_16(admin + password)
+

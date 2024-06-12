@@ -1,0 +1,79 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "id": "menu_home",
+    "href": "page/server.html"
+  },
+  "logoInfo": {
+    "title": "Smart Rtmpd",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "id": "menu_normal_manager",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+            "title": "直播信息",
+            "id": "menu_stream_media",
+            "href": "page/stream-media.html",
+            "icon": "fa fa-play-circle",
+            "target": "_self"
+        },
+        {
+            "title": "转发策略",
+            "id": "menu_policy",
+            "href": "page/policy.html",
+            "icon": "fa fa-server",
+            "target": "_self"
+        },
+        {
+            "title": "服务配置",
+            "id": "menu_config",
+            "href": "page/config.html",
+            "icon": "fa fa-server",
+            "target": "_self"
+        },
+        {
+            "title": "服务管理",
+            "id": "menu_server",
+            "href": "page/server.html",
+            "icon": "fa fa-sun-o",
+            "target": "_self"
+        },
+        {
+            "title": "用户管理",
+            "id": "menu_user",
+            "href": "page/user.html",
+            "icon": "fa fa-users",
+            "target": "_self"
+        },
+        {
+            "title": "日志文件",
+            "id": "menu_log",
+            "href": "page/log.html",
+            "icon": "fa fa-file-text-o",
+            "target": "_self"
+        },
+        {
+            "title": "系统信息",
+            "id": "menu_system_info",
+            "href": "page/system-info.html",
+            "icon": "fa fa-gears",
+            "target": "_self"
+        },
+        {
+            "title": "软件升级",
+            "id": "menu_upgrade",
+            "href": "page/upgrade.html",
+            "icon": "fa fa-cloud-upload",
+            "target": "_self"
+        }
+      ]
+    }
+  ]
+}

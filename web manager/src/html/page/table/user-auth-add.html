@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加用户</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="user_auth_input_type">授权类型</label>
+        <div class="layui-input-block">
+            <select name="type">
+                <option value="all">推拉流</option>
+                <option value="push">推流</option>
+                <option value="pull">拉流</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="user_auth_input_begin">开始日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="begin" id="begindate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="user_auth_input_end">结束日期</label>
+        <div class="layui-input-block">
+            <input type="text" name="end" id="enddate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input name="id" type="hidden" value="" />
+            <button class="layui-btn layui-btn-normal i18n" data-lang="common_save" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../../js/jquery.i18n.properties-min-1.0.9.js" charset="utf-8"></script>
+<script src="../../js/common.js" charset="utf-8"></script>
+<script src="../../js/md5.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'laydate', 'jquery', 'request'], function() {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate,
+            request = layui.request;
+
+        window.lang.render({form: 'table'}); // 国际化
+
+        // 日期
+        laydate.render({
+            elem: '#begindate'
+        });
+        laydate.render({
+            elem: '#enddate'
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data = data.field;
+            if (data.type == '') {
+                layer.msg('授权类型不能为空');
+                return false;
+            }
+            if (data.begin == '') {
+                layer.msg('开始日期不能为空');
+                return false;
+            }
+            if (data.end == '') {
+                layer.msg('结束日期不能为空');
+                return false;
+            }
+
+            console.log('data=', data);
+
+            let params = data;
+
+            request.post({
+                url: '/user?cmd=auth',
+                data: params,
+                success: function(res) {
+                    let { code, msg, data } = res;
+                    if (code === 0) {
+                        layer.msg(msg, {time: 2000}, function() {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.reloadTable();
+                            parent.layer.close(iframeIndex);
+                        });
+                    } else {
+                        layer.msg(JSON.stringify(msg));
+                    }
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

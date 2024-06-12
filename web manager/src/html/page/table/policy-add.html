@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>转发策略</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+        .box {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .box .layui-form,
+        .box .demo {
+            flex: 1;
+        }
+        .box .demo-pic {
+            display: block;
+            margin: 0 auto;
+        }
+        .hide {
+            display: none;
+        }
+        .layui-form-span {
+            display: inline-block;
+            padding: 10px 0;
+            font-weight: bold;
+        }
+        .source-url {
+            font-weight: normal;
+        }
+        .btn-more {
+            position: absolute;
+            top: 5px;
+            right: -20px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        @media screen and (max-width: 450px){
+            .box {
+                display: flex;
+                flex-direction: column;
+            }
+            .layui-form-item {
+                margin-right: 20px;
+                margin-bottom: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <span class="layui-form-span i18n" data-lang="policy_input_source_url">Source URL</span>
+        </div>
+        <div class="layui-form-item" style="margin-bottom: 30px;">
+            <span class="layui-form-span source-url"></span>
+        </div>
+        <div class="source-key hide">
+            <div class="layui-form-item">
+                <span class="layui-form-span i18n" data-lang="policy_input_source_key">Destination Stream Key</span>
+            </div>
+            <div class="layui-form-item">
+                <input type="text" class="source-key layui-input" name="source_key" lay-verify="" lay-reqtext="" placeholder="" value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <span class="layui-form-span i18n" data-lang="policy_input_destination_url">Destination URL</span>
+        </div>
+        <div class="layui-form-item" style="position: relative;">
+            <input type="text" class="destination-url layui-input" name="destination_url" lay-verify="" lay-reqtext="" placeholder="" value="">
+            <i class="fa fa-angle-right btn-more" data-toggle="0"></i>
+        </div>
+        <div class="server-box hide">
+            <div class="layui-form-item">
+                <span class="layui-form-span i18n" data-lang="policy_input_destination_server">Destination Server</span>
+            </div>
+            <div class="layui-form-item">
+                <input type="text" class="destination-server layui-input" name="destination_server" lay-verify="" lay-reqtext="" placeholder="" value="">
+            </div>
+        </div>
+    
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" name="source_url" value="">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="type" value="url">
+                <input type="hidden" name="from" value="0">
+                <input type="hidden" name="index" value="0">
+                <button class="layui-btn layui-btn-normal i18n" data-lang="common_save" lay-submit lay-filter="saveBtn">保存</button>
+            </div>
+        </div>
+    </div>
+    <div class="demo">
+        <img class="demo-pic" src="../../images/url_forward.png">
+    </div>
+</div>
+<script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../../js/jquery.i18n.properties-min-1.0.9.js" charset="utf-8"></script>
+<script src="../../js/common.js" charset="utf-8"></script>
+<script src="../../js/md5.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'jquery', 'request'], function() {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            request = layui.request;
+
+        window.lang.render({form: 'table'}); // 国际化
+
+        // source-url 改变时
+        $('.layuimini-form').on('keyup blur', '.source-url', function() {
+            let _val = $(this).val();
+            let _name = _val.substr(_val.lastIndexOf('/') + 1);
+
+            $('.source-key').val(_name);
+        });
+
+        // destination-url 改变时
+        $('.layuimini-form').on('keyup blur', '.destination-url', function() {
+            let _val = $(this).val();
+            let _arr = _val.split('/');
+
+            $('.destination-server').val(_arr[2]);
+        });
+
+        $('.layuimini-form').on('click', '.btn-more', function() {
+            let _status = $(this).attr('data-toggle');
+
+            if (_status === '0') {
+                $('.server-box').removeClass('hide');
+                $(this).attr('data-toggle', '1').addClass('fa-angle-down').removeClass('fa-angle-right');
+            } else {
+                $('.server-box').addClass('hide');
+                $(this).attr('data-toggle', '0').addClass('fa-angle-right').removeClass('fa-angle-down');
+            }
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data = data.field;
+            if (data.source_url === '') {
+                layer.msg(window.lang.map.policy_verify_source_url);
+                return false;
+            }
+            if (data.source_key === '' && data.type === 'url') {
+                layer.msg(window.lang.map.policy_verify_source_key);
+                return false;
+            }
+            if (data.destination_url && !(data.destination_url.indexOf('rtmp://') > -1 || data.destination_url.indexOf('rtmps://') > -1)) {
+                layer.msg(window.lang.map.policy_verify_destination_url_error);
+                return false;
+            }
+            if (data.destination_server === '') {
+                layer.msg(window.lang.map.policy_verify_destination_server);
+                return false;
+            }
+
+            // console.log('data=', data);
+
+            let params = data;
+
+            var iframeIndex = parent.layer.getFrameIndex(window.name);
+            parent.addData(data);
+            parent.layer.close(iframeIndex);
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

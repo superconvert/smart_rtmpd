@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>添加语言</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="lang_input_name">语言</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="lang_input_file">文件名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="filename" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required i18n" data-lang="lang_input_data">文件内容</label>
+        <div class="layui-input-block">
+            <textarea name="data" placeholder="" class="layui-textarea data"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" id="upload">
+                <i class="layui-icon">&#xe67c;</i>
+                <span class="i18n" data-lang="lang_upload">上传文件</span>
+            </button>
+            <button class="layui-btn layui-btn-normal i18n" data-lang="common_save" lay-submit lay-filter="saveBtn">保存</button>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../../js/jquery.i18n.properties-min-1.0.9.js" charset="utf-8"></script>
+<script src="../../js/common.js" charset="utf-8"></script>
+<script src="../../js/md5.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'upload', 'jquery', 'request'], function() {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            upload = layui.upload,
+            request = layui.request;
+
+        window.lang.render({form: 'table'}); // 国际化
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload',
+            // url: '/upload/',
+            accept: 'file',
+            auto: false,
+            choose: function(obj) {
+                var files = obj.pushFile();
+                obj.preview(function(index, file, result){
+                    let reader = new FileReader();
+                    reader.onloadend = function(e) {
+                        $('.data').val(e.target.result);
+                    }
+                    reader.readAsText(file);
+                });
+            }
+        });
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            data = data.field;
+
+            if (data.name == '') {
+                layer.msg(window.lang.map.lang_tips_empty_lang);
+                return false;
+            }
+            if (data.filename == '') {
+                layer.msg(window.lang.map.lang_tips_empty_file);
+                return false;
+            }
+            if (data.data == '') {
+                layer.msg(window.lang.map.lang_tips_empty_data);
+                return false;
+            }
+
+            let params = {
+                name: data.name,
+                file: data.filename,
+                data: data.data
+            };
+
+            request.post({
+                url: '/lang?cmd=add',
+                data: params,
+                success: function(res) {
+                    let { code, msg, data } = res;
+                    if (code === 0) {
+                        layer.msg(msg, {time: 2000}, function() {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.reloadLang();
+                            parent.parent.getLangList();
+                            parent.layer.close(iframeIndex);
+                        });
+                    } else {
+                        layer.msg(JSON.stringify(msg));
+                    }
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

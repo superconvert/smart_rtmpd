@@ -1,0 +1,23 @@
+{
+  "name": "web_admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "author": "",
+  "dependencies": {
+    "co": "^4.6.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "diskinfo": "0.0.3",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "http": "0.0.1-security",
+    "jsonwebtoken": "^9.0.0",
+    "log4js": "^6.3.0",
+    "request": "^2.88.2",
+    "silly-datetime": "^0.1.2",
+    "sqlite3": "^5.0.2",
+    "thunkify": "^2.1.2",
+    "url": "^0.11.0"
+  }
+}

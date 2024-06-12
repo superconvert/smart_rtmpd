@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>直播信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-colla-title {
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .layui-colla-icon2 {
+            position: absolute;
+            right: 15px;
+            left: auto;
+            top: 0;
+            font-size: 14px;
+        }
+        .table-info tbody td {
+            padding: 0 10px;
+            white-space: nowrap;
+        }
+        .layui-table thead th {
+            font-weight: bold;
+        }
+        .layui-table tr {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .layui-elem-field legend.total {font-size: 14px;}
+        .btn-play {
+            display: inline-block;
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+            color: #ccc;
+            text-align: center;
+        }
+        .btn-play.active {
+            border: 1px solid rgb(7, 150, 67);
+            color: rgb(7, 150, 67);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend class="i18n" data-lang="stream_title">直播流列表</legend>
+        </fieldset>
+
+        <div style="margin: 10px 10px 10px 10px">
+            <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label i18n" data-lang="stream_search_name">流名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="keyword" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="search">
+                            <i class="layui-icon"></i>
+                            <span class="i18n" data-lang="common_search">搜 索</span>
+                        </button>
+                        <button type="button" class="layui-btn btn-refresh">
+                            <i class="fa fa-refresh margin-right-10"></i>
+                            <span class="i18n" data-lang="common_refresh">刷新</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend class="total"><span class="i18n" data-lang="stream_search_total">总路数</span>：<span class="num">0</span></legend>
+        </fieldset>
+        
+        <div class="content"></div>
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../js/jquery.i18n.properties-min-1.0.9.js" charset="utf-8"></script>
+<script src="../js/clipboard.min.js"></script>
+<script src="../js/common.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table', 'request'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            element = layui.element,
+            request = layui.request;
+
+        window.lang.render(); // 国际化
+
+        // 刷新按钮
+        $('.btn-refresh').on('click', function() {
+            getData();
+        });
+
+        // 监听搜索
+        form.on('submit(search)', function (data) {
+            getData(data.field.keyword);
+            return false;
+        });
+
+        // 监听播放
+        $('.layuimini-main').on('click', '.btn-play', function() {
+            if (!$(this).hasClass('active')) {return;}
+            let url = $(this).attr('data-url');
+            let type = $(this).attr('data-type');
+
+            // console.log('url=', url);
+
+            var index = layer.open({
+                id: 'layer-player',
+                title: '播放',
+                type: 2,
+                shade: 0.2,
+                maxmin:true,
+                shadeClose: true,
+                area: ['100%', '100%'],
+                content: `../page/table/play.html?url=${ url }&type=${ type }`,
+                success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    // body.find('input[name="nickname"]').val(data.nickname); // 用户昵称
+                }
+            });
+            $(window).on("resize", function () {
+                layer.full(index);
+            });
+        });
+
+        // 监听复制
+        $('.layuimini-main').on('click', '.btn-copy', function() {
+            let url = $(this).attr('data-url');
+
+            // console.log('url=', url);
+
+            new ClipboardJS('.btn-copy', {
+                text: function(trigger) {
+                    return url;
+                }
+            });
+
+            layer.msg(window.lang.map.common_tips_copy);
+        });
+
+        // 获取流数据
+        function getData(keyword) {
+            let _name = keyword ? '?name=' + keyword : '';
+            request.get({
+                url: '/stream' + _name,
+                success: function(res) {
+                    let { code, msg, data } = res;
+                    if (code === 0) {
+                        let html = '';
+
+                        data.stream.forEach((item) => {
+                            html += `<div class="layui-collapse" lay-filter="test">
+                                <div class="layui-colla-item">
+                                    <h2 class="layui-colla-title" data-url="${ item }">
+                                        ${ item }
+                                    </h2>
+                                    
+                                    <div class="layui-colla-content">
+                                        
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                        $('.content').html(html);
+                        $('.num').text(data.stream.length);
+                        element.render('collapse');
+                        window.lang.render(); // 国际化
+                    } else {
+                        layer.msg(JSON.stringify(msg));
+                    }
+                }
+            });
+        }
+        getData();
+
+        // 监听折叠
+        element.on('collapse(test)', function(data){
+            let $content = data.content,
+                $title = data.title,
+                url = $title.attr('data-url');
+
+            let urlArr = url.split('/');
+
+            if (data.show) { // 展开时请求子流
+                request.get({
+                    url: `/stream?vhost=${ urlArr[2] }&app=${ urlArr[3] }&name=${ urlArr[4] }`,
+                    success: function(res) {
+                        let { code, msg, data } = res;
+                        if (code === 0) {
+                            let html = '';
+                            if (data.urls && data.urls.length > 0) {
+                                html = `
+                                <div class="layui-table-body layui-table-main">
+                                    <blockquote class="layui-elem-quote">
+                                        ${ createTableInfo(data) } 
+                                    </blockquote>
+                                    <table class="layui-table" lay-skin="nob">
+                                        <colgroup>
+                                            <col>
+                                            <col width="100">
+                                            <col width="100">
+                                        </colgroup>
+                                        <tbody>
+                                            ${ createTableContent(data, $title) }
+                                        </tbody>
+                                    </table>
+                                </div>`;
+                            }
+                            $content.html(html);
+                            window.lang.render(); // 国际化
+                        } else {
+                            layer.msg(msg);
+                        }
+                    }
+                });
+
+                // 子流列表
+                function createTableContent(data, $title) {
+                    let html = '';
+                    data.urls.forEach((item) => {
+                        let _active = '', _type = '';
+
+                        if (item.type === 'http-hls') {
+                            _active = 'active';
+                            _type = 'hls';
+                        }
+                        if (item.type === 'http-dash') {
+                            _active = 'active';
+                            _type = 'dash';
+                        }
+                        if (item.type === 'ws-flv' || item.type === 'http-flv') {
+                            _active = 'active';
+                            _type = 'flv';
+                        }
+
+                        html += `<tr>
+                                    <td data-url="${ item.url }">${ item.url }</td>
+                                    <td class="white-space-nowrap">
+                                        <span class="white-space-nowrap btn-play ${ _active }" data-url="${ item.url }" data-type="${ _type }">${ item.type }</span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="layui-btn layui-btn-sm btn-copy" data-url="${ item.url }">
+                                            <span class="i18n" data-lang="common_copy">复制</span>
+                                        </button>
+                                    </td>
+                                </tr>`;
+                    });
+                    return html;
+                }
+
+                // 子流信息
+                function createTableInfo(data) {
+                    let format = data.app.rec === 'none' ? window.lang.map.stream_info_live : window.lang.map.stream_info_video + '（' + data.app.rec + '）';
+
+                    let html = `<table class="table-info">
+                                    <colgroup>
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="200">
+                                        <col width="120">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="i18n" data-lang="stream_info_pull_type">推流方式</span>：${ data.app.from }</td>
+                                            <td><span class="i18n" data-lang="stream_info_mode">模式</span>：${ format }</td>
+                                            <td><span class="i18n" data-lang="stream_info_rate">码率</span>：${ data.app.rate }</td>
+                                            <td><span class="i18n" data-lang="stream_info_duration">时长</span>：${ data.app.duration }</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="i18n" data-lang="stream_info_audio_codec">音频编码</span>：${ data.media.audio.codec }</td>
+                                            <td><span class="i18n" data-lang="stream_info_audio_samplerate">采样率</span>：${ data.media.audio.samplerate }</td>
+                                            <td><span class="i18n" data-lang="stream_info_audio_channel">通道数</span>：${ data.media.audio.channel }</td>
+                                            <td><span class="i18n" data-lang="stream_info_audio_samplebit">采样位</span>：${ data.media.audio.samplebit }</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="i18n" data-lang="stream_info_video_codec">视频编码</span>：${ data.media.video.codec }</td>
+                                            <td><span class="i18n" data-lang="stream_info_video_width_height">视频大小宽</span>：${ data.media.video.width } x ${ data.media.video.height }</td>
+                                            <td><span class="i18n" data-lang="stream_info_video_fps">视频帧数</span>：${ data.media.video.fps }</td>
+                                            <td><span class="i18n" data-lang="stream_info_video_gop">GOP 大小</span>：${ data.media.video.gop }</td>
+                                        </tr>
+                                    </tbody>
+                                </table>`
+                    
+                    return html;
+                }
+            }
+            
+        });
+
+    });
+</script>
+</body>
+</html>

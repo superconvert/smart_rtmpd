@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>日志文件</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+    <style>
+        .layui-code-view .layui-code-ol li {white-space: nowrap;}
+    </style>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <form class="layui-form layui-form-pane" action="">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend class="i18n" data-lang="log_title">日志文件</legend>
+            </fieldset>
+
+            <div class="layui-tab" lay-filter="tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this i18n" data-lang="log_tab_view" lay-id="view">日志查看</li>
+                    <li class="i18n" data-lang="log_tab_list" lay-id="list">日志列表</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <button type="button" class="layui-btn hide" id="upload">
+                            <i class="layui-icon">&#xe67c;</i>
+                            <span class="i18n" data-lang="lang_upload">上传文件</span>
+                        </button>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="refresh" value="1" title="手动" checked=""  lay-filter="refresh">
+                            <input type="radio" name="refresh" value="2" title="自动"  lay-filter="refresh">
+                            <div class="layui-input-inline time hide i18n" data-lang="log_tips_every">每</div>
+                            <div class="layui-input-inline time hide time-tips" style="width: 50px;">
+                                <input type="text" name="time" lay-verify="number" value="3" class="layui-input" placeholder="间隔">
+                            </div>
+                            <div class="layui-input-inline time hide"><span class="i18n" data-lang="common_second">秒</span>，<span class="i18n" data-lang="log_tips_get">取</span></div>
+                            <div class="layui-input-inline line-tips" style="width: 50px;">
+                                <input type="text" name="line" lay-verify="number" value="60" class="layui-input" placeholder="行数">
+                            </div>
+                            <div class="layui-input-inline margin-right-20 i18n" data-lang="log_tips_line">行</div>
+                            <div class="layui-input-inline">
+                                <button type="button" class="layui-btn-sm layui-btn btn-refresh i18n" data-lang="common_refresh">刷新</button>
+                                <button type="button" class="layui-btn-sm layui-btn layui-btn-normal btn-fullscreen i18n" data-lang="common_fullscreen">全屏</button>
+                            </div>
+                        </div>
+                        <div class="show-code">
+                            <pre class="layui-code"></pre>
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <div style="margin: 10px 10px 10px 10px">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label i18n" data-lang="log_search_date">日期</label>
+                                    <div class="layui-input-inline" style="width:150px;">
+                                        <input type="text" name="date" id="date" lay-verify="" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn">
+                                        <i class="layui-icon"></i>
+                                        <span class="i18n" data-lang="common_search">搜 索</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/html" id="currentTableBar">
+                <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit i18n" data-lang="common_download" lay-event="download">下载</a>
+            </script>
+
+        </form>
+
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="../js/jquery-ajax-blob-arraybuffer.js" charset="utf-8"></script>
+<script src="../js/jquery.i18n.properties-min-1.0.9.js" charset="utf-8"></script>
+<script src="../js/common.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'code', 'jquery', 'request', 'element', 'upload'], function() {
+        var $ = layui.jquery,
+            form = layui.form,
+            element = layui.element,
+            layer = layui.layer,
+            table = layui.table,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            request = layui.request,
+            month = new Date().getMonth() + 1,
+            timer = null, // 定时器
+            $time = $('.time'),
+            interval = 3,  // 3秒自动刷新
+            line = 60, // 取多少行
+            time = interval,
+            baseUrl = sessionStorage.getItem('baseUrl'); // 服务器基地址
+
+        window.lang.render(); // 国际化
+
+        // 日期
+        laydate.render({
+            elem: '#date',
+            type: 'month',
+            value: new Date(),
+            done: function(value, date, endDate){
+                month = date.month;
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            getLogList(); // 查看日志列表
+
+            return false;
+        });
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload',
+            // url: '/upload/',
+            accept: 'file',
+            auto: false,
+            choose: function(obj) {
+                var files = obj.pushFile();
+                obj.preview(function(index, file, result){
+                    let reader = new FileReader();
+                    reader.onloadend = function(e) {
+                        $('.layui-code').text(e.target.result);
+                        // 引用code方法
+                        layui.code({
+                            title: window.lang.map.log_code_title,
+                            about: true,
+                        });
+                    }
+                    reader.readAsText(file, 'utf-8');
+                });
+            }
+        });
+
+        // 刷新按钮
+        $('.btn-refresh').on('click', function() {
+            getLogInfo(); // 查看日志内容
+        });
+
+        // 全屏按钮
+        $('.btn-fullscreen').on('click', function() {
+            requestFullScreen('.layui-code');
+        });
+
+        // 全屏 
+        function requestFullScreen(selector) {
+            if (selector) {
+                let element = document.querySelector(selector);
+                let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+
+                if (requestMethod) {
+                    requestMethod.call(element);
+                }
+            }
+        }
+
+        $('.time-tips').on({
+            'mouseenter': function() {
+                layer.tips(window.lang.map.log_tips_auto_refresh, '.time-tips', {
+                    tips: [1, '#000000']
+                });
+            },
+            'mouseleave': function() {
+                layer.closeAll();
+            }
+        });
+
+        $('.line-tips').on({
+            'mouseenter': function() {
+                layer.tips(window.lang.map.log_tips_get_line, '.line-tips', {
+                    tips: [1, '#000000']
+                });
+            },
+            'mouseleave': function() {
+                layer.closeAll();
+            }
+        });
+
+        form.on('radio(refresh)', function(data){
+            let value = +data.value,
+                $btn = $('.btn-refresh');
+
+            if (value === 2) { // 自动刷新
+                $time.removeClass('hide');
+                $btn.text(`${ time } ${ window.lang.map.log_tips_second_refresh }`);
+                $btn.prop('disabled', true).addClass('layui-btn-disabled layui-btn-primary layui-border-green');
+                timer = setInterval(() => {
+                    time--;
+                    $btn.text(`${ time } ${ window.lang.map.log_tips_second_refresh }`);
+                    interval = +$time.find('input').val() || 10;
+                    if (time <= 1) {
+                        time = interval + 1;
+                        getLogInfo(); // 查看日志内容
+                    }
+                }, 1000);
+            } else { // 手动刷新
+                $time.addClass('hide');
+                clearInterval(timer);
+                time = interval;
+                $btn.text(window.lang.map.common_refresh).prop('disabled', false).removeClass('layui-btn-disabled layui-btn-primary layui-border-green');
+            }
+        }); 
+
+        // 监听Tab切换，以改变地址hash值
+        element.on('tab(tab)', function(){
+            let tab = this.getAttribute('lay-id');
+            if (tab === 'list') {
+                getLogList(); // 查看日志列表
+            }
+        });
+
+        // 查看日志内容
+        function getLogInfo() {
+            let _line = $('.line-tips').find('input').val();
+
+            request.get({
+                url: '/logmsg?line='+ _line,
+                success: function(res) {
+                    let { code, msg, data } = res;
+                    if (code === 0) {
+                        let content = data.map((item) => {
+                            return `${ item }\n`;
+                        });
+                        $('.layui-code').html(content);
+                        // 引用code方法
+                        layui.code({
+                            title: window.lang.map.log_code_title,
+                            about: true,
+                        });
+                        layer.msg(msg, {offset: 't'});
+                    } else {
+                        layer.msg(JSON.stringify(msg));
+                    }
+                }
+            });
+        }
+        getLogInfo(); // 查看日志内容
+
+        // 查看日志列表
+        function getLogList() {
+            table.render({
+                elem: '#currentTableId',
+                url: baseUrl + '/logfile?month=' + month,
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                },
+                cols: [[
+                    {type: "checkbox", width: 50},
+                    {field: 'filename', title: window.lang.map.log_table_field_filename},
+                    {width: 120, toolbar: '#currentTableBar', align: "center", title: window.lang.map.common_action}
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 10,
+                page: true,
+                skin: 'line',
+                done: function(res, curr, count){
+                    window.lang.render(); // 国际化
+                },
+                parseData: function(res) {
+                    let _data = res.data.map((item) => {
+                        return {filename: item}
+                    });
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": _data.length, //解析数据长度
+                        "data": _data //解析数据列表
+                    };
+                }
+            });
+        }
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            let data = obj.data;
+            let filename = data.filename;
+            if (obj.event === 'download') {
+                layer.msg(window.lang.map.log_tips_start_download);
+                request.get({
+                    url: '/logfile?name=' + filename,
+                    // dataType: 'blob',
+                    success: function(res) {
+                        downloadFile(res, filename);
+                    },
+                    complete: function(XMLHttpRequest, textStatus) {
+                        downloadFile(XMLHttpRequest.responseText, filename);
+                    }
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm(window.lang.map.log_tips_delete_filename, function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+        // 下载文本文件
+        function downloadFile(content, filename) {
+            if (content && filename) {
+                let a = document.createElement('a');
+                let blob = new Blob([content]);
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+            }
+        }
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>播放</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../js/dplayer/DPlayer.min.css" />
+    <link rel="stylesheet" href="../../css/public.css" media="all">
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-container">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <section class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="video" id="video" style="width: 100%;height: auto"></div>
+                        <div id="dplayer"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="../../js/dplayer/hls.js"></script>
+<script src="../../js/dplayer/flv.min.js"></script>
+<script src="../../js/dplayer/dash.all.min.js"></script>
+<script src="../../js/dplayer/DPlayer.min.js"></script>
+<script>
+    layui.use(['form', 'jquery', 'request'], function() {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer,
+            request = layui.request;
+        
+        // 自定义视频资源地址
+        var url = getQueryString('url');
+        var type = getQueryString('type');
+        console.log('url=', url);
+        console.log('type=', type);
+
+        // var url = 'http://13.250.102.154:8080/live/2.m3u8';
+        // var url = 'ws://13.250.102.154:8080/live/0';
+        window.dp = new DPlayer({
+            container: document.getElementById('dplayer'),
+            autoplay: true, // 自动播放
+            theme: '#FADFA3', // 主题
+            loop: true, // 循环播放
+            lang: 'zh-cn', // 语言
+            screenshot: true, // 截图
+            hotkey: true, // 热键
+            preload: 'auto', // 预加载
+            // logo: '/assets/octocat.png', // 左上角logo
+            volume: 0.7, // 音量
+            mutex: true, // 多个视频互斥
+            // 常规方式
+            video: {
+                url: url,
+                type: type,
+                // pic: '/assets/demo.png', // 封面
+                // thumbnails: '/assets/thumbnail.jpg', // 缩略图
+            },
+            // m3u8
+            //video: {
+            //    url: '/assets/demo.m3u8',
+            //    type: 'hls'
+            //},
+            // flv
+            //video: {
+            //    url: '/assets/demo.flv',
+            //    type: 'flv'
+            //},
+            pluginOptions: {
+                hls: {
+                    // hls config
+                    autoStartLoad: true,
+                    startPosition: -1
+
+                },
+                dash: {
+                    // dash config
+                    autoStartLoad: true,
+                    startPosition: -1
+                },
+                flv: {
+                    enableWorker: false,
+                    enableStashBuffer: true,
+                    stashInitialSize: undefined,
+
+                    isLive: false,
+
+                    lazyLoad: true,
+                    lazyLoadMaxDuration: 3 * 60,
+                    lazyLoadRecoverDuration: 30,
+                    deferLoadAfterSourceOpen: true,
+
+                    // autoCleanupSourceBuffer: default as false, leave unspecified
+                    autoCleanupMaxBackwardDuration: 3 * 60,
+                    autoCleanupMinBackwardDuration: 2 * 60,
+
+                    statisticsInfoReportInterval: 600,
+
+                    fixAudioTimestampGap: true,
+
+                    accurateSeek: false,
+                    seekType: 'range',  // [range, param, custom]
+                    seekParamStart: 'bstart',
+                    seekParamEnd: 'bend',
+                    rangeLoadZeroStart: false,
+                    customSeekHandler: undefined,
+                    reuseRedirectedURL: false,
+                    // referrerPolicy: leave as unspecified
+
+                    headers: undefined,
+                    customLoader: undefined
+                }
+            },
+            
+            // 切换视频质量
+            //video: {
+            //    quality: [
+            //        {
+            //            name: 'HD',
+            //            url: 'demo.m3u8',
+            //            type: 'hls',
+            //        },
+            //        {
+            //            name: 'SD',
+            //            url: 'demo.mp4',
+            //            type: 'normal',
+            //        },
+            //    ],
+            //    defaultQuality: 0,
+            //    pic: 'demo.png',
+            //    thumbnails: 'thumbnails.jpg',
+            //},
+            // 视频字幕
+            // subtitle: {
+            //     type: 'webvtt',
+            //     url: 'webvtt.vtt',
+            //     fontSize: '25px',
+            //     bottom: '10%',
+            //     color: '#b7daff'
+            // },
+            // 弹幕
+            // danmaku: {
+            //     id: vid,
+            //     api: 'http://192.168.1.172:1207/',
+            //     addition: ['http://192.168.1.172:1207/v3/bilibili?aid=80266688&cid=137358410']
+            // },
+            // 视频右键菜单
+            contextmenu: [
+                {
+                    text: 'falltakeman',
+                    link: 'https://cnblogs.com/falltakeman',
+                },
+                {
+                    text: 'dplayer',
+                    click: (player) => {
+                        console.log(player);
+                    },
+                },
+            ],
+            // 高能预告
+            highlight: [
+                {
+                    text: '敌军还有10秒到达战场',
+                    time: 10,
+                },
+                {
+                    text: '2mins 空降',
+                    time: 120,
+                },
+            ],
+        });
+
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+    });
+</script>
+</body>
+</html>
