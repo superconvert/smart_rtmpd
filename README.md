@@ -39,7 +39,7 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 |---|---|
 |official |http://www.qiyicc.com/download/rtmpd.zip |
 |github |https://github.com/superconvert/smart_rtmpd |
-|gitee |https://gitee.com/mirrors/smart-rtmpd |
+|gitee |https://gitee.com/superconvert/smart_rtmpd |
 
 # smart rtmpd 支持哪些音视频编码
 
