@@ -19,6 +19,9 @@ var path = require('path');
 path.join(process.cwd(), 'config.json');
 ~~~
 
+nodejs 版本建议用:
+https://cdn.npmmirror.com/binaries/node/latest-v18.x/node-v18.20.1-x64.msi
+
 # 编译运行
 
 ~~~shell

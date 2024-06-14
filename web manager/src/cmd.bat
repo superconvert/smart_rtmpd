@@ -4,12 +4,15 @@ set cwd=%cd%
 echo %cd%
 
 set one=%1
+set pdir=%cwd%/../bin
 set pname=smart_rtmpd.exe
 set ppath=%cwd%/../bin/%pname%
 set stopfail='stop service %pname% failed.'
 set startfail='start service %pname% failed.'
 set restartfail='restart service %pname% failed.'
 set restorefail='restore service %pname% failed.'
+
+cd %pdir%
 
 rem ---------------------------------------------------------
 if "%one%" == "start" (
@@ -75,7 +78,6 @@ rem ------------------------------------------------
     )
     echo %ppath%
     echo %one%
-    echo 'caiwenfeng'
     start %ppath% %1
 goto:eof
 

@@ -1,17 +1,17 @@
-'use strict';
+ï»¿'use strict';
 
 /// Import sqlitedb.
 const crypto = require('crypto');
 const date = require('silly-datetime');
-const log4js = require('./log_utils');        // ÒıÈë¿â
+const log4js = require('./log_utils');        // å¼•å…¥åº“
 const config = require('./config');
 const sqlitedb = require('./sql_db.js').sqlitedb;
-const logger = log4js.getLogger('webserver'); // »ñÈ¡Ö¸¶¨µÄÊä³öÔ´
+const logger = log4js.getLogger('webserver'); // è·å–æŒ‡å®šçš„è¾“å‡ºæº
 
 var sqliteDB = new sqlitedb('./smart_web.db');
 
 // --------------------------------------------
-// ÏìÓ¦ÕıÈ·Öµµ½Ç°¶Ë
+// å“åº”æ­£ç¡®å€¼åˆ°å‰ç«¯
 // --------------------------------------------
 function succ_response(res, val) {
     var data = {
@@ -25,7 +25,7 @@ function succ_response(res, val) {
 }
 
 // --------------------------------------------
-// ÏìÓ¦´íÎóµÄÖµµ½Ç°¶Ë
+// å“åº”é”™è¯¯çš„å€¼åˆ°å‰ç«¯
 // --------------------------------------------
 function fail_response(res, msg, val) {
     var data = {
@@ -39,7 +39,7 @@ function fail_response(res, msg, val) {
 }
 
 // ----------------------------------------------------------
-// ´´½¨±í
+// åˆ›å»ºè¡¨
 // ----------------------------------------------------------
 function create_table () {
     /// create table.
@@ -50,7 +50,7 @@ function create_table () {
 }
 
 // ----------------------------------------------------------
-// ¼ÓÃÜÃÜÂë
+// åŠ å¯†å¯†ç 
 // ----------------------------------------------------------
 function crypt_passwd (password) {
     var md5 = crypto.createHash('md5');
@@ -58,7 +58,7 @@ function crypt_passwd (password) {
 }
 
 // ----------------------------------------------------------
-// Ìí¼ÓÓÃ»§
+// æ·»åŠ ç”¨æˆ·
 // ----------------------------------------------------------
 function add_user (req, res) {
 		
@@ -92,7 +92,7 @@ function add_user (req, res) {
 }
 
 // ----------------------------------------------------------
-// É¾³ıÓÃ»§
+// åˆ é™¤ç”¨æˆ·
 // ----------------------------------------------------------
 function del_user (req, res) {
 	var userid = req.body["user"];
@@ -113,13 +113,13 @@ function del_user (req, res) {
 }
 
 // ----------------------------------------------------------
-// ĞŞ¸ÄÓÃ»§»òÃÜÂë
+// ä¿®æ”¹ç”¨æˆ·æˆ–å¯†ç 
 // ----------------------------------------------------------
 function mdf_user (req, res) {
 	
 	var user = req.body;
 	var updateSql = '';
-	// ¸ü¸ÄĞÅÏ¢
+	// æ›´æ”¹ä¿¡æ¯
 	if ( user['mobile'] || user['email'] ) {
 		updateSql = 'update user set mobile=\'' + user['mobile'] + '\', ' + 
 			'email=\'' + user['email'] + '\', ' + 'nickname=\'' + user['nickname'] + '\' ';
@@ -136,7 +136,7 @@ function mdf_user (req, res) {
 			}
 		}
 
-	// ¸ü¸ÄÃÜÂë
+	// æ›´æ”¹å¯†ç 
 	} else {
 		var querySql = 'select passwd from user where id=' + user['id'];
 		sqliteDB.query(querySql, query_data);
@@ -168,7 +168,7 @@ function mdf_user (req, res) {
 }
 
 // ----------------------------------------------------------
-// ÓÃ»§ÊÚÈ¨
+// ç”¨æˆ·æˆæƒ
 // ----------------------------------------------------------
 function auth_user (req, res) {
 	var user = req.body;
@@ -186,7 +186,7 @@ function auth_user (req, res) {
 }
 
 // ----------------------------------------------------------
-// ²éÑ¯ÊÚÈ¨
+// æŸ¥è¯¢æˆæƒ
 // ----------------------------------------------------------
 function auth_query (req, res) {
 
@@ -216,7 +216,7 @@ function auth_query (req, res) {
 }
 
 // ----------------------------------------------------------
-// ²éÕÒÓÃ»§
+// æŸ¥æ‰¾ç”¨æˆ·
 // ----------------------------------------------------------
 function find_user (req, res) {
 	var kw = req.query['keyword'];
@@ -236,7 +236,7 @@ function find_user (req, res) {
 }
 
 // ----------------------------------------------------------
-// È¡ÏûÊÚÈ¨
+// å–æ¶ˆæˆæƒ
 // ----------------------------------------------------------
 function auth_del (req, res) {
 
@@ -256,27 +256,27 @@ function auth_del (req, res) {
 }
 
 // ----------------------------------------------------------
-// »ñÈ¡ÓÃ»§
+// è·å–ç”¨æˆ·
 // ----------------------------------------------------------
 exports.get_user = function (req, res) {
 
 	if ( req.query["cmd"] ) {
-		// Ìí¼ÓÓÃ»§
+		// æ·»åŠ ç”¨æˆ·
 		if ( req.query["cmd"] == "add" ) {
 			add_user ( req, res ) ;
-		// É¾³ıÓÃ»§
+		// åˆ é™¤ç”¨æˆ·
 		} else if ( req.query["cmd"] == "del" ) {
 			del_user ( req, res ) ;
-		// ÊÚÈ¨ÓÃ»§
+		// æˆæƒç”¨æˆ·
 		} else if ( req.query["cmd"] == "auth" ) {
 			auth_query ( req, res ) ;
-		// ²éÕÒÓÃ»§
+		// æŸ¥æ‰¾ç”¨æˆ·
 		} else if ( req.query["cmd"] == "find" ) {
 			find_user ( req, res ) ;		
-		// ĞŞ¸ÄÓÃ»§ĞÅÏ¢
+		// ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯
 		} else if ( req.query["cmd"] == "modify" ) {
 			mdf_user ( req, res ) ;
-		// ´íÎó´¦Àí
+		// é”™è¯¯å¤„ç†
 		} else {
 	        var data = {
 				"code": 1,
@@ -286,7 +286,7 @@ exports.get_user = function (req, res) {
 	        res.setHeader('Content-Type', 'application/json');
 		    res.send(JSON.stringify(data));			
 		}
-	// ·ÖÒ³ÓÃ»§ÁĞ±í
+	// åˆ†é¡µç”¨æˆ·åˆ—è¡¨
 	} else {
 		var page = req.query['page'] - 1;
 		var limit = req.query['limit'];
@@ -306,29 +306,29 @@ exports.get_user = function (req, res) {
 }
 
 // ----------------------------------------------------------
-// ÉèÖÃÓÃ»§
+// è®¾ç½®ç”¨æˆ·
 // ---------------------------------------------------------- 
 exports.set_user = function (req, res) {
 
 	if ( req.query["cmd"] ) {
-		// Ìí¼ÓÓÃ»§
+		// æ·»åŠ ç”¨æˆ·
 		if ( req.query["cmd"] == "add" ) {
 			add_user ( req, res ) ;
-		// É¾³ıÓÃ
+		// åˆ é™¤ç”¨
 		} else if ( req.query["cmd"] == "del" ) {
 			del_user ( req, res ) ;
 		} else if ( req.query["cmd"] == "auth" ) {
-			// È¡ÏûÊÚÈ¨
+			// å–æ¶ˆæˆæƒ
 			if ( req.query["id"] ) {
 				auth_del ( req, res ) ;
-			// ²úÉúÊÚÈ¨
+			// äº§ç”Ÿæˆæƒ
 			} else {
  			    auth_user ( req, res ) ;
 			}
-		// ĞŞ¸ÄÓÃ»§
+		// ä¿®æ”¹ç”¨æˆ·
 		} else if ( req.query["cmd"] == "modify" ) {
 			mdf_user ( req, res ) ;
-		// ´íÎó·µ»Ø
+		// é”™è¯¯è¿”å›
 		} else {
 			succ_response ( res, {} ) ;
 		}

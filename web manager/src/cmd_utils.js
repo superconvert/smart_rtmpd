@@ -411,6 +411,7 @@ function* req_smart_rtmpd(req_cmd, req_url, body=null) {
         };
         option['body'] = body;
     }
+    logger.info("request smart_rtmpd - " + req_url);
     return new Promise((resolve, reject) => {
         request(option, (err, res, body) => {
             var data = {
@@ -424,7 +425,11 @@ function* req_smart_rtmpd(req_cmd, req_url, body=null) {
                 data["msg"] = res.statusCode + "-" + res.statusMessage;
             }
             resolve(data);
-			logger.info("stream server respose(" + body + ")");
+            if (err) {
+			    logger.info("smart_rtmpd respose failed(" + err + ")");
+            } else {
+                logger.info("smart_rtmpd respose success(" + body + ")");
+            }
         });
     });
 };
