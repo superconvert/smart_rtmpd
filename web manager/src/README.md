@@ -89,43 +89,43 @@ smart_rtmpd
      |
      +-- bin
      |    |
-	 |    +-- vod
-	 |    |
-	 |    +-- log
-	 |    |
-	 |    +-- ims
-	 |    |
-	 |    +-- html
-	 |    |
-	 |    +-- live
-	 |    |
-	 |    +-- config.xml
-	 |    |
-	 |    +-- policy.xml
-	 |    |
-	 |    +-- ice_server.json
-	 |    |
-	 |    +-- smart_rtmpd.exe
-	 |    |
-	 |    +-- ... ...
-	 |
+     |    +-- vod
+     |    |
+     |    +-- log
+     |    |
+     |    +-- ims
+     |    |
+     |    +-- html
+     |    |
+     |    +-- live
+     |    |
+     |    +-- config.xml
+     |    |
+     |    +-- policy.xml
+     |    |
+     |    +-- ice_server.json
+     |    |
+     |    +-- smart_rtmpd.exe
+     |    |
+     |    +-- ... ...
+     |
      +-- web
           |
-  	      +-- cmd.bat
-	      |
-	      +-- config.json
-	      |
-	      +-- smart_web.db
-	      |
-	      +-- server.exe
-	      |
-	      +-- html
-		  |    |
-		  |    +-- config.js
-		  |    |
-		  |    +-- ... ...
-	      |
-	      +-- node_modules
+          +-- cmd.bat
+          |
+          +-- config.json
+          |
+          +-- smart_web.db
+          |
+          +-- server.exe
+          |
+          +-- html
+          |    |
+	  |    +-- config.js
+	  |    |
+	  |    +-- ... ...
+          |
+          +-- node_modules
 ~~~
 
 # web 服务器配置文件
