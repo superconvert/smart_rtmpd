@@ -57,10 +57,24 @@ npm i request
 npm run start 或 node run server.js
 ~~~
 
-# 编译成 exe 文件
+# 编译成可执行文件
 
+Windows 环境：
+~~~shell
+# 安装 pkg
 1. npm install -g pkg
+# 编译 server.exe
 2. pkg -t win server.js
+~~~
+
+Ubuntu 16.04
+~~~shell
+# 安装 pkg
+1. npm install -g pkg
+# 因为 node 的版本是 16，所以写成 node16，编译 server
+2. pkg -t node16-linux server.js
+~~~
+
 
 linux 下自行编译对应的版本
 
