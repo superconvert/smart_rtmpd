@@ -19,8 +19,35 @@ var path = require('path');
 path.join(process.cwd(), 'config.json');
 ~~~
 
-nodejs 版本建议用:
-https://cdn.npmmirror.com/binaries/node/latest-v18.x/node-v18.20.1-x64.msi
+# nodejs 环境安装
+Windows 版本：
+  nodejs 版本 https://cdn.npmmirror.com/binaries/node/latest-v18.x/node-v18.20.1-x64.msi
+Ubuntu 16.04 版本：
+~~~shell
+ # 下载 nodejs 源脚本
+ curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
+ # 初始化 nodejs 安装环境
+ base nodesource_setup.sh
+ # 安装 nodejs 
+ apt install nodejs -y
+ # 查看 node 版本
+ node -v 
+ cd web/
+ rm node_modules/ package.json package-lock.json -rf 
+ npm init
+ npm install
+ npm i cors
+ npm i express
+ npm i log4js 
+ npm i co 
+ npm i jsonwebtoken 
+ npm i silly-datetime
+ npm i request
+ npm i thunkify
+ npm i diskinfo 
+ npm i sqlite3
+ npm run start
+~~~
 
 # 编译运行
 
