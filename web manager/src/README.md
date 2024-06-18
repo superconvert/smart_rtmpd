@@ -33,7 +33,8 @@ Ubuntu 16.04 版本：
  # 查看 node 版本
  node -v 
  cd web/
- rm node_modules/ package.json package-lock.json -rf 
+ rm node_modules/ package.json package-lock.json -rf
+ chmod +x *.sh
  npm init
  npm install
  npm i cors
