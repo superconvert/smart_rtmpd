@@ -38,33 +38,34 @@ EOF
 
 brief=$(cat<<EOF
 ${YELLOW}
-/*****************************************************************************
-*                                                                            *
-*  Copyright (C) 2024 www.qiyicc.com All rights reserved.                    *
-*                                                                            *
-*  @file     deploy_smart_rtmpd                                              *
-*  @brief    一键部署 smart_rtmpd 流媒体服务器                               *
-*  Details.                                                                  *
-*                                                                            *
-*  @author   caiwenfeng                                                      *
-*  @email    cwf12345@sina.com                                               *
-*  @QQ       99766553                                                        *
-*  @WebChat  99766553                                                        *
-*  @github   https://github.com/superconvert/smart_rtmpd                     *
-*  @gitee    https://gitee.com/superconvert/smart_rtmpd                      *
-*  @version  0.1                                                             *
-*  @date     2024-07-08                                                      *
-*                                                                            *
-*----------------------------------------------------------------------------*
-*  Remark         : Description                                              *
-*----------------------------------------------------------------------------*
-*  Change History :                                                          *
-*  <Date>     | <Version> | <Author>       | <Description>                   *
-*----------------------------------------------------------------------------*
-*  2024-07-08    | 0.1.0     | 蔡文锋          | 新建文件                    *
-*----------------------------------------------------------------------------*
-*                                                                            *
-*****************************************************************************/
+/**************************************************************************************************
+*                                                                                                 *
+*  Copyright (C) 2024 www.qiyicc.com All rights reserved.                                         *
+*                                                                                                 *
+*  @file     deploy_smart_rtmpd                                                                   *
+*  @brief    一键部署 smart_rtmpd 流媒体服务器                                                    *
+*  Details.                                                                                       *
+*                                                                                                 *
+*  @author   caiwenfeng                                                                           *
+*  @email    cwf12345@sina.com                                                                    *
+*  @QQ       99766553                                                                             *
+*  @WebChat  99766553                                                                             *
+*  @github   https://github.com/superconvert/smart_rtmpd                                          *
+*  @gitee    https://gitee.com/superconvert/smart_rtmpd                                           *
+*  @webadmin https://github.com/superconvert/smart_rtmpd/blob/master/web%20manager/src/README.md  *
+*  @version  0.1                                                                                  *
+*  @date     2024-07-08                                                                           *
+*                                                                                                 *
+*-------------------------------------------------------------------------------------------------*
+*  Remark         : Description                                                                   *
+*-------------------------------------------------------------------------------------------------*
+*  Change History :                                                                               *
+*  <Date>     | <Version> | <Author>       | <Description>                                        *
+*-------------------------------------------------------------------------------------------------*
+*  2024-07-08    | 0.1.0     | 蔡文锋          | 新建文件                                         *
+*-------------------------------------------------------------------------------------------------*
+*                                                                                                 *
+**************************************************************************************************/
 ${NC}
 EOF
 )
