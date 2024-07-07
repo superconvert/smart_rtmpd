@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 
 red='\e[0;41m' # 红色
 RED='\e[1;31m'
@@ -16,7 +16,7 @@ WHITE='\e[1;37m' # 白色
 
 NC='\e[0m' # 没有颜色
 
-bin_name=smart_rtmpd
+app_name=smart_rtmpd
 
 #############################################################
 #
@@ -193,17 +193,23 @@ function download(){
     echo ""
     echo -e "${YELLOW}下载软件包 ...${NC}"
 
+    os_name=$1
     rm tmp -rf && mkdir tmp && cd tmp
     curl -o smart_rtmpd.zip http://www.qiyicc.com/download/rtmpd.zip
 
     echo ""
     echo -e "${YELLOW}正在部署环境 ...${NC}"
     unzip smart_rtmpd.zip
-    mv rtmpd/smart_rtmpd.multithread.ubuntu16.04LTS.x64.tar.gz ./
+    if [ ${os_name} = 'ubuntu' ]; then
+        bin_name=smart_rtmpd.multithread.ubuntu16.04LTS.x64.tar.gz
+    else
+        bin_name=smart_rtmpd.multithread.centos7.7.1908.x64.tar.gz
+    fi
+    mv rtmpd/${bin_name} ./
     rm smart_rtmpd.zip rtmpd -rf
     mkdir smart_rtmpd
-    tar zxf smart_rtmpd.multithread.ubuntu16.04LTS.x64.tar.gz -C smart_rtmpd
-    rm smart_rtmpd.multithread.ubuntu16.04LTS.x64.tar.gz -rf
+    tar zxf ${bin_name} -C smart_rtmpd
+    rm ${bin_name} -rf
     rm /opt/smart_rtmpd -rf
     mv smart_rtmpd /opt/
     cd ..
@@ -298,7 +304,7 @@ function deploy_centos() {
     env_rpm tar
     env_rpm unzip
     env_port
-    download
+    download centos
     runserver
 }
 
@@ -312,7 +318,7 @@ function deploy_ubuntu() {
     env_deb tar
     env_deb unzip
     env_port
-    download
+    download ubuntu
     runserver
 }
 
