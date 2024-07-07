@@ -16,8 +16,12 @@ WHITE='\e[1;37m' # 白色
 
 NC='\e[0m' # 没有颜色
 
+bin_name=smart_rtmpd
+
 #############################################################
-# 欢迎词
+#
+# Wellcom ( 欢迎词 )
+#
 #############################################################
 
 title=$(cat<<EOF
@@ -70,12 +74,13 @@ ${NC}
 EOF
 )
 
-
 echo -e "${title}"
 echo -e "${brief}"
 
 #############################################################
-# 环境检测
+#
+# env check ( 环境检测 )
+#
 #############################################################
 OS_TYPE=/etc/redhat-release
 
@@ -146,7 +151,6 @@ function env_port() {
 
 # rpm 包是否存在，不存在则初始化环境
 function env_rpm(){
-    echo -e "${YELLOW}基本环境检测 ...${NC}"
     rpm_name=$1
     var_rpm=$(rpm -qa | grep ${rpm_name})
     if [[ $? -ne 0 || ! -n "${var_rpm}" ]]; then
@@ -160,13 +164,11 @@ function env_rpm(){
     else
         printf "${CYAN}%-16s : ok${NC}\n" ${rpm_name}
     fi
-
-    env_port
 }
 
 # deb 包是否存在，不存在则初始化环境
 function env_deb(){
-    echo -e "${YELLOW}基本环境检测 ...${NC}"
+
     deb_name=$1
     var_deb=$(dpkg -l | grep ${deb_name})
     if [[ $? -ne 0 || ! -n "${var_deb}" ]]; then
@@ -180,12 +182,12 @@ function env_deb(){
     else
         printf "${CYAN}%-16s : ok${NC}\n" ${deb_name}
     fi
-
-    env_port
 }
 
 ############################################################
-# 下载软件包
+#
+# download ( 下载软件包 )
+#
 ############################################################
 function download(){
     echo ""
@@ -207,35 +209,111 @@ function download(){
     cd ..
     rm tmp -rf
 
-    echo ""
-    echo -e "${RED}准备启动 smart rtmpd 流媒体服务器 ...${NC}"
-    cd /opt/smart_rtmpd && ./smart_rtmpd -d
+}
+
+############################################################
+#
+# run_server (准备运行环境)
+#
+############################################################
+
+cat > start_rtmpd.sh << 'EOF'
+#!/bin/sh
+cd /opt/smart_rtmpd/
+nohup ./run_rtmpd.sh > /dev/null 2>&1 &
+EOF
+
+cat > stop_rtmpd.sh << 'EOF'
+#!/bin/sh
+
+# 停止监听进程
+server=`ps aux | grep ./run_rtmpd.sh | grep -v grep | awk -F ' ' '{print $2}'`
+if [ "$server" ]; then
+    kill -9 $server
+fi
+
+# 停止流媒体服务器 smart_rtmpd
+server=`ps aux | grep ./smart_rtmpd | grep -v grep | awk -F ' ' '{print $2}'`
+if [ "$server" ]; then
+    kill -9 $server
+fi
+
+EOF
+
+cat > run_rtmpd.sh << 'EOF'
+#!/bin/sh
+
+cd /opt/smart_rtmpd
+
+# 添加本地执行路径
+export LD_LIBRARY_PATH=./
+
+while true; do
+    # 启动一个循环，定时检查进程是否存在
+    server=`ps aux | grep ./smart_rtmpd | grep -v grep`
+    if [ ! "$server" ]; then
+        # 如果不存在就重新启动
+        ./smart_rtmpd -d
+        sleep 5
+    fi
     sleep 3
-    rtmp=$(ss -lnp | grep 1935)
-    if [[ ${rtmp} ]]; then
+done
+EOF
+
+
+function runserver(){
+    echo ""
+    echo -e "${YELLOW}准备启动 smart rtmpd 流媒体服务器 ...${NC}"
+    chmod +x start_rtmpd.sh && mv start_rtmpd.sh /opt/smart_rtmpd/
+    chmod +x run_rtmpd.sh && mv run_rtmpd.sh /opt/smart_rtmpd/
+    chmod +x stop_rtmpd.sh && mv stop_rtmpd.sh /opt/smart_rtmpd/
+    /opt/smart_rtmpd/start_rtmpd.sh
+    
+    i=0
+    while [ $i -le 6 ]
+    do
+       let i++
+       sleep 1 
+       echo -e "${CYAN}please waiting.${NC}"
+    done
+
+    state=$(ss -lnp | grep 1935)
+    if [[ ${state} ]]; then
         printf "${GREEN}启动成功!!!${NC}\n"
     else
         printf "${RED}启动失败!!!${NC}\n"
     fi
-    echo -e "${CYAN}您的服务器工作目录是: /opt/smart_rtmpd ${NC}"
+    echo -e "${PURPLE}您的服务器工作目录是: /opt/smart_rtmpd ${NC}"
+    echo -e "${PURPLE}您的服务器启动脚本是: /opt/smart_rtmpd/start_rtmpd.sh ${NC}"
+    echo -e "${PURPLE}您的服务器停止脚本是: /opt/smart_rtmpd/stop_rtmpd.sh ${NC}"
 }
 
 ############################################################
+#
 # 主函数 ( CentOS )
+#
 ############################################################
 function deploy_centos() {
+    echo -e "${YELLOW}基本环境检测 ...${NC}"
     env_rpm tar
     env_rpm unzip
+    env_port
     download
+    runserver
 }
 
 ############################################################
+#
 # 主函数 ( Ubuntu )
+#
 ############################################################
 function deploy_ubuntu() {
+    echo -e "${YELLOW}基本环境检测 ...${NC}"
     env_deb tar
     env_deb unzip
+    env_port
     download
+    runserver
 }
 
 if [ -f "$OS_TYPE" ];then
