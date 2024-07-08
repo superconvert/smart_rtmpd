@@ -44,6 +44,7 @@ Ubuntu 16.04 版本：
  npm i jsonwebtoken 
  npm i silly-datetime
  npm i request
+ npm i xmldoc
  npm i thunkify
  npm i diskinfo 
  npm i sqlite3
