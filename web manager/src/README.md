@@ -81,7 +81,7 @@ ARM64
 # 安装 pkg
 1. npm install -g pkg
 # 因为 node 的版本是 16，所以写成 node16，编译 server
-2. pkg -t node16-linux-arm64 server.js
+2. pkg -t node16-linux-arm64 server.js --no-bytecode --public-packages "*" --public
 ~~~
 
 linux 下自行编译对应的版本
