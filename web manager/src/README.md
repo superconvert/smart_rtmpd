@@ -27,7 +27,7 @@ Ubuntu 16.04 版本：
  # 下载 nodejs 源脚本
  curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
  # 初始化 nodejs 安装环境
- base nodesource_setup.sh
+ bash nodesource_setup.sh
  # 安装 nodejs 
  apt install nodejs -y
  # 查看 node 版本
@@ -76,6 +76,13 @@ Ubuntu 16.04
 2. pkg -t node16-linux server.js
 ~~~
 
+ARM64
+~~~shell
+# 安装 pkg
+1. npm install -g pkg
+# 因为 node 的版本是 16，所以写成 node16，编译 server
+2. pkg -t node16-linux-arm64 server.js
+~~~
 
 linux 下自行编译对应的版本
 
