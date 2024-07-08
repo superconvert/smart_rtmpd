@@ -82,6 +82,22 @@ ARM64
 1. npm install -g pkg
 # 因为 node 的版本是 16，所以写成 node16，编译 server
 2. pkg -t node16-linux-arm64 server.js --no-bytecode --public-packages "*" --public
+# 参数 --no-bytecode --public-packages "*" --public 是解决下述问题的
+Error: spawn UNKNOWN
+    at ChildProcess.spawn (node:internal/child_process:414:11)
+    at spawn (node:child_process:761:9)
+    at fabricate (C:\Users\Admin\AppData\Roaming\npm\node_modules\pkg\lib-es5\fabricator.js:55:51)
+    at fabricateTwice (C:\Users\Admin\AppData\Roaming\npm\node_modules\pkg\lib-es5\fabricator.js:120:5)
+    at MultiStream._queue (C:\Users\Admin\AppData\Roaming\npm\node_modules\pkg\lib-es5\producer.js:271:68)
+    at MultiStream._next (C:\Users\Admin\AppData\Roaming\npm\node_modules\pkg\node_modules\multistream\index.js:86:12)
+    at Meter.onEnd (C:\Users\Admin\AppData\Roaming\npm\node_modules\pkg\node_modules\multistream\index.js:129:12)
+    at Object.onceWrapper (node:events:631:28)
+    at Meter.emit (node:events:517:28)
+    at endReadableNT (node:internal/streams/readable:1400:12) {
+  errno: -4094,
+  code: 'UNKNOWN',
+  syscall: 'spawn'
+}
 ~~~
 
 linux 下自行编译对应的版本
