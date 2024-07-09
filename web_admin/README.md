@@ -50,6 +50,7 @@ Ubuntu 16.04 版本：
  npm i sqlite3
  npm run start
 ~~~
+ARM64 的环境和 Ubuntu 16.04 流程差不多， node 版本选择 v14.6.0 或合适的版本即可
 
 # 编译运行
 
@@ -137,25 +138,27 @@ smart_rtmpd
      |
      +-- web
           |
-          +-- cmd.bat
+          +-- cmd.sh(bat)                 // windows 用 cmd.bat， linux 和 arm64 用 cmd.sh
           |
-          +-- config.json                    // 配置文件根据需要进行更改
+          +-- exec.sh                     // windows 可以不带此文件，linux 和 arm64 必须带有此文件
           |
-          +-- smart_web.db
+          +-- config.json                 // 根据需要修改里面的内容
+          |
+          +-- passwd                      // 默认的密码文件，默认密码: 123456
           |
           +-- server.exe
           |
           +-- html
           |    |
-	  |    +-- config.js                 // 需要修改里面的 ip:port 为您的服务器的地址和端口
-	  |    |
-	  |    +-- ... ...
+          |    +-- config.js              // 修改里面的 ip:port 为您的服务器地址和端口
+          |    |
+          |    +-- ... ...
           |
-          +-- node_sqlite3.node
+          +-- node_sqlite3.node           // windows 下用 windows 版本的，linux 用 linux 版本的，arm64 用 arm64 版本的
 ~~~
 
 # web 服务器配置文件
-配置文件路径
+后台配置文件 config.json
 smart_rtmpd --> web --> config.json
 ~~~shell
 {
@@ -180,6 +183,13 @@ smart_rtmpd --> web --> config.json
       "license":"/api/license"
    }
 }
+~~~
+
+前端配置文件 html/config.js
+~~~shell
+# 这个地址必须改成您的服务器地址和端口!!!
+var baseUrl = 'http://127.0.0.1:5000/api';   
+sessionStorage.setItem('baseUrl', baseUrl);
 ~~~
 
 # web 默认登陆账户
