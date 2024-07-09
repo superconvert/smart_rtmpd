@@ -77,8 +77,11 @@ Ubuntu 16.04 需要在 Linux 的环境下制作
 2. cp node_modules/sqlite3/build/Release/node_sqlite3.node ./
 # 因为 node 的版本是 16，所以写成 node16，编译 server
 3. pkg -t node16-linux server.js -o smart_web
+# 修改配置文件
+4. 修改 html/config.js
+var baseUrl = 'http://127.0.0.1:5000/api';  为 var baseUrl = 'http://您的服务器运行域名或IP:您的服务器运行端口/api';
 # 打包制作发布文件 smart_web.tar.gz
-4. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
+5. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
 
 ARM64 需要在 ARM64 环境下制作
@@ -92,8 +95,11 @@ v14.6.0
 3. cp node_modules/sqlite3/build/Release/node_sqlite3.node ./
 # 因为 node 的版本是 16，所以写成 node16，编译 server
 4. pkg -t node16-linux-arm64 server.js -o smart_web
+# 修改配置文件
+5. 修改 html/config.js
+var baseUrl = 'http://127.0.0.1:5000/api';  为 var baseUrl = 'http://您的服务器运行域名或IP:您的服务器运行端口/api';
 # 打包制作发布文件 smart_web.tar.gz
-5. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
+6. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
 
 linux 下自行编译对应的版本
@@ -133,7 +139,7 @@ smart_rtmpd
           |
           +-- cmd.bat
           |
-          +-- config.json
+          +-- config.json                    // 配置文件根据需要进行更改
           |
           +-- smart_web.db
           |
@@ -141,7 +147,7 @@ smart_rtmpd
           |
           +-- html
           |    |
-	  |    +-- config.js
+	  |    +-- config.js                 // 需要修改里面的 ip:port 为您的服务器的地址和端口
 	  |    |
 	  |    +-- ... ...
           |
