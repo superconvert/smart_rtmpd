@@ -94,8 +94,8 @@ v14.6.0
 2. npm install -g pkg
 # 需要拷贝 sqlite3 插件
 3. cp node_modules/sqlite3/build/Release/node_sqlite3.node ./
-# 因为 node 的版本是 16，所以写成 node16，编译 server
-4. pkg -t node16-linux-arm64 server.js -o smart_web
+# 因为 node 的版本是 14，所以写成 node14，编译 server
+4. pkg -t node14-linux-arm64 server.js -o smart_web
 # 修改配置文件
 5. 修改 html/config.js
 var baseUrl = 'http://127.0.0.1:5000/api';  为 var baseUrl = 'http://您的服务器运行域名或IP:您的服务器运行端口/api';
