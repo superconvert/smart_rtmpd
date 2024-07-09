@@ -73,19 +73,27 @@ Ubuntu 16.04 需要在 Linux 的环境下制作
 ~~~shell
 # 安装 pkg
 1. npm install -g pkg
+# 需要拷贝 sqlite3 插件
+2. cp node_modules/sqlite3/build/Release/node_sqlite3.node ./
 # 因为 node 的版本是 16，所以写成 node16，编译 server
-2. pkg -t node16-linux server.js
+3. pkg -t node16-linux server.js -o smart_web
+# 打包制作发布文件 smart_web.tar.gz
+4. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
 
 ARM64 需要在 ARM64 环境下制作
 ~~~shell
 # 检验 node 版本
-0. node -v
+1. node -v
 v14.6.0
 # 安装 pkg
-1. npm install -g pkg
+2. npm install -g pkg
+# 需要拷贝 sqlite3 插件
+3. cp node_modules/sqlite3/build/Release/node_sqlite3.node ./
 # 因为 node 的版本是 16，所以写成 node16，编译 server
-2. pkg -t node16-linux-arm64 server.js
+4. pkg -t node16-linux-arm64 server.js -o smart_web
+# 打包制作发布文件 smart_web.tar.gz
+5. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
 
 linux 下自行编译对应的版本
