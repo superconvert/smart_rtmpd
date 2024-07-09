@@ -145,7 +145,7 @@ smart_rtmpd
 	  |    |
 	  |    +-- ... ...
           |
-          +-- node_modules
+          +-- node_sqlite3.node
 ~~~
 
 # web 服务器配置文件
