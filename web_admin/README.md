@@ -20,8 +20,6 @@ path.join(process.cwd(), 'config.json');
 ~~~
 
 # nodejs 环境安装
-Windows 版本：
-  nodejs 版本 https://cdn.npmmirror.com/binaries/node/latest-v18.x/node-v18.20.1-x64.msi
 Ubuntu 16.04 版本：
 ~~~shell
  # 下载 nodejs 源脚本
@@ -53,11 +51,15 @@ Ubuntu 16.04 版本：
 ~~~
 ARM64 的环境和 Ubuntu 16.04 流程差不多， node 版本选择 v14.6.0 或合适的版本即可
 
+Windows 版本:  
+~~~shell
+  nodejs 版本 https://cdn.npmmirror.com/binaries/node/latest-v18.x/node-v18.20.1-x64.msi  
+  同样也需要 npm 的 Ubuntu 下那些 npm 的初始化和安装步骤
+~~~
+
 # 编译运行
 
 ~~~shell
-npm install
-npm i request
 npm run start 或 node run server.js
 ~~~
 
@@ -68,7 +70,12 @@ Windows 环境：
 # 安装 pkg
 1. npm install -g pkg
 # 编译 server.exe
-2. pkg -t win server.js
+2. pkg -t win server.js -o smart_web
+# 修改配置文件
+3. 核对配置文件 config.json
+media 项下的 port: 8080 必须和 smart_rtmpd 的 http 端口一致
+# 打包制作发布文件 smart_web.zip
+4. 用 winrar 打包 cmd.bat config.json html/ node_sqlite3.node smart_web
 ~~~
 
 Ubuntu 16.04 需要在 Linux 的环境下制作
@@ -80,8 +87,8 @@ Ubuntu 16.04 需要在 Linux 的环境下制作
 # 因为 node 的版本是 16，所以写成 node16，编译 server
 3. pkg -t node16-linux server.js -o smart_web
 # 修改配置文件
-4. 修改 html/config.js
-var baseUrl = 'http://127.0.0.1:5000/api';  为 var baseUrl = 'http://您的服务器运行域名或IP:您的服务器运行端口/api';
+4. 核对配置文件 config.json
+media 项下的 port: 8080 必须和 smart_rtmpd 的 http 端口一致
 # 打包制作发布文件 smart_web.tar.gz
 5. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
@@ -98,8 +105,8 @@ v14.6.0
 # 因为 node 的版本是 14，所以写成 node14，编译 server
 4. pkg -t node14-linux-arm64 server.js -o smart_web
 # 修改配置文件
-5. 修改 html/config.js
-var baseUrl = 'http://127.0.0.1:5000/api';  为 var baseUrl = 'http://您的服务器运行域名或IP:您的服务器运行端口/api';
+5. 核对配置文件 config.json
+media 项下的 port: 8080 必须和 smart_rtmpd 的 http 端口一致
 # 打包制作发布文件 smart_web.tar.gz
 6. tar zcvf smart_web.tar.gz cmd.sh config.json exec.sh html/ node_sqlite3.node smart_web
 ~~~
