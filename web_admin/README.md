@@ -48,6 +48,7 @@ Ubuntu 16.04 版本：
  npm i thunkify
  npm i diskinfo 
  npm i sqlite3
+ npm i formidable
  npm run start
 ~~~
 ARM64 的环境和 Ubuntu 16.04 流程差不多， node 版本选择 v14.6.0 或合适的版本即可
