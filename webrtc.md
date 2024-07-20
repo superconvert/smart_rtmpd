@@ -62,4 +62,4 @@
     ```
 
 4. webrtc 进行播放 ( client )  
-打开 chrome， 输入 url http://192.168.1.6:8080， 就会看到 webrtc 播放器界面，播放器最下面的输入框通常情况就是 "https://192.168.1.6:8181/live/stream.wms?type=getoffer"， 点击 "start" 按钮，理论上不出问题的话，就可以看到音视频画面里
+打开 chrome， 输入 url http://192.168.1.6:8080/webrtc.html， 就会看到 webrtc 播放器界面，播放器最下面的输入框通常情况就是 "https://192.168.1.6:8181/live/stream.wms?type=getoffer"， 点击 "start" 按钮，理论上不出问题的话，就可以看到音视频画面里
