@@ -5,7 +5,13 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 ### 说明
 * 免费软件 ( 不开源 )
 * 允许商业应用 ( 保留我们的 logo 和 name )
-* 源码授权 [ 只限公司 ]，可以私下联系我 ( 微信: 99766553, qq: 99766553, email: cwf12345@sina.com )
+* 源码授权 [ 只限公司 ]，可以联系我  
+  微信: ![image](webchat.png)
+  QQ: ![image](qq.jpg)
+  1号交流群（满）: ![image](1号群.jpg)  
+  2号交流群: ![image](2号群.jpg)
+  3号交流群: ![image](3号群.jpg)
+  嘻嘻1号流群: ![image](嘻嘻1号群.jpg)
 
 ### 特点
 * 性能是我们追求的目标，个人认为 smart_rtmpd 性能相对不错
@@ -211,19 +217,4 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
     thirtpart user can play this stream.
     this is call url forward!   
     good luck. 
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/url%20forward.png)
-
-# web portal
-
-  web browser <-------> nodejs server ( source code ) <----> smart_rtmpd
-  see https://github.com/superconvert/smart_rtmpd/tree/master/web/src
-  
-  web development interface :
-  https://my.oschina.net/u/4249347/blog/5529704
-  
-# web player
-
-  you can put all file ( see below url ) to smart_rtmpd html dir
-  https://github.com/superconvert/smart_rtmpd/tree/master/h5%20player/demo
-  input url http://192.168.1.1:8080 ，good luck!
-
+![image](url%20forward.png)
