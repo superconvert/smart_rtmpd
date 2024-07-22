@@ -493,7 +493,7 @@ http://192.168.1.1:8080/webrtc.html
 参见服务器的配置文件 config.xml
 ```xml
 <config>
-    <authurl timeout="3000" router="/api">www.qiyicc.com<authurl/>
+    <authurl timeout="3000">http://www.qiyicc.com:80/api/auth<authurl/>
 </config>
 ```
 为了防止非法操作上述 web 接口，需要对每个 web 请求进行鉴权验证。就需要在服务器上配置类似的验证信息。服务器作为 web client，鉴权服务器作为 web server ，访问方式就是一个 HTTP GET 请求
@@ -501,23 +501,18 @@ http://192.168.1.1:8080/webrtc.html
 |参数|说明|
 |---|---|
 |timeout|连接鉴权服务器超时时间，毫秒|
-|router|就是 HTTP GET 请求 URL 前面加的前缀，方便鉴权服务器编程方便|
-
-- router 例子说明
-比如上述配置里，router="/api"，假设需要对获取服务器配置授权，web client 发往鉴权服务器的 HTTP 报文如下：
 
 ```bash
-GET /api/api/config?type=http&role=api HTTP/1.1
+GET /api/auth?type=http&role=api HTTP/1.1
 User-Agent: smart_rtmpd
 Host: www.qiyicc.com:80
 Connection: close
 
 ``` 
-/api/api/config?type=http&role=api
+/api/auth?type=http&role=api
 
-第一个 api 就是上述配置的 router="/api"
-第二个 api 就是上述的 web api 接口部分的 api/config
-参数 type 表示这个鉴权请求来自于 http 业务
+/api/auth 就是 config.xml 里面配置的 url 的 path 部分，参数为 smart_rtmpd 自动加上的 ?type=http&role=api  
+上述参数 type 为 http 请求，role 表示是有 api 接口的调用过来
 
 |名称|说明|
 |---|---|
@@ -538,7 +533,7 @@ Connection: close
 
 如果 router 配置为空那么请求就变成
 ```bash
-GET /api/config?type=http&role=api HTTP/1.1
+GET /api/auth?type=http&role=api HTTP/1.1
 User-Agent: smart_rtmpd
 Host: www.qiyicc.com:80
 Connection: close
