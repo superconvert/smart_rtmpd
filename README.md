@@ -9,9 +9,10 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 
 ### 特点
 * 性能是我们追求的目标，个人认为 smart_rtmpd 性能相对不错
-* 部署简单，解压及运行，无需过渡配置
+* 部署简单，解压及运行，无需过度配置
 * 兼容性特强，windows, linux, freebsd, arm64 主流系统，都满足运行条件
-* 软件大小相对比较小，即使是嵌入式设备也能满足布署 
+* 软件大小相对比较小，即使是嵌入式设备也能满足布署
+* 支持 URL 重新机制，针对各种灵活的业务需求，提供支撑
 * 支持 web 开发接口
 * 支持集群，级联
 
