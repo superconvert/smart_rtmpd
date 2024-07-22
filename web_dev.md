@@ -497,6 +497,7 @@ http://192.168.1.1:8080/webrtc.html
 </config>
 ```
 为了防止非法操作上述 web 接口，需要对每个 web 请求进行鉴权验证。就需要在服务器上配置类似的验证信息。服务器作为 web client，鉴权服务器作为 web server ，访问方式就是一个 HTTP GET 请求
+必须配置为一个标准的 http url , 例如：http://www.qiyicc.com/api/auth 或 https://qiyicc.com/api/auth，否则就是无效配置，鉴权功能就失效。
 
 |参数|说明|
 |---|---|
