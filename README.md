@@ -103,12 +103,12 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 ### 最快部署
 1. 下载软件包，解压 rtmpd.zip， 解压后得到 windows 的 smart_rtmpd 服务器
 2. 运行 smart_rtmpd.exe 如下图，既表示成功
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_run.png?raw=true)
+![image](smart_rtmpd_run.png?raw=true)
 3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://github.com/BtbN/FFmpeg-Builds/releases )
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_push.png?raw=true)
+![image](smart_rtmpd_push.png?raw=true)
 4. 播流验证
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play1.png?raw=true)
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/smart_rtmpd_play2.png?raw=true)
+![image](smart_rtmpd_play1.png?raw=true)
+![image](smart_rtmpd_play2.png?raw=true)
 
 ### 例子 ( example )
 |说明 |链接 |
@@ -172,7 +172,7 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
 
 # nat map mode :
 
-   ![image](https://github.com/superconvert/smart_rtmpd/blob/master/nat.png)
+   ![image](nat.png)
    	 
    outer user can push stream rtmp://61.180.166.16/live/stream, inner user can play with rtmp://192.168.1.1/live/stream     
   
@@ -196,7 +196,7 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
      for many server repeat this proccess or each other forward.
      this is call app forward!
      
-![image](https://github.com/superconvert/smart_rtmpd/blob/master/app%20forward.png)
+![image](app%20forward.png)
     
 # forward thirtparty :
   
