@@ -6,12 +6,7 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 * 免费软件 ( 不开源 )
 * 允许商业应用 ( 保留我们的 logo 和 name )
 * 源码授权 [ 只限公司 ]，可以联系我  
-  微信: ![image](webchat.png)
-  QQ: ![image](qq.jpg)
-  1号交流群（满）: ![image](1号群.jpg)  
-  2号交流群: ![image](2号群.jpg)
-  3号交流群: ![image](3号群.jpg)
-  嘻嘻1号流群: ![image](嘻嘻1号群.jpg)
+  微信: ![image](images/webchat.png)  QQ: ![image](images/qq.jpg)  
 
 ### 特点
 * 性能是我们追求的目标，个人认为 smart_rtmpd 性能相对不错
@@ -103,12 +98,12 @@ only support "live" or "rec" app tag, but no support "sky", "class" or "record" 
 ### 最快部署
 1. 下载软件包，解压 rtmpd.zip， 解压后得到 windows 的 smart_rtmpd 服务器
 2. 运行 smart_rtmpd.exe 如下图，既表示成功
-![image](smart_rtmpd_run.png?raw=true)
+![image](images/smart_rtmpd_run.png?raw=true)
 3. 推流验证，运行 ffmpeg.exe ( Windows下的 ffmpeg.exe 下载地址：https://github.com/BtbN/FFmpeg-Builds/releases )
-![image](smart_rtmpd_push.png?raw=true)
+![image](images/smart_rtmpd_push.png?raw=true)
 4. 播流验证
-![image](smart_rtmpd_play1.png?raw=true)
-![image](smart_rtmpd_play2.png?raw=true)
+![image](images/smart_rtmpd_play1.png?raw=true)
+![image](images/smart_rtmpd_play2.png?raw=true)
 
 ### 例子 ( example )
 |说明 |链接 |
@@ -157,8 +152,13 @@ https://github.com/superconvert/smart_rtmpd/blob/master/recording.md
 |---|---|
 |QQ |99766553 |
 |QQ 群 |190583317, 300474021, 271191746 |
+|微信群 |由于微信限制，首先加我微信，邀请进群 |
 |WebChat(微信) |99766553 |
 |E-mail(邮箱) |cwf12345@sina.com |
+
+  1号交流群（已经满）: ![image](images/1号群.jpg)  2号交流群（可以加）: ![image](images/2号群.jpg)  
+  3号交流群（近乎满）: ![image](images/3号群.jpg)  嘻嘻1号流群（可加）: ![image](images/嘻嘻1号群.jpg)  
+
  
 # download file or vod mode :
 
@@ -172,7 +172,7 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
 
 # nat map mode :
 
-   ![image](nat.png)
+   ![image](images/nat.png)
    	 
    outer user can push stream rtmp://61.180.166.16/live/stream, inner user can play with rtmp://192.168.1.1/live/stream     
   
@@ -196,7 +196,7 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
      for many server repeat this proccess or each other forward.
      this is call app forward!
      
-![image](app%20forward.png)
+![image](images/app%20forward.png)
     
 # forward thirtparty :
   
@@ -217,4 +217,4 @@ more web interface, see this link : https://my.oschina.net/u/4249347/blog/552970
     thirtpart user can play this stream.
     this is call url forward!   
     good luck. 
-![image](url%20forward.png)
+![image](images/url%20forward.png)
