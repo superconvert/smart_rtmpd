@@ -33,6 +33,9 @@ Ubuntu 16.04 版本：
  cd web/
  rm node_modules/ package.json package-lock.json -rf
  chmod +x *.sh
+ # 设置 npm 加速源
+ npm config set registry https://registry.npmmirror.com
+ # 初始化项目
  npm init
  npm install
  npm i cors
