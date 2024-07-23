@@ -152,8 +152,8 @@ https://github.com/superconvert/smart_rtmpd/blob/master/recording.md
 |---|---|
 |QQ |99766553 |
 |QQ 群 |190583317, 300474021, 271191746 |
-|微信群 |由于微信限制，首先加我微信，邀请进群 |
 |WebChat(微信) |99766553 |
+|微信群 |由于微信限制，首先加我微信，邀请进群 |
 |E-mail(邮箱) |cwf12345@sina.com |
 
   1号交流群（已经满）: ![image](images/1号群.jpg)  
