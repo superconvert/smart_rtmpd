@@ -170,8 +170,6 @@ https://github.com/superconvert/smart_rtmpd/blob/master/recording.md
 4. put a video file into /vod/discovery directory, for example: space.mkv
 5. use player play it, ffplay http://192.168.1.1:8080/vod/discovery/space.mkv
 
-more web interface, see this link : https://my.oschina.net/u/4249347/blog/5529704
-
 # nat map mode :
 
    ![image](images/nat.png)
