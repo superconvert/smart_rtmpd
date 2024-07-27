@@ -6,7 +6,7 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 * 免费软件 ( 不开源 )
 * 允许商业应用 ( 保留我们的 logo 和 name )
 * 源码授权 [ 只限公司 ]，可以联系我
-* 我的 skype : https://join.skype.com/invite/ufwEVORZO1bZ
+* 我的 skype : https://join.skype.com/invite/ufwEVORZO1bZ  
   微信: ![image](images/webchat.png)  QQ: ![image](images/qq.jpg)  
 
 ### 特点
