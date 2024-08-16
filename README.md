@@ -2,7 +2,7 @@
 smart_rtpmd 是一款用于直播，录播性能卓越的服务器。如果您不理解，可以理解为和 nginx-rtmp, srs ，并与此功能类似，特点是性能卓越，跨平台，无依赖，部署和维护十分方便，解压既能运行。  
 smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, centos, freebsd, windows & arm64. It is small, independent, easy to deploy, and has high performance. 
 
-一键运行版本已经推出，单机版本：288。支持的操作系统有 windows10, centos8.5, ubuntu22.04, arm64 等系统。预览版本敬请访问  
+<font color=red>一键运行版本已经推出，单机版本：288。支持的操作系统有 windows10, centos8.5, ubuntu22.04, arm64 等系统。预览版本敬请访问</font>  
 http://dt4.8tupian.net/2/32453a2b500.pg3
 
 ### 说明
