@@ -6,11 +6,11 @@ smart rtmpd is a streaming media server. It can run on multiple systems ubuntu, 
 smart web 属于 smart rtmpd 的姊妹版本，是 smart rtmpd 带上 web 管理功能的版本，功能更加强大，性能更加强劲，有进程守护功能，支持 H264(HEVC) 推流和拉流，支持远程配置，日志查看，转发配置，等诸多功能。  
 支持的操作系统有 windows10, centos8.5, ubuntu22.04, arm64 等系统。
 
-smart web 属于收费版本，目前暂且定价人民币：288 元，后续可能会涨价。  
+smart web 属于收费版本，目前暂且定价人民币：400 元。  
 
 预览版本敬请访问 http://dt4.8tupian.net/2/32453a2b500.pg3
 
-### whip/whep 推拉流
+### whip/whep 进行 webrtc 的 OBS 推流，H5 拉流
 
 [whip_whep.md](https://github.com/superconvert/smart_rtmpd/blob/master/whip_whep.md)
 
