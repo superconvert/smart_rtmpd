@@ -10,6 +10,10 @@ smart web 属于收费版本，目前暂且定价人民币：288 元，后续可
 
 预览版本敬请访问 http://dt4.8tupian.net/2/32453a2b500.pg3
 
+### whip/whep 推拉流
+
+[whip_whep.md](https://github.com/superconvert/smart_rtmpd/blob/master/whip_whep.md)
+
 ### 说明
 * 免费软件 ( 不开源 )
 * 允许商业应用 ( 保留我们的 logo 和 name )
