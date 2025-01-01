@@ -5,7 +5,7 @@
 None 
 
 ### Linux 
-1. Can't start srt server failed! ( 启动 srt 服务器失败 ）
+1. Start srt server failed! ( 启动 srt 服务器失败 ）
 ~~~shell
 Q:
 root@CMZL-60-112:~/new/bin# ./smart_webrtc 
@@ -58,7 +58,7 @@ generating new self-signed cert for smart_rtmpd@qiyicc.com
 65F0F740 [25-01- 1 17:25:58.919] I: rtmp-manager add watch.
 ~~~
 
-2. Can't start sip server failed! ( 启动 sip 服务器失败 ）
+2. Start sip server failed! ( 启动 sip 服务器失败 ）
 ~~~shell
 Q:
 root@CMZL-60-112:~/new/bin# ./smart_webrtc 
