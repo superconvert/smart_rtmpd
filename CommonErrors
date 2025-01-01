@@ -1,0 +1,60 @@
+# Smart_Rtmpd ( Smart_WebRTC ) Common Errors ( 常见错误 ）
+
+# Windows 
+
+# Linux 
+1. 
+~~~shell
+Q:
+root@CMZL-60-112:~/new/bin# ./smart_webrtc 
+8CC7E740 [25-01- 1 17:14:47.142] I: smart_webrtc --- build time : 2024-12-20 09:48:16
+8CC7E740 [25-01- 1 17:14:47.142] I: website url : http://www.qiyicc.com/download/rtmpd.zip
+8CC7E740 [25-01- 1 17:14:47.142] I: gitee url : https://gitee.com/mirrors/smart-rtmpd
+8CC7E740 [25-01- 1 17:14:47.142] I: github url : https://github.com/superconvert/smart_rtmpd
+8CC7E740 [25-01- 1 17:14:47.142] I: liveshow url : https://github.com/superconvert/smart_rtmpd/blob/master/liveshow.md
+8CC7E740 [25-01- 1 17:14:47.142] I: development url : https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md
+8CC7E740 [25-01- 1 17:14:47.142] I: examples url : https://github.com/superconvert/smart_rtmpd/tree/master/example
+8CC7E740 [25-01- 1 17:14:47.142] I: email : cwf12345@sina.com
+8CC7E740 [25-01- 1 17:14:47.142] I: webchat : 99766553, qq : 99766553
+8CC7E740 [25-01- 1 17:14:47.143] I: 110.40.64.224 eth0
+8CC7E740 [25-01- 1 17:14:47.165] I: ssl client no config.
+8CC7E740 [25-01- 1 17:14:47.165] I: ssl server no config.
+8CC7E740 [25-01- 1 17:14:47.179] I: the rtmp server ip: 0.0.0.0, port is: 1935
+8CC7E740 [25-01- 1 17:14:47.234] I: the http server ip: 0.0.0.0, port is: 8080
+8CC7E740 [25-01- 1 17:14:47.234] I: the http url http://110.40.64.224:8080
+8CC7E740 [25-01- 1 17:14:47.249] I: the turn server ip: 0.0.0.0, port is: 8888
+generating new self-signed cert for smart_rtmpd@qiyicc.com
+8CC7E740 [25-01- 1 17:14:47.278] I: rtc-manager build self-signed certificate.
+8CC7E740 [25-01- 1 17:14:47.279] I: the rtsp server ip: 0.0.0.0, port is: 8554
+8CC7E740 [25-01- 1 17:14:47.280] I: the srt server ip: 0.0.0.0, port is: 9000
+8CC7E740 [25-01- 1 17:14:47.280] I: srt bind socket failed(Connection setup failure)
+
+A:
+oot@CMZL-60-112:~/new/bin# ulimit -n 65535
+root@CMZL-60-112:~/new/bin# ./smart_webrtc 
+65F0F740 [25-01- 1 17:25:58.735] I: smart_webrtc --- build time : 2024-12-20 09:48:16
+65F0F740 [25-01- 1 17:25:58.735] I: website url : http://www.qiyicc.com/download/rtmpd.zip
+65F0F740 [25-01- 1 17:25:58.735] I: gitee url : https://gitee.com/mirrors/smart-rtmpd
+65F0F740 [25-01- 1 17:25:58.735] I: github url : https://github.com/superconvert/smart_rtmpd
+65F0F740 [25-01- 1 17:25:58.735] I: liveshow url : https://github.com/superconvert/smart_rtmpd/blob/master/liveshow.md
+65F0F740 [25-01- 1 17:25:58.735] I: development url : https://github.com/superconvert/smart_rtmpd/blob/master/web_dev.md
+65F0F740 [25-01- 1 17:25:58.735] I: examples url : https://github.com/superconvert/smart_rtmpd/tree/master/example
+65F0F740 [25-01- 1 17:25:58.735] I: email : cwf12345@sina.com
+65F0F740 [25-01- 1 17:25:58.735] I: webchat : 99766553, qq : 99766553
+65F0F740 [25-01- 1 17:25:58.736] I: 110.40.64.224 eth0
+65F0F740 [25-01- 1 17:25:58.757] I: ssl client no config.
+65F0F740 [25-01- 1 17:25:58.758] I: ssl server no config.
+65F0F740 [25-01- 1 17:25:58.771] I: the rtmp server ip: 0.0.0.0, port is: 1935
+65F0F740 [25-01- 1 17:25:58.828] I: the http server ip: 0.0.0.0, port is: 8080
+65F0F740 [25-01- 1 17:25:58.828] I: the http url http://110.40.64.224:8080
+65F0F740 [25-01- 1 17:25:58.848] I: the turn server ip: 0.0.0.0, port is: 8888
+generating new self-signed cert for smart_rtmpd@qiyicc.com
+65F0F740 [25-01- 1 17:25:58.883] I: rtc-manager build self-signed certificate.
+65F0F740 [25-01- 1 17:25:58.883] I: the rtsp server ip: 0.0.0.0, port is: 8554
+65F0F740 [25-01- 1 17:25:58.913] I: the srt server ip: 0.0.0.0, port is: 9000
+65F0F740 [25-01- 1 17:25:58.914] I: the sip server ip: 0.0.0.0, port is: 5060
+65F0F740 [25-01- 1 17:25:58.916] I: the ims server disable
+65F0F740 [25-01- 1 17:25:58.919] I: rtmp-manager add watch.
+
+~~~
+
