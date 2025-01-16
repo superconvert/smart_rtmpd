@@ -9,9 +9,8 @@ https://www.cnblogs.com/superconvert/p/18421322
 
 ### smart web
 smart web 属于 smart rtmpd 的姊妹版本，是 smart rtmpd 带上 web 管理功能的版本，功能更加强大，性能更加强劲，有进程守护功能，支持 H264(HEVC) 推流和拉流，支持远程配置，日志查看，转发配置，等诸多功能。  
-支持的操作系统有 windows10, centos8.5, ubuntu22.04, arm64 等系统。
-
-smart web 属于收费版本，目前暂且定价人民币：400 元。  
+支持的操作系统有 windows10, centos8.5, ubuntu22.04, arm64 等系统。详情参考下述链接：
+[smart_web.md](https://github.com/superconvert/smart_rtmpd/blob/master/smart_web.md)
 
 预览版本敬请访问 http://dt4.8tupian.net/2/32453a2b500.pg3
 
