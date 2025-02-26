@@ -318,7 +318,10 @@ exports.get_logfile = async function (req, res) {
     var logpath = config.binpath + "log";   
     co(function*(){
         if ( req.query["name"] ) {
-            var logfile = logpath + '/' + req.query["name"];
+            var logfile = path.resolve(logpath + '/' + req.query["name"]);
+	    if (!logfile.startsWith(logpath)) {
+	    	fail_response ( res, 'file not found' );
+	    }
             if (fs.existsSync(logfile)) {
                 fs.readFile(logfile, (err, data) => {
                     if (err) {
